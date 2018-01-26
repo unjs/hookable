@@ -1,6 +1,6 @@
 {
   "name": "hable",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A simpler tapable alternative, which can be used to create hooks for plugins",
   "main": "dist/hable.cjs.js",
   "module": "dist/hable.es.js",
