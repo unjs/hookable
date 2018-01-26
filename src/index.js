@@ -34,7 +34,10 @@ export default class Hookable {
       return
     }
 
-    this.$hooks[name] = this.$hooks[name] || []
+    if (!this.$hooks[name]) {
+      this.$hooks[name] = []
+    }
+
     this.$hooks[name].push(fn)
   }
 
