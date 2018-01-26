@@ -1,8 +1,7 @@
 {
   "name": "hable",
-  "version": "0.0.3",
-  "description":
-    "A simpler tapable alternative, which can be used to create hooks for plugins",
+  "version": "0.0.4",
+  "description": "A simpler tapable alternative, which can be used to create hooks for plugins",
   "main": "lib/hable.cjs.js",
   "module": "lib/hable.es.js",
   "jsnext:main": "lib/hable.es.js",
@@ -16,7 +15,13 @@
     "type": "git",
     "url": "git+https://github.com/pi0/hable.git"
   },
-  "keywords": ["tapable", "tappable", "hook", "plugin", "hookable"],
+  "keywords": [
+    "tapable",
+    "tappable",
+    "hook",
+    "plugin",
+    "hookable"
+  ],
   "author": "Pooya Parsa <pooya@pi0.ir>",
   "license": "MIT",
   "bugs": {
