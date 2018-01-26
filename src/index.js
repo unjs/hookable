@@ -3,7 +3,9 @@ import { serial, parallel } from 'items-promise'
 export default class Hookable {
   constructor() {
     this.$hooks = {}
+
     this.hook = this.hook.bind(this)
+    this.hookObj = this.hookObj.bind(this)
   }
 
   async callHook(name, ...args) {
