@@ -8,8 +8,8 @@
   "jsnext:main": "lib/hable.es.js",
   "scripts": {
     "build": "bili --format es,cjs --inline",
-    "dev": "yarn build --watch",
-    "release": "standard-version"
+    "dev": "npm run build --watch",
+    "release": "npm run build && standard-version"
   },
   "repository": {
     "type": "git",
