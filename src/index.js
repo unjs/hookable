@@ -8,18 +8,18 @@ export default class Hookable {
     this.hookObj = this.hookObj.bind(this)
   }
 
-  async callHook(name, ...args) {
+  callHook(name, ...args) {
     if (!this.$hooks[name]) {
       return
     }
-    await serial(this.$hooks[name], fn => fn(...args))
+    return serial(this.$hooks[name], fn => fn.apply(fn, args))
   }
 
-  async callHookAsync(name, ...args) {
+  callHookAsync(name, ...args) {
     if (!this.$hooks[name]) {
       return
     }
-    await parallel(this.$hooks[name], fn => fn(...args))
+    return parallel(this.$hooks[name], fn => fn.apply(fn, args))
   }
 
   hook(name, fn) {
