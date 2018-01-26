@@ -1,0 +1,32 @@
+{
+  "name": "hable",
+  "version": "0.0.1",
+  "description":
+    "A simpler tapable alternative, which can be used to create hooks for plugins",
+  "main": "lib/hable.cjs.js",
+  "module": "lib/hable.es.js",
+  "jsnext:main": "lib/hable.es.js",
+  "scripts": {
+    "build": "bili --format es,cjs --inline",
+    "dev": "yarn build --watch",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pi0/hable.git"
+  },
+  "keywords": ["tapable", "tappable", "hook", "plugin", "hookable"],
+  "author": "Pooya Parsa <pooya@pi0.ir>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pi0/hable/issues"
+  },
+  "homepage": "https://github.com/pi0/hable#readme",
+  "dependencies": {
+    "items-promise": "^1.0.0"
+  },
+  "devDependencies": {
+    "bili": "^2.2.3",
+    "standard-version": "^4.3.0"
+  }
+}
