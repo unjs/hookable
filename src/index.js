@@ -23,13 +23,6 @@ export default class Hookable {
   }
 
   hook(name, fn) {
-    if (Array.isArray(fn)) {
-      for (let f of fn) {
-        this.hook(name, fn)
-      }
-      return
-    }
-
     if (!name || typeof fn !== 'function') {
       return
     }
@@ -38,7 +31,11 @@ export default class Hookable {
       this.$hooks[name] = []
     }
 
-    this.$hooks[name].push(fn)
+    if (Array.isArray(fn)) {
+      Array.prototype.push.apply(this.$hooks[name], fn)
+    } else {
+      this.$hooks[name].push(fn)
+    }
   }
 
   hookObj(hooksObj) {
