@@ -25,7 +25,6 @@
   "scripts": {
     "build": "bili --format es,cjs,cjs-min --inline",
     "test": "jest",
-    "test-ci": "NODE_ENV=test jest --coverage && codecov",
     "dev": "npm run build --watch",
     "release": "npm run build && standard-version",
     "release2": "git push --follow-tags && npm publish"

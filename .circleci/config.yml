@@ -15,7 +15,7 @@ jobs:
       # Install dependencies
       - run:
           name: Install Dependencies
-          command: NODE_ENV=dev yarn && node-clean
+          command: NODE_ENV=dev yarn
 
       # Keep cache
       - save_cache:
@@ -31,4 +31,9 @@ jobs:
       # Test
       - run:
           name: Tests
-          command: yarn test-ci
+          command: NODE_ENV=test yarn test --coverage
+
+      # Coverage
+      - run:
+          name: Coverage
+          command: yarn codecov
