@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.7"></a>
+## [0.0.7](https://github.com/pi0/hable/compare/v0.0.6...v0.0.7) (2018-01-28)
+
+
+### Bug Fixes
+
+* hook with array or falsy key ([7e90de1](https://github.com/pi0/hable/commit/7e90de1))
+
+
+### Performance Improvements
+
+* use for in for hookObj ([3c8e2e7](https://github.com/pi0/hable/commit/3c8e2e7))
+
+
+
 <a name="0.0.6"></a>
 ## [0.0.6](https://github.com/pi0/hable/compare/v0.0.5...v0.0.6) (2018-01-26)
 
