@@ -39,7 +39,7 @@ export default class Hookable {
   }
 
   hookObj(hooksObj) {
-    for (let name of Object.keys(hooksObj)) {
+    for (let name in hooksObj) {
       this.hook(name, hooksObj[name])
     }
   }
