@@ -1,38 +1,51 @@
 {
   "name": "hable",
   "version": "0.0.6",
-  "description": "A simpler tapable alternative, which can be used to create hooks for plugins",
+  "description":
+    "A simpler tapable alternative, which can be used to create hooks for plugins",
+  "author": "Pooya Parsa <pooya@pi0.ir>",
+  "license": "MIT",
+  "homepage": "https://github.com/pi0/hable#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pi0/hable.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pi0/hable/issues"
+  },
+  "keywords": ["tapable", "tappable", "hook", "plugin", "hookable"],
   "main": "dist/hable.cjs.js",
   "module": "dist/hable.es.js",
   "jsnext:main": "dist/hable.es.js",
   "scripts": {
     "build": "bili --format es,cjs --inline",
+    "test": "jest",
     "dev": "npm run build --watch",
     "release": "npm run build && standard-version",
     "release2": "git push --follow-tags && npm publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pi0/hable.git"
+  "jest": {
+    "collectCoverage": true,
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   },
-  "keywords": [
-    "tapable",
-    "tappable",
-    "hook",
-    "plugin",
-    "hookable"
-  ],
-  "author": "Pooya Parsa <pooya@pi0.ir>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pi0/hable/issues"
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": ["babel-plugin-transform-es2015-modules-commonjs"]
+      }
+    }
   },
-  "homepage": "https://github.com/pi0/hable#readme",
   "dependencies": {
     "items-promise": "^1.0.0"
   },
   "devDependencies": {
+    "babel-jest": "^22.1.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "bili": "^2.2.3",
+    "codecov": "^3.0.0",
+    "jest": "^22.1.4",
     "standard-version": "^4.3.0"
   }
 }
