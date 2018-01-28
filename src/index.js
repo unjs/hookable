@@ -23,10 +23,6 @@ export default class Hookable {
   }
 
   hook(name, fn) {
-    if (!name || typeof fn !== 'function') {
-      return
-    }
-
     if (!this.$hooks[name]) {
       this.$hooks[name] = []
     }
