@@ -20,27 +20,16 @@
   "scripts": {
     "build": "bili --format es,cjs --inline",
     "test": "jest",
+    "test-ci": "jest --coverage && codecov",
     "dev": "npm run build --watch",
     "release": "npm run build && standard-version",
     "release2": "git push --follow-tags && npm publish"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": ["babel-plugin-transform-es2015-modules-commonjs"]
-      }
-    }
   },
   "dependencies": {
     "items-promise": "^1.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "babel-jest": "^22.1.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "bili": "^2.2.3",

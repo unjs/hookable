@@ -31,4 +31,4 @@ jobs:
       # Test
       - run:
           name: Tests
-          command: yarn test && yarn codecov
+          command: yarn test-ci
