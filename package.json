@@ -1,6 +1,6 @@
 {
   "name": "hable",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "Awaitable hooks for Node.js",
   "cintributors": [
     "Sebastien Chopin (@Atinux)",
