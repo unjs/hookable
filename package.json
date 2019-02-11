@@ -1,16 +1,20 @@
 {
   "name": "hable",
   "version": "0.0.7",
-  "description": "A simpler tapable alternative, which can be used to create hooks for plugins",
-  "author": "Pooya Parsa <pooya@pi0.ir>",
+  "description": "Awaitable hooks for Node.js",
+  "cintributors": [
+    "Sebastien Chopin (@Atinux)",
+    "Clark Du (@clarkdo)",
+    "Pooya Parsa <pooya@pi0.ir>"
+  ],
   "license": "MIT",
-  "homepage": "https://github.com/pi0/hable#readme",
+  "homepage": "https://github.com/jsless/hable#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pi0/hable.git"
+    "url": "git+https://github.com/jsless/hable.git"
   },
   "bugs": {
-    "url": "https://github.com/pi0/hable/issues"
+    "url": "https://github.com/jsless/hable/issues"
   },
   "keywords": [
     "tapable",
@@ -19,26 +23,30 @@
     "plugin",
     "hookable"
   ],
-  "main": "dist/hable.cjs.js",
-  "module": "dist/hable.es.js",
-  "jsnext:main": "dist/hable.es.js",
+  "main": "lib/hable.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "build": "bili --format es,cjs,cjs-min --inline",
-    "test": "jest",
-    "dev": "npm run build --watch",
-    "release": "npm run build && standard-version",
-    "release2": "git push --follow-tags && npm publish"
+    "test": "yarn lint && jest",
+    "lint": "eslint",
+    "prepublish": "yarn test",
+    "release": "standard-version && git push --follow-tags && npm publish"
   },
   "dependencies": {
+    "consola": "^2.4.0",
     "items-promise": "^1.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.1.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "bili": "^2.2.3",
     "codecov": "^3.0.0",
-    "jest": "^22.1.4",
+    "eslint": "^5.13.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.2.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.1.0",
     "standard-version": "^4.3.0"
   }
 }

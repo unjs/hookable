@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dt/hable.svg?style=flat-square)](https://www.npmjs.com/package/hable)
 [![size](http://img.badgesize.io/https://unpkg.com/hable/dist/hable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hable)
 
-> A simpler tapable alternative, which can be used to create hooks for plugins.
+> Awaitable hooks for Node.js
 
 ## Install
 
@@ -39,8 +39,8 @@ export default class Foo extends Hookable {
     // Call and wait for `hook1` hooks (if any) sequential
     await this.callHook('hook1')
 
-    // Call and wait for `hook2` hooks (if any) in paraller
-    await this.callHookAsync('hook2')
+    // Call and wait for `hook2` hooks (if any) in parallel
+    await this.callHookParallel('hook2')
   }
 }
 ```
@@ -62,19 +62,48 @@ lib.hookObj({
 
 ## Hookable class
 
-**private functions**
 
-* `async callHook(name, ...args)`: Used by class itself to **sequentially** call handlers of a specific hook.
-* `async callHookAsync(name, ...args)`: Same as `callHook` but calls handlers in **parallel**.
+### `hook (name, fn)`
 
-**public functions**
+Register a handler for a specific hook. `fn` can be a single function or an array.
 
-* `hook(name, fn)`: Used by plugins to register a handler for an specific hook. `fn` can be a single function or an array.
-* `hookObj(hooksObj)`: Register many hooks using an object.
+### `addHooks(configHooks)`
 
-**private attributes**
+Flatten and register hooks object.
 
-* `$hooks`: An object which maps from each hook name to it's handlers.
+Example:
+
+```js
+hookable.addHooks({
+  test: {
+    before: () => {},
+    after: () => {}
+  }
+})
+
+```
+
+This registers `test:before` and `test:after` hooks at bulk.
+
+### `async callHook (name, ...args)`
+
+Used by class itself to **sequentially** call handlers of a specific hook.
+
+### `deprecateHook (old, name)`
+
+Deprecate hook called `old` in flavor of `name` hook.
+
+### `clearHook (name)`
+
+Clear all hooks for a specific hook.
+
+### `clearHooks ()`
+
+Clear all hooks registered in the class.
+
+### `flatHooks (hooksObj)`
+
+Register many hooks using an object.
 
 ## Credits
 
