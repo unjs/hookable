@@ -28,7 +28,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "yarn lint && jest",
+    "test": "yarn lint && yarn jest",
     "lint": "eslint",
     "prepublish": "yarn test",
     "release": "standard-version && git push --follow-tags && npm publish"
