@@ -1,7 +1,7 @@
 # Hable
 
-[![CircleCI](https://img.shields.io/circleci/project/github/pi0/hable.svg?style=flat-square)](https://circleci.com/gh/pi0/hable)
-[![Codecov](https://img.shields.io/codecov/c/github/pi0/hable.svg?style=flat-square)](https://codecov.io/gh/pi0/hable)
+[![CircleCI](https://img.shields.io/circleci/project/github/jsless/hable.svg?style=flat-square)](https://circleci.com/gh/jsless/hable)
+[![Codecov](https://img.shields.io/codecov/c/github/jsless/hable.svg?style=flat-square)](https://codecov.io/gh/jsless/hable)
 [![npm](https://img.shields.io/npm/v/hable.svg?style=flat-square)](https://www.npmjs.com/package/hable)
 [![npm](https://img.shields.io/npm/dt/hable.svg?style=flat-square)](https://www.npmjs.com/package/hable)
 [![size](http://img.badgesize.io/https://unpkg.com/hable/dist/hable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hable)
