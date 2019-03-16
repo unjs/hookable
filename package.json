@@ -2,20 +2,13 @@
   "name": "hable",
   "version": "1.0.0",
   "description": "Awaitable hooks for Node.js",
-  "cintributors": [
+  "license": "MIT",
+  "contributors": [
     "Sebastien Chopin (@Atinux)",
     "Clark Du (@clarkdo)",
-    "Pooya Parsa <pooya@pi0.ir>"
+    "Pooya Parsa (@pi0)"
   ],
-  "license": "MIT",
-  "homepage": "https://github.com/jsless/hable#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jsless/hable.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jsless/hable/issues"
-  },
+  "repository": "jsless/hable",
   "keywords": [
     "tapable",
     "tappable",
@@ -23,7 +16,7 @@
     "plugin",
     "hookable"
   ],
-  "main": "lib/hable.js",
+  "main": "lib/hookable.js",
   "files": [
     "lib"
   ],
@@ -47,6 +40,6 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.1.0",
-    "standard-version": "^4.3.0"
+    "standard-version": "^5.0.1"
   }
 }
