@@ -1,5 +1,5 @@
 const consola = require('consola')
-const Hookable = require('../lib/hookable')
+const Hookable = require('..')
 const { flatHooks } = require('../lib/utils')
 
 describe('core: hookable', () => {
