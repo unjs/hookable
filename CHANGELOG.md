@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.1](https://github.com/jsless/hable/compare/v1.0.0...v1.0.1) (2019-03-16)
+
+
+### Bug Fixes
+
+* fix package.json (2) ([7ff4ce9](https://github.com/jsless/hable/commit/7ff4ce9))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/jsless/hable/compare/v0.0.7...v1.0.0) (2019-02-11)
 
