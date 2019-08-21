@@ -1,10 +1,11 @@
-const consola = require('consola')
 const Hookable = require('..')
 const { flatHooks } = require('../lib/utils')
 
 describe('core: hookable', () => {
   beforeEach(() => {
-    consola.mockTypes(() => jest.fn())
+    ['log', 'warn', 'error', 'debug'].forEach(l => {
+      console[l] = jest.fn()
+    })
   })
 
   test('should construct hook object', () => {
@@ -51,18 +52,18 @@ describe('core: hookable', () => {
 
     hook.hook('test:hook', () => { })
 
-    expect(consola.warn).toBeCalledWith('test:hook hook has been deprecated, please use test:before')
+    expect(console.warn).toBeCalledWith('test:hook hook has been deprecated, please use test:before')
     expect(hook._hooks['test:hook']).toBeUndefined()
     expect(hook._hooks['test:before']).toEqual([expect.any(Function)])
   })
 
   test('should call registered hook', async () => {
     const hook = new Hookable()
-    hook.hook('test:hook', () => consola.log('test:hook called'))
+    hook.hook('test:hook', () => console.log('test:hook called'))
 
     await hook.callHook('test:hook')
 
-    expect(consola.log).toBeCalledWith('test:hook called')
+    expect(console.log).toBeCalledWith('test:hook called')
   })
 
   test('should ignore unregistered hook', async () => {
@@ -70,7 +71,7 @@ describe('core: hookable', () => {
 
     await hook.callHook('test:hook')
 
-    expect(consola.debug).not.toBeCalled()
+    expect(console.debug).not.toBeCalled()
   })
 
   test('should report hook error', async () => {
@@ -80,7 +81,7 @@ describe('core: hookable', () => {
 
     await hook.callHook('test:hook')
 
-    expect(consola.error).toBeCalledWith(error)
+    expect(console.error).toBeCalledWith(error)
   })
 
   test('should call error hook', async () => {
@@ -92,7 +93,7 @@ describe('core: hookable', () => {
     await hook.callHook('test:hook')
 
     expect(hook._hooks.error[0]).toBeCalledWith(error)
-    expect(consola.error).toBeCalledWith(error)
+    expect(console.error).toBeCalledWith(error)
   })
 
   test('should clear registered hooks', () => {

@@ -845,11 +845,6 @@ concat-stream@^1.6.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-consola@^2.4.0:
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/consola/-/consola-2.5.6.tgz#5ce14dbaf6f5b589c8a258ef80ed97b752fa57d5"
-  integrity sha512-DN0j6ewiNWkT09G3ZoyyzN3pSYrjxWcx49+mHu+oDI5dvW5vzmyuzYsqGS79+yQserH9ymJQbGzeqUejfssr8w==
-
 contains-path@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/contains-path/-/contains-path-0.1.0.tgz#fe8cf184ff6670b6baef01a9d4861a5cbec4120a"
@@ -2301,11 +2296,6 @@ istanbul-reports@^2.1.1:
   integrity sha512-FzNahnidyEPBCI0HcufJoSEoKykesRlFcSzQqjH9x0+LC8tnnE/p/90PBLu8iZTxr8yYZNyTtiAujUqyN+CIxw==
   dependencies:
     handlebars "^4.1.0"
-
-items-promise@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/items-promise/-/items-promise-1.0.0.tgz#a71ff03063078eb82db468f1e2f12df4da34dc01"
-  integrity sha512-t+3w4E51IlviTn1b/gesEsH9Jf0gEs2+VhSbwgMaVyK2IxXYSwZkL6sOmr+FBhMT0sSFzcc4Rn5X7sz6NvS2GQ==
 
 jest-changed-files@^24.5.0:
   version "24.5.0"

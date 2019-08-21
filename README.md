@@ -33,6 +33,8 @@ export default class Foo extends Hookable {
   constructor() {
     // Call to parent to initialize
     super()
+    // Initialize Hookable with custom logger
+    // super(consola)
   }
 
   async someFunction() {
@@ -62,6 +64,15 @@ lib.hookObj({
 
 ## Hookable class
 
+### `constructor(logger)`
+
+Custom logger. Default logger is `console` but you can use your own or [consola](https://github.com/nuxt/consola).
+
+It should be an object implementing following functions:
+- log
+- warn
+- error
+- debug
 
 ### `hook (name, fn)`
 

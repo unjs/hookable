@@ -26,9 +26,6 @@
     "prepublish": "yarn test",
     "release": "standard-version && git push --follow-tags && npm publish"
   },
-  "dependencies": {
-    "consola": "^2.4.0"
-  },
   "devDependencies": {
     "codecov": "^3.0.0",
     "eslint": "^5.13.0",
