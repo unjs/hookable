@@ -27,8 +27,7 @@
     "release": "standard-version && git push --follow-tags && npm publish"
   },
   "dependencies": {
-    "consola": "^2.4.0",
-    "items-promise": "^1.0.0"
+    "consola": "^2.4.0"
   },
   "devDependencies": {
     "codecov": "^3.0.0",
