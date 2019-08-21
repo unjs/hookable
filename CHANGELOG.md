@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [2.0.0](https://github.com/jsless/hable/compare/v1.0.1...v2.0.0) (2019-08-21)
+
+
+### Features
+
+* custom logger ([ada6e37](https://github.com/jsless/hable/commit/ada6e37))
+
+
+### BREAKING CHANGES
+
+* console is replaced by consola by default
+
+
+
 ## [1.0.1](https://github.com/jsless/hable/compare/v1.0.0...v1.0.1) (2019-03-16)
 
 
