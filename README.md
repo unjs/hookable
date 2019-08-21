@@ -101,7 +101,11 @@ Used by class itself to **sequentially** call handlers of a specific hook.
 
 ### `deprecateHook (old, name)`
 
-Deprecate hook called `old` in flavor of `name` hook.
+Deprecate hook called `old` in favor of `name` hook.
+
+### `deprecateHooks (hooks)`
+
+Deprecate all hooks from an object (keys are old and values or newer ones).
 
 ### `clearHook (name)`
 

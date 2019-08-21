@@ -57,6 +57,19 @@ describe('core: hookable', () => {
     expect(hook._hooks['test:before']).toEqual([expect.any(Function)])
   })
 
+  test('deprecateHooks', () => {
+    const hook = new Hookable()
+    hook.deprecateHooks({
+      'test:hook': 'test:before'
+    })
+
+    hook.hook('test:hook', () => { })
+
+    expect(console.warn).toBeCalledWith('test:hook hook has been deprecated, please use test:before')
+    expect(hook._hooks['test:hook']).toBeUndefined()
+    expect(hook._hooks['test:before']).toEqual([expect.any(Function)])
+  })
+
   test('should call registered hook', async () => {
     const hook = new Hookable()
     hook.hook('test:hook', () => console.log('test:hook called'))
