@@ -69,10 +69,9 @@ lib.hookObj({
 Custom logger. Default logger is `console` but you can use your own or [consola](https://github.com/nuxt/consola).
 
 It should be an object implementing following functions:
-- log
 - warn
 - error
-- debug
+- fatal (optional)
 
 ### `hook (name, fn)`
 
