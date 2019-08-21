@@ -103,7 +103,7 @@ Used by class itself to **sequentially** call handlers of a specific hook.
 
 Deprecate hook called `old` in favor of `name` hook.
 
-### `deprecateHooks (hooks)`
+### `deprecateHooks (deprecatedHooks)`
 
 Deprecate all hooks from an object (keys are old and values or newer ones).
 
