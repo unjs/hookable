@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [2.3.0](https://github.com/jsless/hable/compare/v2.2.1...v2.3.0) (2019-09-01)
+
+
+### Features
+
+* hide deprecate warnings on production builds ([0861df3](https://github.com/jsless/hable/commit/0861df3))
+
+
+
 ## [2.2.1](https://github.com/jsless/hable/compare/v2.2.0...v2.2.1) (2019-08-21)
 
 
