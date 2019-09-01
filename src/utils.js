@@ -1,4 +1,4 @@
-exports.flatHooks = function flatHooks (configHooks, hooks = {}, parentName) {
+export function flatHooks (configHooks, hooks = {}, parentName) {
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key
@@ -11,6 +11,6 @@ exports.flatHooks = function flatHooks (configHooks, hooks = {}, parentName) {
   return hooks
 }
 
-exports.serial = function serial (tasks, fn) {
+export function serial (tasks, fn) {
   return tasks.reduce((promise, task) => promise.then(previous => fn(task, previous)), Promise.resolve(null))
 }

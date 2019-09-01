@@ -1,5 +1,5 @@
 const Hookable = require('..')
-const { flatHooks } = require('../lib/utils')
+const { flatHooks } = require('../src/utils')
 
 describe('core: hookable', () => {
   beforeEach(() => {

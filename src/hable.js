@@ -1,6 +1,6 @@
-const { serial, flatHooks } = require('./utils')
+import { serial, flatHooks } from './utils'
 
-module.exports = class Hookable {
+export default class Hookable {
   constructor (logger = console) {
     this._logger = logger
     this._hooks = {}

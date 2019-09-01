@@ -2,31 +2,35 @@
   "name": "hable",
   "version": "2.3.0",
   "description": "Awaitable hooks for Node.js",
+  "keywords": [
+    "hook",
+    "hookable",
+    "plugin",
+    "tapable",
+    "tappable"
+  ],
+  "repository": "jsless/hable",
   "license": "MIT",
   "contributors": [
     "Sebastien Chopin (@Atinux)",
     "Clark Du (@clarkdo)",
     "Pooya Parsa (@pi0)"
   ],
-  "repository": "jsless/hable",
-  "keywords": [
-    "tapable",
-    "tappable",
-    "hook",
-    "plugin",
-    "hookable"
-  ],
-  "main": "lib/hookable.js",
   "files": [
-    "lib"
+    "src",
+    "dist"
   ],
+  "main": "dist/hable.js",
+  "browser": "dist/hable.umd.js",
   "scripts": {
-    "test": "yarn lint && yarn jest",
-    "lint": "eslint lib",
-    "prepublish": "yarn test",
-    "release": "standard-version && git push --follow-tags && npm publish"
+    "build": "bili --module-name hable --minify --format cjs,umd,es src/hable.js",
+    "lint": "eslint src",
+    "prepublish": "yarn build && yarn test",
+    "release": "standard-version && git push --follow-tags && npm publish",
+    "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
+    "bili": "^4.8.1",
     "codecov": "^3.0.0",
     "eslint": "^5.13.0",
     "eslint-config-standard": "^12.0.0",
