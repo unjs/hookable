@@ -5,6 +5,10 @@ export default class Hookable {
     this._logger = logger
     this._hooks = {}
     this._deprecatedHooks = {}
+
+    // Allow destructuring hook and callHook functions out of instance object
+    this.hook = this.hook.bind(this)
+    this.callHook = this.callHook.bind(this)
   }
 
   hook (name, fn) {
