@@ -3,9 +3,9 @@
     "@nuxtjs"
   ],
   "baseBranches": [
-    "dev"
+    "master"
   ],
-  "ignoreDeps": [
-    "thread-loader"
-  ]
+  "lockFileMaintenance": {
+    "enabled": true
+  }
 }

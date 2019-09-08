@@ -27,11 +27,12 @@
   "scripts": {
     "build": "bili --module-name hable --minify --format cjs,umd,es src/hable.js",
     "lint": "eslint src",
-    "prepublish": "yarn build && yarn test",
+    "prepublishOnly": "yarn build && yarn test",
     "release": "standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
+    "babel-jest": "^24.9.0",
     "bili": "^4.8.1",
     "codecov": "^3.0.0",
     "eslint": "^5.13.0",
