@@ -30,6 +30,7 @@
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
+    "babel-jest": "^24.9.0",
     "bili": "^4.8.1",
     "codecov": "^3.0.0",
     "eslint": "^5.13.0",
