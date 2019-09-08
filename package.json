@@ -34,7 +34,7 @@
     "bili": "^4.8.1",
     "codecov": "^3.0.0",
     "eslint": "^5.13.0",
-    "eslint-config-standard": "^12.0.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jest": "^22.2.2",
     "eslint-plugin-node": "^8.0.1",
