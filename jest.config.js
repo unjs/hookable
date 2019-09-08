@@ -3,5 +3,8 @@ module.exports = {
   'collectCoverage': true,
   'collectCoverageFrom': [
     'lib/**/*.js'
-  ]
+  ],
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  }
 }
