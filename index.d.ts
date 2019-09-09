@@ -1,5 +1,5 @@
 interface hable {
-  hook (name: string, fn: (...args: any) => Promise<void>): void;
+  hook (name: string, fn: (...args: any) => Promise<void> | void): void;
 
   deprecateHook (old: string, name: string): void;
 
