@@ -1,15 +1,15 @@
 interface hable {
-  hook (name: String, fn: Function): void;
+  hook (name: string, fn: (...args: any) => Promise<void>): void;
 
-  deprecateHook (old: String, name: String): void;
+  deprecateHook (old: string, name: string): void;
 
-  deprecateHooks (deprecatedHooks: Object): void;
+  deprecateHooks (deprecatedHooks: object): void;
 
-  addHooks (configHooks: Object): void;
+  addHooks (configHooks: object): void;
 
-  callHook (name: String, ...args: any) : void;
+  callHook (name: string, ...args: any) : Promise<void>;
 
-  clearHook (name: String): void;
+  clearHook (name: string): void;
 
   clearHooks (): void;
 }
