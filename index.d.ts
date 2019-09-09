@@ -1,4 +1,4 @@
-declare class hable {
+interface hable {
   hook (name: String, fn: Function): void;
 
   deprecateHook (old: String, name: String): void;
