@@ -16,14 +16,14 @@
     "Clark Du (@clarkdo)",
     "Pooya Parsa (@pi0)"
   ],
+  "main": "./dist/hable.js",
+  "browser": "./dist/hable.umd.js",
+  "types": "./index.d.ts",
   "files": [
     "index.d.ts",
     "src",
     "dist"
   ],
-  "main": "./dist/hable.js",
-  "browser": "./dist/hable.umd.js",
-  "types": "./index.d.ts",
   "scripts": {
     "build": "bili --module-name hable --minify --format cjs,umd,es src/hable.js",
     "lint": "eslint src",
