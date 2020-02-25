@@ -21,14 +21,13 @@
     "src",
     "dist"
   ],
-  "main": "dist/hable.js",
-  "browser": "dist/hable.umd.js",
+  "main": "./dist/hable.js",
+  "browser": "./dist/hable.umd.js",
   "types": "./index.d.ts",
   "scripts": {
     "build": "bili --module-name hable --minify --format cjs,umd,es src/hable.js",
     "lint": "eslint src",
-    "prepublishOnly": "yarn build && yarn test",
-    "release": "standard-version && git push --follow-tags && npm publish",
+    "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
