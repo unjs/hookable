@@ -1,6 +1,19 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.0.0](https://github.com/jsless/hable/compare/v2.3.0...v3.0.0) (2020-02-25)
+
+
+### Bug Fixes
+
+* revert back hooks ([07f52dc](https://github.com/jsless/hable/commit/07f52dc))
+
+
+### Features
+
+* advanced deprecation ([5b88628](https://github.com/jsless/hable/commit/5b88628))
+* bundle package ([53a2a0e](https://github.com/jsless/hable/commit/53a2a0e))
 
 # [2.3.0](https://github.com/jsless/hable/compare/v2.2.1...v2.3.0) (2019-09-01)
 
