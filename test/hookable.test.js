@@ -46,15 +46,23 @@ describe('core: hookable', () => {
     expect(hook._hooks['test:hook']).toBeUndefined()
   })
 
-  test('should convert and display deprecated hook', () => {
+  test('should convert and display deprecated hooks', () => {
     const hook = new Hookable()
-    hook.deprecateHook('test:hook', 'test:before')
+    hook.deprecateHook('a', 'b')
+    hook.deprecateHook('b', { to: 'c' })
+    hook.deprecateHook('x', { to: 'y', message: 'Custom' })
 
-    hook.hook('test:hook', () => { })
+    hook.hook('a', () => { })
+    hook.hook('b', () => { })
+    hook.hook('c', () => { })
+    hook.hook('x', () => { })
 
-    expect(console.warn).toBeCalledWith('test:hook hook has been deprecated, please use test:before')
-    expect(hook._hooks['test:hook']).toBeUndefined()
-    expect(hook._hooks['test:before']).toEqual([expect.any(Function)])
+    expect(console.warn).toBeCalledWith('a hook has been deprecated, please use c')
+    expect(console.warn).toBeCalledWith('b hook has been deprecated, please use c')
+    expect(console.warn).toBeCalledWith('Custom')
+    expect(hook._hooks.a).toBeUndefined()
+    expect(hook._hooks.b).toBeUndefined()
+    expect(hook._hooks.c).toEqual([expect.any(Function), expect.any(Function), expect.any(Function)])
   })
 
   test('deprecateHooks', () => {

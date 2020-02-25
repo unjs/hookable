@@ -16,11 +16,24 @@ export default class Hookable {
       return
     }
 
-    if (this._deprecatedHooks[name]) {
-      if (process.env.NODE_ENV !== 'production') {
-        this._logger.warn(`${name} hook has been deprecated, please use ${this._deprecatedHooks[name]}`)
+    const originalName = name
+    let deprecatedHook
+    while (this._deprecatedHooks[name]) {
+      deprecatedHook = this._deprecatedHooks[name]
+      if (typeof deprecatedHook === 'string') {
+        deprecatedHook = { to: deprecatedHook }
       }
-      name = this._deprecatedHooks[name]
+      name = deprecatedHook.newName
+    }
+    if (deprecatedHook) {
+      if (!deprecatedHook.message) {
+        this._logger.warn(
+          `${originalName} hook has been deprecated` +
+          (deprecatedHook.to ? `, please use ${deprecatedHook.to}` : '')
+        )
+      } else {
+        this._logger.warn(deprecatedHook.message)
+      }
     }
 
     this._hooks[name] = this._hooks[name] || []
