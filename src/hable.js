@@ -23,7 +23,7 @@ export default class Hookable {
       if (typeof deprecatedHook === 'string') {
         deprecatedHook = { to: deprecatedHook }
       }
-      name = deprecatedHook.newName
+      name = deprecatedHook.to
     }
     if (deprecatedHook) {
       if (!deprecatedHook.message) {
