@@ -38,6 +38,20 @@ export default class Hookable {
 
     this._hooks[name] = this._hooks[name] || []
     this._hooks[name].push(fn)
+    
+    return () => {
+      if (fn) {
+        this.removeHook(name, fn)
+        fn = null // Free memory
+      }
+    }
+  }
+  
+  removeHook (name, fn) {
+    const idx = this._hooks[name] ? this._hooks[name].indexOf(fn) : -1
+    if (idx !== -1) {
+      this._hooks[name].splice(idx, 1)
+    }
   }
 
   deprecateHook (old, name) {
@@ -52,6 +66,20 @@ export default class Hookable {
     const hooks = flatHooks(configHooks)
     for (const key in hooks) {
       this.hook(key, hooks[key])
+    }
+
+    return () => {
+      if (configHooks) {
+        this.removeHooks(configHooks)
+        configHooks = null // Free memory
+      }
+    }
+  }
+
+  removeHooks (configHooks) {
+    const hooks = flatHooks(configHooks)
+    for (const key in hooks) {
+      this.removeHook(key, hooks[key])
     }
   }
 
