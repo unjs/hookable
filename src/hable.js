@@ -38,7 +38,7 @@ export default class Hookable {
 
     this._hooks[name] = this._hooks[name] || []
     this._hooks[name].push(fn)
-    
+
     return () => {
       if (fn) {
         this.removeHook(name, fn)
@@ -46,7 +46,7 @@ export default class Hookable {
       }
     }
   }
-  
+
   removeHook (name, fn) {
     const idx = this._hooks[name] ? this._hooks[name].indexOf(fn) : -1
     if (idx !== -1) {
@@ -64,15 +64,12 @@ export default class Hookable {
 
   addHooks (configHooks) {
     const hooks = flatHooks(configHooks)
-    for (const key in hooks) {
-      this.hook(key, hooks[key])
-    }
+    const unregFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]))
 
     return () => {
-      if (configHooks) {
-        this.removeHooks(configHooks)
-        configHooks = null // Free memory
-      }
+      // Splice will ensure that all fns are called once, and free all
+      // unreg functions from memory.
+      unregFns.splice(0, unregFns.length).forEach(unreg => unreg())
     }
   }
 
