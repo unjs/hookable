@@ -48,9 +48,16 @@ export default class Hookable {
   }
 
   removeHook (name, fn) {
-    const idx = this._hooks[name] ? this._hooks[name].indexOf(fn) : -1
-    if (idx !== -1) {
-      this._hooks[name].splice(idx, 1)
+    if (this._hooks[name]) {
+      const idx = this._hooks[name].indexOf(fn)
+
+      if (idx !== -1) {
+        this._hooks[name].splice(idx, 1)
+      }
+
+      if (this._hooks[name].length === 0) {
+        delete this._hooks[name]
+      }
     }
   }
 
