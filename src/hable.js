@@ -71,12 +71,12 @@ export default class Hookable {
 
   addHooks (configHooks) {
     const hooks = flatHooks(configHooks)
-    const unregFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]))
+    const removeFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]))
 
     return () => {
       // Splice will ensure that all fns are called once, and free all
       // unreg functions from memory.
-      unregFns.splice(0, unregFns.length).forEach(unreg => unreg())
+      removeFns.splice(0, removeFns.length).forEach(unreg => unreg())
     }
   }
 
