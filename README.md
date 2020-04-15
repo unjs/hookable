@@ -121,7 +121,11 @@ Register many hooks using an object.
 
 ## Credits
 
-Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system. Original author: [Sébastien Chopin](https://github.com/Atinux).
+Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system
+
+Original author [Sébastien Chopin](https://github.com/Atinux)
+
+Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https://www.npmjs.com/package/hookable) package name
 
 ## License
 
