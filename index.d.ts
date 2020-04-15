@@ -1,4 +1,4 @@
-interface hable {
+interface hookable {
   hook (name: string, fn: (...args: any) => Promise<void> | void): void;
 
   deprecateHook (old: string, name: string): void;
@@ -14,4 +14,4 @@ interface hable {
   clearHooks (): void;
 }
 
-export default hable
+export default hookable
