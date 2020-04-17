@@ -109,14 +109,4 @@ export default class Hookable {
       }
     }
   }
-
-  clearHook (name) {
-    if (name) {
-      delete this._hooks[name]
-    }
-  }
-
-  clearHooks () {
-    this._hooks = {}
-  }
 }

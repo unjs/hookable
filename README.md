@@ -172,14 +172,6 @@ hookable.removeHooks({
 })
 ```
 
-### `clearHook (name)`
-
-Clear all hooks for a specific hook.
-
-### `clearHooks ()`
-
-Clear all hooks registered in the class.
-
 ## Credits
 
 Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system
