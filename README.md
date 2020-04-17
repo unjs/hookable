@@ -62,6 +62,20 @@ lib.hookObj({
 })
 ```
 
+**Triggering a hook handler once:**
+
+```js
+const lib = newFooLib()
+
+const unregister = lib.hook('hook0', async () => {
+  // Unregister as soon as the hook is executed
+  unregister()
+
+  /* ... */
+})
+```
+
+
 ## Hookable class
 
 ### `constructor(logger)`
@@ -76,6 +90,8 @@ It should be an object implementing following functions:
 ### `hook (name, fn)`
 
 Register a handler for a specific hook. `fn` can be a single function or an array.
+
+Returns an `unregister` function that, when called, will remove the registered handler.
 
 ### `addHooks(configHooks)`
 
@@ -94,6 +110,8 @@ hookable.addHooks({
 ```
 
 This registers `test:before` and `test:after` hooks at bulk.
+
+Returns an `unregister` function that, when called, will remove all the registered handlers.
 
 ### `async callHook (name, ...args)`
 
