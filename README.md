@@ -40,9 +40,6 @@ export default class Foo extends Hookable {
   async someFunction() {
     // Call and wait for `hook1` hooks (if any) sequential
     await this.callHook('hook1')
-
-    // Call and wait for `hook2` hooks (if any) in parallel
-    await this.callHookParallel('hook2')
   }
 }
 ```
@@ -56,7 +53,7 @@ const lib = newFooLib()
 lib.hook('hook2', async () => { /* ... */ })
 
 // Register multiply handlers at once
-lib.hookObj({
+lib.addHooks({
   hook1: async () => { /* ... */ },
   hook2: [ /* can be also an array */ ]
 })
@@ -75,7 +72,7 @@ It should be an object implementing following functions:
 
 ### `hook (name, fn)`
 
-Register a handler for a specific hook. `fn` can be a single function or an array.
+Register a handler for a specific hook. `fn` must be a function.
 
 ### `addHooks(configHooks)`
 
@@ -114,10 +111,6 @@ Clear all hooks for a specific hook.
 ### `clearHooks ()`
 
 Clear all hooks registered in the class.
-
-### `flatHooks (hooksObj)`
-
-Register many hooks using an object.
 
 ## Credits
 
