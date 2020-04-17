@@ -1,4 +1,6 @@
-export function flatHooks (configHooks, hooks = {}, parentName?) {
+import { configHooksT, flatHooksT } from './types'
+
+export function flatHooks (configHooks: configHooksT, hooks: flatHooksT = {}, parentName?: string): flatHooksT {
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key
@@ -11,6 +13,6 @@ export function flatHooks (configHooks, hooks = {}, parentName?) {
   return hooks
 }
 
-export function serial (tasks, fn) {
-  return tasks.reduce((promise, task) => promise.then(previous => fn(task, previous)), Promise.resolve(null))
+export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {
+  return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve(null))
 }

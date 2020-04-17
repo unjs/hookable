@@ -1,12 +1,12 @@
 import { serial, flatHooks } from './utils'
-import { Logger } from './types'
+import { LoggerT, hookFnT, configHooksT, deprecatedHookT, deprecatedHooksT } from './types'
 
 export default class Hookable {
-  private _hooks: object
-  private _deprecatedHooks: object
-  private _logger: Logger | false
+  private _hooks: { [name: string]: hookFnT[] }
+  private _deprecatedHooks: deprecatedHooksT
+  private _logger: LoggerT | false
 
-  constructor (logger: Logger | false = console) {
+  constructor (logger: LoggerT | false = console) {
     this._logger = logger
     this._hooks = {}
     this._deprecatedHooks = {}
@@ -16,9 +16,9 @@ export default class Hookable {
     this.callHook = this.callHook.bind(this)
   }
 
-  hook (name, fn) {
+  hook (name: string, fn: hookFnT): hookFnT {
     if (!name || typeof fn !== 'function') {
-      return
+      return () => { }
     }
 
     const originalName = name
@@ -47,12 +47,13 @@ export default class Hookable {
     return () => {
       if (fn) {
         this.removeHook(name, fn)
+        // @ts-ignore
         fn = null // Free memory
       }
     }
   }
 
-  removeHook (name, fn) {
+  removeHook (name: string, fn: hookFnT) {
     if (this._hooks[name]) {
       const idx = this._hooks[name].indexOf(fn)
 
@@ -66,15 +67,15 @@ export default class Hookable {
     }
   }
 
-  deprecateHook (old, name) {
-    this._deprecatedHooks[old] = name
+  deprecateHook (name: string, deprecated: deprecatedHookT) {
+    this._deprecatedHooks[name] = deprecated
   }
 
-  deprecateHooks (deprecatedHooks) {
+  deprecateHooks (deprecatedHooks: deprecatedHooksT) {
     Object.assign(this._deprecatedHooks, deprecatedHooks)
   }
 
-  addHooks (configHooks) {
+  addHooks (configHooks: configHooksT) {
     const hooks = flatHooks(configHooks)
     const removeFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]))
 
@@ -85,14 +86,14 @@ export default class Hookable {
     }
   }
 
-  removeHooks (configHooks) {
+  removeHooks (configHooks: configHooksT) {
     const hooks = flatHooks(configHooks)
     for (const key in hooks) {
       this.removeHook(key, hooks[key])
     }
   }
 
-  async callHook (name, ...args) {
+  async callHook (name: string, ...args: any) {
     if (!this._hooks[name]) {
       return
     }
