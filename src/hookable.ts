@@ -4,9 +4,9 @@ import { Logger } from './types'
 export default class Hookable {
   private _hooks: object
   private _deprecatedHooks: object
-  private _logger: Logger
+  private _logger: Logger | false
 
-  constructor (logger: Logger = console) {
+  constructor (logger: Logger | false = console) {
     this._logger = logger
     this._hooks = {}
     this._deprecatedHooks = {}
@@ -30,7 +30,7 @@ export default class Hookable {
       }
       name = deprecatedHook.to
     }
-    if (deprecatedHook) {
+    if (deprecatedHook && this._logger) {
       if (!deprecatedHook.message) {
         this._logger.warn(
           `${originalName} hook has been deprecated` +
@@ -102,10 +102,12 @@ export default class Hookable {
       if (name !== 'error') {
         await this.callHook('error', err)
       }
-      if (this._logger.fatal) {
-        this._logger.fatal(err)
-      } else {
-        this._logger.error(err)
+      if (this._logger) {
+        if (this._logger.fatal) {
+          this._logger.fatal(err)
+        } else {
+          this._logger.error(err)
+        }
       }
     }
   }
