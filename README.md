@@ -1,7 +1,7 @@
 # Hookable
 
-[![CircleCI](https://img.shields.io/circleci/project/github/jsless/hookable.svg?style=flat-square)](https://circleci.com/gh/jsless/hookable)
-[![Codecov](https://img.shields.io/codecov/c/github/jsless/hookable.svg?style=flat-square)](https://codecov.io/gh/jsless/hookable)
+[![CircleCI](https://img.shields.io/circleci/project/github/nuxt-contrib/hookable.svg?style=flat-square)](https://circleci.com/gh/nuxt-contrib/hookable)
+[![Codecov](https://img.shields.io/codecov/c/github/nuxt-contrib/hookable.svg?style=flat-square)](https://codecov.io/gh/nuxt-contrib/hookable)
 [![npm](https://img.shields.io/npm/v/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
 [![npm](https://img.shields.io/npm/dt/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
 [![size](http://img.badgesize.io/https://unpkg.com/hookable/dist/hookable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hookable)

@@ -2,60 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [3.0.0](https://github.com/jsless/hookable/compare/v2.3.0...v3.0.0) (2020-02-25)
+## [3.0.0](https://github.com/nuxt-contrib/hookable/compare/v2.3.0...v3.0.0) (2020-02-25)
 
 
 ### Bug Fixes
 
-* revert back hooks ([07f52dc](https://github.com/jsless/hookable/commit/07f52dc))
+* revert back hooks ([07f52dc](https://github.com/nuxt-contrib/hookable/commit/07f52dc))
 
 
 ### Features
 
-* advanced deprecation ([5b88628](https://github.com/jsless/hookable/commit/5b88628))
-* bundle package ([53a2a0e](https://github.com/jsless/hookable/commit/53a2a0e))
+* advanced deprecation ([5b88628](https://github.com/nuxt-contrib/hookable/commit/5b88628))
+* bundle package ([53a2a0e](https://github.com/nuxt-contrib/hookable/commit/53a2a0e))
 
-# [2.3.0](https://github.com/jsless/hookable/compare/v2.2.1...v2.3.0) (2019-09-01)
-
-
-### Features
-
-* hide deprecate warnings on production builds ([0861df3](https://github.com/jsless/hookable/commit/0861df3))
-
-
-
-## [2.2.1](https://github.com/jsless/hookable/compare/v2.2.0...v2.2.1) (2019-08-21)
-
-
-
-# [2.2.0](https://github.com/jsless/hookable/compare/v2.1.0...v2.2.0) (2019-08-21)
+# [2.3.0](https://github.com/nuxt-contrib/hookable/compare/v2.2.1...v2.3.0) (2019-09-01)
 
 
 ### Features
 
-* deprecateHooks ([62f2d38](https://github.com/jsless/hookable/commit/62f2d38))
+* hide deprecate warnings on production builds ([0861df3](https://github.com/nuxt-contrib/hookable/commit/0861df3))
 
 
 
-# [2.1.0](https://github.com/jsless/hookable/compare/v2.0.1...v2.1.0) (2019-08-21)
-
-
-### Features
-
-* optional fatal support for logger ([7c7355d](https://github.com/jsless/hookable/commit/7c7355d))
+## [2.2.1](https://github.com/nuxt-contrib/hookable/compare/v2.2.0...v2.2.1) (2019-08-21)
 
 
 
-## [2.0.1](https://github.com/jsless/hookable/compare/v2.0.0...v2.0.1) (2019-08-21)
-
-
-
-# [2.0.0](https://github.com/jsless/hookable/compare/v1.0.1...v2.0.0) (2019-08-21)
+# [2.2.0](https://github.com/nuxt-contrib/hookable/compare/v2.1.0...v2.2.0) (2019-08-21)
 
 
 ### Features
 
-* custom logger ([ada6e37](https://github.com/jsless/hookable/commit/ada6e37))
+* deprecateHooks ([62f2d38](https://github.com/nuxt-contrib/hookable/commit/62f2d38))
+
+
+
+# [2.1.0](https://github.com/nuxt-contrib/hookable/compare/v2.0.1...v2.1.0) (2019-08-21)
+
+
+### Features
+
+* optional fatal support for logger ([7c7355d](https://github.com/nuxt-contrib/hookable/commit/7c7355d))
+
+
+
+## [2.0.1](https://github.com/nuxt-contrib/hookable/compare/v2.0.0...v2.0.1) (2019-08-21)
+
+
+
+# [2.0.0](https://github.com/nuxt-contrib/hookable/compare/v1.0.1...v2.0.0) (2019-08-21)
+
+
+### Features
+
+* custom logger ([ada6e37](https://github.com/nuxt-contrib/hookable/commit/ada6e37))
 
 
 ### BREAKING CHANGES
@@ -64,22 +64,22 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
-## [1.0.1](https://github.com/jsless/hookable/compare/v1.0.0...v1.0.1) (2019-03-16)
+## [1.0.1](https://github.com/nuxt-contrib/hookable/compare/v1.0.0...v1.0.1) (2019-03-16)
 
 
 ### Bug Fixes
 
-* fix package.json (2) ([7ff4ce9](https://github.com/jsless/hookable/commit/7ff4ce9))
+* fix package.json (2) ([7ff4ce9](https://github.com/nuxt-contrib/hookable/commit/7ff4ce9))
 
 
 
 <a name="1.0.0"></a>
-# [1.0.0](https://github.com/jsless/hookable/compare/v0.0.7...v1.0.0) (2019-02-11)
+# [1.0.0](https://github.com/nuxt-contrib/hookable/compare/v0.0.7...v1.0.0) (2019-02-11)
 
 
 ### Features
 
-* rewrite for 1.0.0 ([88decae](https://github.com/jsless/hookable/commit/88decae))
+* rewrite for 1.0.0 ([88decae](https://github.com/nuxt-contrib/hookable/commit/88decae))
 
 
 ### BREAKING CHANGES

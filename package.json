@@ -9,7 +9,7 @@
     "tapable",
     "tappable"
   ],
-  "repository": "jsless/hookable",
+  "repository": "nuxt-contrib/hookable",
   "license": "MIT",
   "contributors": [
     "Sebastien Chopin (@Atinux)",
@@ -17,10 +17,11 @@
     "Pooya Parsa (@pi0)"
   ],
   "main": "./dist/hookable.js",
-  "browser": "./dist/hookable.umd.js",
-  "types": "./dist/hoookable.d.ts",
+  "browser": "./dist/hookable.min.js",
+  "types": "./types/hoookable.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "build": "rollup -c && tsc --emitDeclarationOnly",
@@ -30,8 +31,8 @@
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-typescript": "^7.9.0",
+    "@babel/preset-env": "latest",
+    "@babel/preset-typescript": "latest",
     "babel-jest": "latest",
     "codecov": "latest",
     "eslint": "latest",
@@ -42,10 +43,10 @@
     "eslint-plugin-promise": "latest",
     "eslint-plugin-standard": "latest",
     "jest": "latest",
-    "rollup": "^2.6.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.3.0",
+    "rollup": "latest",
+    "rollup-plugin-babel": "latest",
+    "rollup-plugin-node-resolve": "latest",
+    "rollup-plugin-terser": "latest",
     "rollup-plugin-typescript2": "latest",
     "standard-version": "latest",
     "typescript": "latest"
