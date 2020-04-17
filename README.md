@@ -59,6 +59,44 @@ lib.addHooks({
 })
 ```
 
+**Unregistering hooks:**
+
+```js
+const lib = newFooLib()
+
+const hook0 = async () => { /* ... */ }
+const hook1 = async () => { /* ... */ }
+const hook2 = async () => { /* ... */ }
+
+// The hook() method returns an "unregister" function
+const unregisterHook0 = lib.hook('hook0', hook0)
+const unregisterHooks1and2 lib.addHooks({ hook1, hook2 })
+
+/* ... */
+
+unregisterHook0()
+unregisterHooks1and2()
+
+// or
+
+lib.removeHooks({ hook0, hook1 })
+lib.removeHook('hook2', hook2)
+```
+
+**Triggering a hook handler once:**
+
+```js
+const lib = newFooLib()
+
+const unregister = lib.hook('hook0', async () => {
+  // Unregister as soon as the hook is executed
+  unregister()
+
+  /* ... */
+})
+```
+
+
 ## Hookable class
 
 ### `constructor(logger)`
@@ -73,6 +111,8 @@ It should be an object implementing following functions:
 ### `hook (name, fn)`
 
 Register a handler for a specific hook. `fn` must be a function.
+
+Returns an `unregister` function that, when called, will remove the registered handler.
 
 ### `addHooks(configHooks)`
 
@@ -92,6 +132,8 @@ hookable.addHooks({
 
 This registers `test:before` and `test:after` hooks at bulk.
 
+Returns an `unregister` function that, when called, will remove all the registered handlers.
+
 ### `async callHook (name, ...args)`
 
 Used by class itself to **sequentially** call handlers of a specific hook.
@@ -103,6 +145,32 @@ Deprecate hook called `old` in favor of `name` hook.
 ### `deprecateHooks (deprecatedHooks)`
 
 Deprecate all hooks from an object (keys are old and values or newer ones).
+
+### `removeHook (name, fn)`
+
+Remove a particular hook handler, if the `fn` handler is present.
+
+### `removeHooks (configHooks)`
+
+Remove multiple hook handlers.
+
+Example:
+
+```js
+const handler = async () => { /* ... */ }
+
+hookable.hook('test:before', handler)
+hookable.addHooks({ test: { after: handler } })
+
+// ...
+
+hookable.removeHooks({
+  test: {
+    before: handler,
+    after: handler
+  }
+})
+```
 
 ### `clearHook (name)`
 

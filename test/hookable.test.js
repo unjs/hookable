@@ -131,6 +131,70 @@ describe('core: hookable', () => {
     expect(hook._hooks['test:before']).toBeUndefined()
   })
 
+  test('should return a self-removal function', async () => {
+    const hook = new Hookable()
+    const remove = hook.hook('test:hook', () => {
+      console.log('test:hook called')
+    })
+
+    await hook.callHook('test:hook')
+    remove()
+    await hook.callHook('test:hook')
+
+    expect(console.log).toBeCalledTimes(1)
+  })
+
+  test('should clear only its own hooks', () => {
+    const hook = new Hookable()
+    const callback = () => { }
+
+    hook.hook('test:hook', callback)
+    const remove = hook.hook('test:hook', callback)
+    hook.hook('test:hook', callback)
+
+    expect(hook._hooks['test:hook']).toEqual([callback, callback, callback])
+
+    remove()
+    remove()
+    remove()
+
+    expect(hook._hooks['test:hook']).toEqual([callback, callback])
+  })
+
+  test('should clear removed hooks', () => {
+    const hook = new Hookable()
+    const callback = () => { }
+    hook.hook('test:hook', callback)
+    hook.hook('test:hook', callback)
+
+    expect(hook._hooks['test:hook']).toHaveLength(2)
+
+    hook.removeHook('test:hook', callback)
+
+    expect(hook._hooks['test:hook']).toHaveLength(1)
+
+    hook.removeHook('test:hook', callback)
+
+    expect(hook._hooks['test:hook']).toBeUndefined()
+  })
+
+  test('should call self-removing hooks once', async () => {
+    const hook = new Hookable()
+    const remove = hook.hook('test:hook', () => {
+      console.log('test:hook called')
+      remove()
+    })
+
+    expect(hook._hooks['test:hook']).toHaveLength(1)
+
+    await hook.callHook('test:hook')
+    await hook.callHook('test:hook')
+
+    expect(console.log).toBeCalledWith('test:hook called')
+    expect(console.log).toBeCalledTimes(1)
+    expect(hook._hooks['test:hook']).toBeUndefined()
+  })
+
   test('should clear all registered hooks', () => {
     const hook = new Hookable()
     hook.hook('test:hook', () => { })
@@ -176,5 +240,53 @@ describe('core: hookable', () => {
     })
     expect(hook._hooks['test:hook']).toHaveLength(1)
     expect(hook._hooks['test:before']).toHaveLength(1)
+  })
+
+  test('should clear multiple hooks', () => {
+    const hook = new Hookable()
+    const callback = () => {}
+
+    const hooks = {
+      test: {
+        hook: () => { },
+        before: () => { }
+      }
+    }
+
+    hook.addHooks(hooks)
+
+    hook.hook('test:hook', callback)
+
+    expect(hook._hooks['test:hook']).toHaveLength(2)
+    expect(hook._hooks['test:before']).toHaveLength(1)
+
+    hook.removeHooks(hooks)
+
+    expect(hook._hooks['test:hook']).toEqual([callback])
+    expect(hook._hooks['test:before']).toBeUndefined()
+  })
+
+  test('should clear only the hooks added by addHooks', () => {
+    const hook = new Hookable()
+    const callback1 = () => {}
+    const callback2 = () => {}
+    hook.hook('test:hook', callback1)
+
+    const remove = hook.addHooks({
+      test: {
+        hook: () => { },
+        before: () => { }
+      }
+    })
+
+    hook.hook('test:hook', callback2)
+
+    expect(hook._hooks['test:hook']).toHaveLength(3)
+    expect(hook._hooks['test:before']).toHaveLength(1)
+
+    remove()
+
+    expect(hook._hooks['test:hook']).toEqual([callback1, callback2])
+    expect(hook._hooks['test:before']).toBeUndefined()
   })
 })
