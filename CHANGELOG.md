@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/nuxt-contrib/hookable/compare/v3.0.0...v4.0.0) (2020-04-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* only dist and types getting published
+
+### Features
+
+* allow disabling logger ([f8fb742](https://github.com/nuxt-contrib/hookable/commit/f8fb74224f1277ec7f7d5a37bd312af7514fc962))
+* allow removing registered hooks ([#16](https://github.com/nuxt-contrib/hookable/issues/16)) ([4134c31](https://github.com/nuxt-contrib/hookable/commit/4134c31c44256cc82cac3a7a3610ece9252431dc))
+* migrate to typescript ([d63ea3e](https://github.com/nuxt-contrib/hookable/commit/d63ea3e408ebea74ea3855af0c6e51880ebf9cac))
+
 ## [3.0.0](https://github.com/nuxt-contrib/hookable/compare/v2.3.0...v3.0.0) (2020-02-25)
 
 
