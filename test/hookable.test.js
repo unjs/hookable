@@ -1,4 +1,4 @@
-import Hookable from '../src/hable'
+import Hookable from '../src/hookable'
 import { flatHooks } from '../src/utils'
 
 describe('core: hookable', () => {

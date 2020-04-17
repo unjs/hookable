@@ -1,10 +1,10 @@
-# Hable
+# Hookable
 
-[![CircleCI](https://img.shields.io/circleci/project/github/jsless/hable.svg?style=flat-square)](https://circleci.com/gh/jsless/hable)
-[![Codecov](https://img.shields.io/codecov/c/github/jsless/hable.svg?style=flat-square)](https://codecov.io/gh/jsless/hable)
-[![npm](https://img.shields.io/npm/v/hable.svg?style=flat-square)](https://www.npmjs.com/package/hable)
-[![npm](https://img.shields.io/npm/dt/hable.svg?style=flat-square)](https://www.npmjs.com/package/hable)
-[![size](http://img.badgesize.io/https://unpkg.com/hable/dist/hable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hable)
+[![CircleCI](https://img.shields.io/circleci/project/github/jsless/hookable.svg?style=flat-square)](https://circleci.com/gh/jsless/hookable)
+[![Codecov](https://img.shields.io/codecov/c/github/jsless/hookable.svg?style=flat-square)](https://codecov.io/gh/jsless/hookable)
+[![npm](https://img.shields.io/npm/v/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
+[![npm](https://img.shields.io/npm/dt/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
+[![size](http://img.badgesize.io/https://unpkg.com/hookable/dist/hookable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hookable)
 
 > Awaitable hooks for Node.js
 
@@ -13,21 +13,21 @@
 Using yarn:
 
 ```bash
-yarn add hable
+yarn add hookable
 ```
 
 Using npm:
 
 ```bash
-npm install hable
+npm install hookable
 ```
 
 ## Usage
 
-**Extend your base class from Hable:**
+**Extend your base class from Hookable:**
 
 ```js
-import Hookable from 'hable'
+import Hookable from 'hookable'
 
 export default class Foo extends Hookable {
   constructor() {
@@ -121,7 +121,11 @@ Register many hooks using an object.
 
 ## Credits
 
-Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system. Original author: [Sébastien Chopin](https://github.com/Atinux).
+Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system
+
+Original author [Sébastien Chopin](https://github.com/Atinux)
+
+Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https://www.npmjs.com/package/hookable) package name
 
 ## License
 

@@ -1,5 +1,5 @@
 {
-  "name": "hable",
+  "name": "hookable",
   "version": "3.0.0",
   "description": "Awaitable hooks for Node.js",
   "keywords": [
@@ -9,15 +9,15 @@
     "tapable",
     "tappable"
   ],
-  "repository": "jsless/hable",
+  "repository": "jsless/hookable",
   "license": "MIT",
   "contributors": [
     "Sebastien Chopin (@Atinux)",
     "Clark Du (@clarkdo)",
     "Pooya Parsa (@pi0)"
   ],
-  "main": "./dist/hable.js",
-  "browser": "./dist/hable.umd.js",
+  "main": "./dist/hookable.js",
+  "browser": "./dist/hookable.umd.js",
   "types": "./index.d.ts",
   "files": [
     "index.d.ts",
@@ -25,7 +25,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "bili --module-name hable --minify --format cjs,umd,es src/hable.js",
+    "build": "bili --module-name hookable --minify --format cjs,umd,es src/hookable.js",
     "lint": "eslint src",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint && yarn jest"
