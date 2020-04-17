@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Hookable from '../src/hookable'
 import { flatHooks } from '../src/utils'
 
@@ -32,6 +33,7 @@ describe('core: hookable', () => {
     hook.hook(0, () => { })
     hook.hook('', () => { })
     hook.hook(undefined, () => { })
+
 
     expect(hook._hooks[0]).toBeUndefined()
     expect(hook._hooks['']).toBeUndefined()
@@ -117,20 +119,6 @@ describe('core: hookable', () => {
     expect(console.error).toBeCalledWith(error)
   })
 
-  test('should clear registered hooks', () => {
-    const hook = new Hookable()
-    hook.hook('test:hook', () => { })
-
-    expect(hook._hooks['test:hook']).toHaveLength(1)
-    expect(hook._hooks['test:before']).toBeUndefined()
-
-    hook.clearHook('test:hook')
-    hook.clearHook('test:before')
-
-    expect(hook._hooks['test:hook']).toBeUndefined()
-    expect(hook._hooks['test:before']).toBeUndefined()
-  })
-
   test('should return a self-removal function', async () => {
     const hook = new Hookable()
     const remove = hook.hook('test:hook', () => {
@@ -193,20 +181,6 @@ describe('core: hookable', () => {
     expect(console.log).toBeCalledWith('test:hook called')
     expect(console.log).toBeCalledTimes(1)
     expect(hook._hooks['test:hook']).toBeUndefined()
-  })
-
-  test('should clear all registered hooks', () => {
-    const hook = new Hookable()
-    hook.hook('test:hook', () => { })
-
-    expect(hook._hooks['test:hook']).toHaveLength(1)
-    expect(hook._hooks['test:before']).toBeUndefined()
-
-    hook.clearHooks()
-
-    expect(hook._hooks['test:hook']).toBeUndefined()
-    expect(hook._hooks['test:before']).toBeUndefined()
-    expect(hook._hooks).toEqual({})
   })
 
   test('should return flat hooks', () => {

@@ -1,10 +1,12 @@
 module.exports = {
-  testEnvironment: 'node',
+  preset: 'ts-jest',
   collectCoverage: true,
-  collectCoverageFrom: [
-    'src/**'
-  ],
-  transform: {
-    '^.+\\.js$': 'babel-jest'
+  testEnvironment: 'node',
+  globals: {
+    'ts-jest': {
+      tsConfig: {
+          esModuleInterop: false
+      }
+    }
   }
-}
+};

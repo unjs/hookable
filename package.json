@@ -25,14 +25,16 @@
   ],
   "scripts": {
     "build": "rollup -c && tsc --emitDeclarationOnly",
-    "lint": "eslint src",
     "prepublish": "yarn build",
+    "lint": "eslint --ext .ts src",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
-    "test": "yarn lint && yarn jest"
+    "test": "yarn jest"
   },
   "devDependencies": {
     "@babel/preset-env": "latest",
     "@babel/preset-typescript": "latest",
+    "@nuxtjs/eslint-config-typescript": "^1.0.2",
+    "@types/jest": "latest",
     "babel-jest": "latest",
     "codecov": "latest",
     "eslint": "latest",
@@ -49,6 +51,7 @@
     "rollup-plugin-terser": "latest",
     "rollup-plugin-typescript2": "latest",
     "standard-version": "latest",
+    "ts-jest": "latest",
     "typescript": "latest"
   }
 }
