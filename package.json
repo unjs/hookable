@@ -31,17 +31,17 @@
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
-    "babel-jest": "^24.9.0",
-    "bili": "^4.8.1",
-    "codecov": "^3.5.0",
-    "eslint": "^6.3.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.17.0",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "jest": "^24.9.0",
-    "standard-version": "^7.0.0"
+    "babel-jest": "latest",
+    "bili": "latest",
+    "codecov": "latest",
+    "eslint": "latest",
+    "eslint-config-standard": "latest",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-jest": "latest",
+    "eslint-plugin-node": "latest",
+    "eslint-plugin-promise": "latest",
+    "eslint-plugin-standard": "latest",
+    "jest": "latest",
+    "standard-version": "latest"
   }
 }
