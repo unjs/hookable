@@ -40,9 +40,6 @@ export default class Foo extends Hookable {
   async someFunction() {
     // Call and wait for `hook1` hooks (if any) sequential
     await this.callHook('hook1')
-
-    // Call and wait for `hook2` hooks (if any) in parallel
-    await this.callHookParallel('hook2')
   }
 }
 ```
