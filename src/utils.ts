@@ -1,4 +1,4 @@
-export function flatHooks (configHooks, hooks = {}, parentName) {
+export function flatHooks (configHooks, hooks = {}, parentName?) {
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key

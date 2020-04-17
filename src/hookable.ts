@@ -1,7 +1,12 @@
 import { serial, flatHooks } from './utils'
+import { Logger } from './types'
 
 export default class Hookable {
-  constructor (logger = console) {
+  private _hooks: object
+  private _deprecatedHooks: object
+  private _logger: Logger
+
+  constructor (logger: Logger = console) {
     this._logger = logger
     this._hooks = {}
     this._deprecatedHooks = {}

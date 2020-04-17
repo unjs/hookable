@@ -18,21 +18,21 @@
   ],
   "main": "./dist/hookable.js",
   "browser": "./dist/hookable.umd.js",
-  "types": "./index.d.ts",
+  "types": "./dist/hoookable.d.ts",
   "files": [
-    "index.d.ts",
-    "src",
     "dist"
   ],
   "scripts": {
-    "build": "bili --module-name hookable --minify --format cjs,umd,es src/hookable.js",
+    "build": "rollup -c && tsc --emitDeclarationOnly",
     "lint": "eslint src",
+    "prepublish": "yarn build",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-typescript": "^7.9.0",
     "babel-jest": "latest",
-    "bili": "latest",
     "codecov": "latest",
     "eslint": "latest",
     "eslint-config-standard": "latest",
@@ -42,6 +42,12 @@
     "eslint-plugin-promise": "latest",
     "eslint-plugin-standard": "latest",
     "jest": "latest",
-    "standard-version": "latest"
+    "rollup": "^2.6.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "latest",
+    "standard-version": "latest",
+    "typescript": "latest"
   }
 }
