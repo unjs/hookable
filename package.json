@@ -28,7 +28,7 @@
     "prepublish": "yarn build",
     "lint": "eslint --ext .ts src",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
-    "test": "yarn jest"
+    "test": "yarn lint && yarn jest"
   },
   "devDependencies": {
     "@babel/preset-env": "latest",

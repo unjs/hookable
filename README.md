@@ -1,10 +1,12 @@
 # Hookable
 
-[![CircleCI](https://img.shields.io/circleci/project/github/nuxt-contrib/hookable.svg?style=flat-square)](https://circleci.com/gh/nuxt-contrib/hookable)
-[![Codecov](https://img.shields.io/codecov/c/github/nuxt-contrib/hookable.svg?style=flat-square)](https://codecov.io/gh/nuxt-contrib/hookable)
-[![npm](https://img.shields.io/npm/v/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
-[![npm](https://img.shields.io/npm/dt/hookable.svg?style=flat-square)](https://www.npmjs.com/package/hookable)
-[![size](http://img.badgesize.io/https://unpkg.com/hookable/dist/hookable.cjs.min.js?compression=gzip&style=flat-square)](https://unpkg.com/hookable)
+[![npm version][npm-version-src]][npm-version-href]
+[![npm downloads][npm-downloads-src]][npm-downloads-href]
+[![packagephobia][packagephobia-src]][packagephobia-href]
+[![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
+[![Codecov][codecov-src]][codecov-href]
+[![Dependencies][david-dm-src]][david-dm-href]
+[![Standard JS][standard-js-src]][standard-js-href]
 
 > Awaitable hooks for Node.js
 
@@ -182,4 +184,23 @@ Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https:/
 
 ## License
 
-MIT
+MIT - Made with 💖 by Nuxt.js team!
+
+<!-- Badges -->
+[npm-version-src]: https://flat.badgen.net/npm/dt/hookable
+[npm-version-href]: https://npmjs.com/package/hookable
+
+[npm-downloads-src]: https://flat.badgen.net/npm/v/hookable
+[npm-downloads-href]: https://npmjs.com/package/hookable
+
+[github-actions-ci-src]: https://github.com/nuxt-contrib/hookable/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/nuxt-contrib/hookable/actions?query=workflow%3Aci
+
+[codecov-src]: https://flat.badgen.net/codecov/c/github/nuxt-contrib/hookable
+[codecov-href]: https://codecov.io/gh/nuxt-contrib/hookable
+
+[david-dm-src]: https://flat.badgen.net/david/dep/nuxt-contrib/hookable
+[david-dm-href]: https://david-dm.org/nuxt-contrib/hookable
+
+[packagephobia-src]: https://flat.badgen.net/packagephobia/install/hookable
+[packagephobia-href]: https://packagephobia.now.sh/result?p=hookable
