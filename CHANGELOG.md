@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](https://github.com/nuxt-contrib/hookable/compare/v4.1.0...v4.1.1) (2020-04-28)
+
+
+### Bug Fixes
+
+* **pkg:** typo in types entry name (fixes [#19](https://github.com/nuxt-contrib/hookable/issues/19)) ([b9ba90f](https://github.com/nuxt-contrib/hookable/commit/b9ba90fbc725097e41c430d7df4205985c2faaec))
+
 ## [4.1.0](https://github.com/nuxt-contrib/hookable/compare/v4.0.0...v4.1.0) (2020-04-17)
 
 
