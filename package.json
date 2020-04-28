@@ -18,7 +18,7 @@
   ],
   "main": "./dist/hookable.js",
   "browser": "./dist/hookable.min.js",
-  "types": "./types/hoookable.d.ts",
+  "types": "./types/hookable.d.ts",
   "files": [
     "dist",
     "types"
