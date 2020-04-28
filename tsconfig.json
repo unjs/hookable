@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "importHelpers": false,
-    "noEmitHelpers": true,
+    "noEmitHelpers": false,
     "strict": true,
     "esModuleInterop": true,
     "declaration": true,
