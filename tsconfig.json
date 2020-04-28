@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "es5",
+    "module": "commonjs",
     "importHelpers": false,
     "noEmitHelpers": true,
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "dist",
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": "lib",
     "types": [
       "node"
     ],
+    "outDir": "./lib",
+    "rootDir": "./src",  
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "lib"
   ]
 }

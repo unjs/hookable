@@ -14,17 +14,19 @@
   "contributors": [
     "Sebastien Chopin (@Atinux)",
     "Clark Du (@clarkdo)",
-    "Pooya Parsa (@pi0)"
+    "Pooya Parsa (@pi0)",
+    "xcodebuild (@xcodebuild)"
   ],
-  "main": "./dist/hookable.js",
-  "browser": "./dist/hookable.min.js",
-  "types": "./types/hoookable.d.ts",
+  "main": "./lib/hookable.js",
+  "browser": "./lib/hookable.js",
+  "typings": "./lib/hoookable.d.ts",
   "files": [
     "dist",
-    "types"
+    "types",
+    "lib"
   ],
   "scripts": {
-    "build": "rollup -c && tsc --emitDeclarationOnly",
+    "build": "rollup -c && tsc",
     "prepublish": "yarn build",
     "lint": "eslint --ext .ts src",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
