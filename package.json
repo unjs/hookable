@@ -33,7 +33,7 @@
   "devDependencies": {
     "@babel/preset-env": "latest",
     "@babel/preset-typescript": "latest",
-    "@nuxtjs/eslint-config-typescript": "^1.0.2",
+    "@nuxtjs/eslint-config-typescript": "^2.0.0",
     "@types/jest": "latest",
     "babel-jest": "latest",
     "codecov": "latest",
