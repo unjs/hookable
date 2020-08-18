@@ -175,7 +175,7 @@ hookable.removeHooks({
 
 ## Credits
 
-Extracted from [Nuxt.js](github.com/nuxt/nuxt.js) hooks system
+Extracted from [Nuxt.js](https://github.com/nuxt/nuxt.js) hooks system
 
 Original author [Sébastien Chopin](https://github.com/Atinux)
 
