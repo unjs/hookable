@@ -5,8 +5,8 @@ module.exports = {
   globals: {
     'ts-jest': {
       tsConfig: {
-          esModuleInterop: false
+        esModuleInterop: false
       }
     }
   }
-};
+}

@@ -1,5 +1,5 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 
 const extensions = ['.js', '.ts', '.tsx']
@@ -26,7 +26,10 @@ export default [
       babel({
         extensions,
         presets: [
-          '@babel/preset-env',
+          ['@babel/preset-env', {
+            targets: { ie: '11' },
+            exclude: ['@babel/plugin-transform-regenerator']
+          }],
           '@babel/preset-typescript'
         ]
       }),
