@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.2](https://github.com/nuxt-contrib/hookable/compare/v4.1.1...v4.1.2) (2020-08-24)
+
+
+### Bug Fixes
+
+* **build:** exclude regenerator and update target to ie 11 ([48acfc5](https://github.com/nuxt-contrib/hookable/commit/48acfc5c0a4b0fb8edc6e9790b37ad336c966215))
+
 ### [4.1.1](https://github.com/nuxt-contrib/hookable/compare/v4.1.0...v4.1.1) (2020-04-28)
 
 
