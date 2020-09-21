@@ -6,7 +6,7 @@ export function flatHooks (configHooks: configHooksT, hooks: flatHooksT = {}, pa
     const name = parentName ? `${parentName}:${key}` : key
     if (typeof subHook === 'object' && subHook !== null) {
       flatHooks(subHook, hooks, name)
-    } else {
+    } else if (typeof subHook === 'function') {
       hooks[name] = subHook
     }
   }
