@@ -4,7 +4,7 @@ import { flatHooks } from '../src/utils'
 
 describe('core: hookable', () => {
   beforeEach(() => {
-    ['log', 'warn', 'error', 'debug'].forEach(l => {
+    ['log', 'warn', 'error', 'debug'].forEach((l) => {
       console[l] = jest.fn()
     })
   })
@@ -33,7 +33,6 @@ describe('core: hookable', () => {
     hook.hook(0, () => { })
     hook.hook('', () => { })
     hook.hook(undefined, () => { })
-
 
     expect(hook._hooks[0]).toBeUndefined()
     expect(hook._hooks['']).toBeUndefined()
@@ -262,5 +261,18 @@ describe('core: hookable', () => {
 
     expect(hook._hooks['test:hook']).toEqual([callback1, callback2])
     expect(hook._hooks['test:before']).toBeUndefined()
+  })
+
+  test('hook once', async () => {
+    const hook = new Hookable()
+
+    let x = 0
+
+    hook.hookOnce('test', () => { x++ })
+
+    await hook.callHook('test')
+    await hook.callHook('test')
+
+    expect(x).toBe(1)
   })
 })

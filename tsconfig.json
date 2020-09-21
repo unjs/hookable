@@ -4,7 +4,7 @@
     "module": "ESNext",
     "importHelpers": false,
     "noEmitHelpers": true,
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "outDir": "dist",
     "declaration": true,

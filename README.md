@@ -115,6 +115,12 @@ Register a handler for a specific hook. `fn` must be a function.
 
 Returns an `unregister` function that, when called, will remove the registered handler.
 
+### `hookOnce (name, fn)`
+
+Similar to `hook` but unregisters hook once called.
+
+Returns an `unregister` function that, when called, will remove the registered handler before first call.
+
 ### `addHooks(configHooks)`
 
 Flatten and register hooks object.

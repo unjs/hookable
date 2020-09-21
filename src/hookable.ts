@@ -16,9 +16,9 @@ export default class Hookable {
     this.callHook = this.callHook.bind(this)
   }
 
-  hook (name: string, fn: hookFnT): hookFnT {
+  hook (name: string, fn: hookFnT) {
     if (!name || typeof fn !== 'function') {
-      return () => { }
+      return () => {}
     }
 
     const originalName = name
@@ -47,10 +47,21 @@ export default class Hookable {
     return () => {
       if (fn) {
         this.removeHook(name, fn)
-        // @ts-ignore
         fn = null // Free memory
       }
     }
+  }
+
+  hookOnce (name: string, fn: hookFnT) {
+    let _unreg
+    let _fn = (...args) => {
+      _unreg()
+      _unreg = null
+      _fn = null
+      return fn(...args)
+    }
+    _unreg = this.hook(name, _fn)
+    return _unreg
   }
 
   removeHook (name: string, fn: hookFnT) {
