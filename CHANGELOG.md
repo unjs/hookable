@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/nuxt-contrib/hookable/compare/v4.1.2...v4.2.0) (2020-10-23)
+
+
+### Features
+
+* hookOnce ([225fa8a](https://github.com/nuxt-contrib/hookable/commit/225fa8af85e1a504916c357f57b047143b6bc5ab))
+
+
+### Bug Fixes
+
+* typecheck for flatHooks ([7800190](https://github.com/nuxt-contrib/hookable/commit/7800190feb82134be5dd089ca184a18a6644da19))
+
 ### [4.1.2](https://github.com/nuxt-contrib/hookable/compare/v4.1.1...v4.1.2) (2020-08-24)
 
 
