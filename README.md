@@ -7,7 +7,7 @@
 [![Codecov][codecov-src]][codecov-href]
 [![Dependencies][david-dm-src]][david-dm-href]
 
-> Awaitable hooks for Node.js
+> Awaitable hooks for Node.js and Browser
 
 ## Install
 
