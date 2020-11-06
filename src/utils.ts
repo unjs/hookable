@@ -27,7 +27,6 @@ export function mergeHooks (...hooks: configHooksT[]): flatHooksT {
     }
   }
 
-  // Merge to single function for backward compatibility
   for (const key in finalHooks) {
     const arr = finalHooks[key]
     finalHooks[key] = (...args) => serial(arr, (fn: any) => fn(...args))
