@@ -1,10 +1,13 @@
-import { serial, flatHooks } from './utils'
+import { serial, flatHooks, mergeHooks } from './utils'
 import { LoggerT, hookFnT, configHooksT, deprecatedHookT, deprecatedHooksT } from './types'
 
-export default class Hookable {
+class Hookable {
   private _hooks: { [name: string]: hookFnT[] }
   private _deprecatedHooks: deprecatedHooksT
   private _logger: LoggerT | false
+
+  static mergeHooks: typeof mergeHooks
+  mergeHooks: typeof mergeHooks
 
   constructor (logger: LoggerT | false = console) {
     this._logger = logger
@@ -124,3 +127,8 @@ export default class Hookable {
     }
   }
 }
+
+Hookable.mergeHooks = mergeHooks
+Hookable.prototype.mergeHooks = mergeHooks
+
+export default Hookable

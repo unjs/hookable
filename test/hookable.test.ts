@@ -275,4 +275,56 @@ describe('core: hookable', () => {
 
     expect(x).toBe(1)
   })
+
+  test('mergeHooks util', () => {
+    const fn = () => { }
+    const hooks1 = {
+      foo: fn,
+      bar: fn,
+      'a:b': fn,
+      'a:c': fn
+    }
+    const hooks2 = {
+      foo: fn,
+      baz: fn,
+      a: {
+        b: fn,
+        d: fn
+      }
+    }
+
+    const merged = Hookable.mergeHooks(hooks1, hooks2)
+
+    expect(Object.keys(merged)).toMatchObject([
+      'foo',
+      'bar',
+      'a:b',
+      'a:c',
+      'baz',
+      'a:d'
+    ])
+  })
+
+  test('mergeHooks util (proto)', async () => {
+    const hook = new Hookable()
+
+    const hooks1 = {
+      'test:hook': () => console.log('test:hook called1')
+    }
+
+    const hooks2 = {
+      test: {
+        hook: () => console.log('test:hook called2')
+      }
+    }
+
+    const mergedHooks = hook.mergeHooks(hooks1, hooks2)
+
+    hook.addHooks(mergedHooks)
+
+    await hook.callHook('test:hook')
+
+    expect(console.log).toBeCalledWith('test:hook called1')
+    expect(console.log).toBeCalledWith('test:hook called2')
+  })
 })
