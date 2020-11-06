@@ -4,13 +4,36 @@ export function flatHooks (configHooks: configHooksT, hooks: flatHooksT = {}, pa
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key
-    if (typeof subHook === 'object' && subHook !== null) {
+    if (typeof subHook === 'object' && subHook !== null && !Array.isArray(subHook)) {
       flatHooks(subHook, hooks, name)
     } else if (typeof subHook === 'function') {
       hooks[name] = subHook
     }
   }
   return hooks
+}
+
+export function mergeHooks (...hooks: configHooksT[]): flatHooksT {
+  const finalHooks: any = {}
+
+  for (let _hook of hooks) {
+    _hook = flatHooks(_hook)
+    for (const key in _hook) {
+      if (finalHooks[key]) {
+        finalHooks[key].push(_hook[key])
+      } else {
+        finalHooks[key] = [_hook[key]]
+      }
+    }
+  }
+
+  // Merge to single function for backward compatibility
+  for (const key in finalHooks) {
+    const arr = finalHooks[key]
+    finalHooks[key] = (...args) => serial(arr, (fn: any) => fn(...args))
+  }
+
+  return finalHooks
 }
 
 export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {
