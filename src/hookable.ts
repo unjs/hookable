@@ -1,5 +1,6 @@
 import { serial, flatHooks, mergeHooks } from './utils'
 import { LoggerT, hookFnT, configHooksT, deprecatedHookT, deprecatedHooksT } from './types'
+export * from './types'
 
 class Hookable {
   private _hooks: { [name: string]: hookFnT[] }
