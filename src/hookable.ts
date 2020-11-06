@@ -20,11 +20,6 @@ class Hookable {
   }
 
   hook (name: string, fn: hookFnT) {
-    if (Array.isArray(fn)) {
-      for (const _fn of fn) {
-        this.hook(name, _fn)
-      }
-    }
     if (!name || typeof fn !== 'function') {
       return () => {}
     }

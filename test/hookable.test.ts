@@ -276,19 +276,6 @@ describe('core: hookable', () => {
     expect(x).toBe(1)
   })
 
-  test('should call registered hooks (array)', async () => {
-    const hook = new Hookable()
-    hook.hook('test:hook', [
-      () => console.log('test:hook called1'),
-      () => console.log('test:hook called2')
-    ])
-
-    await hook.callHook('test:hook')
-
-    expect(console.log).toBeCalledWith('test:hook called1')
-    expect(console.log).toBeCalledWith('test:hook called2')
-  })
-
   test('mergeHooks util', () => {
     const fn = () => { }
     const hooks1 = {

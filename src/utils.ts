@@ -4,7 +4,7 @@ export function flatHooks (configHooks: configHooksT, hooks: flatHooksT = {}, pa
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key
-    if (typeof subHook === 'object' && subHook !== null && !Array.isArray(subHook)) {
+    if (typeof subHook === 'object' && subHook !== null) {
       flatHooks(subHook, hooks, name)
     } else if (typeof subHook === 'function') {
       hooks[name] = subHook
