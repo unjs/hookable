@@ -17,6 +17,7 @@
     "Pooya Parsa (@pi0)"
   ],
   "main": "./dist/hookable.js",
+  "module": "./dist/hookable.mjs",
   "browser": "./dist/hookable.umd.js",
   "types": "./types/hookable.d.ts",
   "files": [
