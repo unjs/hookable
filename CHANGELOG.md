@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/nuxt-contrib/hookable/compare/v4.3.1...v4.4.0) (2021-01-21)
+
+
+### Features
+
+* **pkg:** expose module format ([2987b09](https://github.com/nuxt-contrib/hookable/commit/2987b0901e292eb4570f8141ca51cfd9d2d3f94f))
+
 ### [4.3.1](https://github.com/nuxt-contrib/hookable/compare/v4.3.0...v4.3.1) (2020-11-06)
 
 
