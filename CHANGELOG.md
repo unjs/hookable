@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.1](https://github.com/nuxt-contrib/hookable/compare/v4.4.0...v4.4.1) (2021-02-26)
+
+
+### Bug Fixes
+
+* avoid creating extra wrapper when merging hooks ([790c1c4](https://github.com/nuxt-contrib/hookable/commit/790c1c4dbbd1f7b9cb1995b40baeecead5346ed0))
+
 ## [4.4.0](https://github.com/nuxt-contrib/hookable/compare/v4.3.1...v4.4.0) (2021-01-21)
 
 
