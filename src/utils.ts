@@ -28,8 +28,12 @@ export function mergeHooks (...hooks: configHooksT[]): flatHooksT {
   }
 
   for (const key in finalHooks) {
-    const arr = finalHooks[key]
-    finalHooks[key] = (...args) => serial(arr, (fn: any) => fn(...args))
+    if (finalHooks[key].length > 1) {
+      const arr = finalHooks[key]
+      finalHooks[key] = (...args) => serial(arr, (fn: any) => fn(...args))
+    } else {
+      finalHooks[key] = finalHooks[key][0]
+    }
   }
 
   return finalHooks
