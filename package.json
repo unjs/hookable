@@ -11,22 +11,19 @@
   ],
   "repository": "unjs/hookable",
   "license": "MIT",
-  "contributors": [
-    "Sebastien Chopin (@Atinux)",
-    "Clark Du (@clarkdo)",
-    "Pooya Parsa (@pi0)"
-  ],
-  "main": "./dist/hookable.js",
+  "exports": {
+    "import": "./dist/hookable.mjs",
+    "require": "./dist/hookable.cjs"
+  },
+  "main": "./dist/hookable.cjs",
   "module": "./dist/hookable.mjs",
-  "browser": "./dist/hookable.umd.js",
   "types": "./types/hookable.d.ts",
   "files": [
     "dist",
     "types"
   ],
   "scripts": {
-    "build": "siroc build && yarn build:browser",
-    "build:browser": "bili src/hookable.ts --format umd --minify --module-name Hookable",
+    "build": "siroc build",
     "lint": "eslint --ext .ts src",
     "prepublish": "yarn build",
     "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
