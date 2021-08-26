@@ -9,6 +9,8 @@
 
 > Awaitable hooks for Node.js and Browser
 
+**Please see [Migration Guide](#migration) for migrating from < 4.0.0 to >= 5.0.0**
+
 ## Install
 
 Using yarn:
@@ -186,6 +188,17 @@ hookable.removeHooks({
   }
 })
 ```
+
+## Migration
+
+### From `4.x` to `5.x`
+
+- Type checking improved. You can use `Hookable<T>` or `createHooks<T>()` to provide types interface **([c2e1e22](https://github.com/unjs/hookable/commit/c2e1e223d16e7bf87117cd8d72ad3ba211a333d8))**
+- We no longer provide an IE11 compatible umd build. Instead, you should use an ESM-aware bundler such as webpack or rollup to transpile if needed.
+- Logger param is dropped. We use `console.warn` by default for deprecated hooks.
+- Package now uses named exports. You should import `{ Hookable }` instead of  `Hookable` or use new `createHooks` util
+- `mergeHooks` util is exported standalone. You should replace `Hookable.mergeHooks` and `this.mergeHooks` with new `{ mergeHooks }` export
+- In versions < 5.0.0 when using `callHook` if an error happened by one of the hook callbacks, we was handling errors globally and call global `error` hook + `console.error` instead and resolve `callHook` promise!  This sometimes makes confusing behavior when we think code worked but it didn't. v5 introduced a breaking change that when a hook throws an error, `callHook` also rejects instead of a global `error` event. This means you should be careful to handle all errors when using `callHook` now.
 
 ## Credits
 
