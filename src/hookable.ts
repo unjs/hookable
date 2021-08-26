@@ -24,7 +24,7 @@ class Hookable <
     this.callHook = this.callHook.bind(this)
   }
 
-  hook <NameT extends HookNameT>(name: NameT, fn: HooksT[NameT] & HookCallback) {
+  hook <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
     if (!name || typeof fn !== 'function') {
       return () => {}
     }
@@ -60,7 +60,7 @@ class Hookable <
     }
   }
 
-  hookOnce <NameT extends HookNameT>(name: NameT, fn: HooksT[NameT] & HookCallback) {
+  hookOnce <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
     let _unreg
     let _fn = (...args) => {
       _unreg()

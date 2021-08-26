@@ -17,7 +17,7 @@ export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, p
 export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
   const finalHooks = {} as any
 
-  for (let hook of hooks) {
+  for (const hook of hooks) {
     const flatenHook = flatHooks(hook)
     for (const key in flatenHook) {
       if (finalHooks[key]) {
