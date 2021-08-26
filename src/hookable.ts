@@ -2,7 +2,7 @@ import { serial, flatHooks } from './utils'
 import type { LoggerT, DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 export * from './types'
 
-class Hookable <
+export class Hookable <
   _HooksT = Record<string, HookCallback>,
   HooksT = _HooksT & { error: (error: Error | any) => void },
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
@@ -134,4 +134,6 @@ class Hookable <
   }
 }
 
-export default Hookable
+export function createHooks<T> (logger: LoggerT | false): Hookable<T> {
+  return new Hookable<T>(logger)
+}

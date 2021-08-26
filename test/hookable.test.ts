@@ -1,6 +1,5 @@
 // @ts-nocheck
-import Hookable from '../src/hookable'
-import { flatHooks } from '../src/utils'
+import { createHooks, flatHooks, mergeHooks } from '../src/index'
 
 describe('core: hookable', () => {
   beforeEach(() => {
@@ -10,7 +9,7 @@ describe('core: hookable', () => {
   })
 
   test('should construct hook object', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
 
     expect(hook._hooks).toEqual({})
     expect(hook._deprecatedHooks).toEqual({})
@@ -19,7 +18,7 @@ describe('core: hookable', () => {
   })
 
   test('should register hook successfully', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.hook('test:hook', () => { })
     hook.hook('test:hook', () => { })
 
@@ -29,7 +28,7 @@ describe('core: hookable', () => {
   })
 
   test('should ignore empty hook name', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.hook(0, () => { })
     hook.hook('', () => { })
     hook.hook(undefined, () => { })
@@ -40,7 +39,7 @@ describe('core: hookable', () => {
   })
 
   test('should ignore non-function hook', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.hook('test:hook', '')
     hook.hook('test:hook', undefined)
 
@@ -48,7 +47,7 @@ describe('core: hookable', () => {
   })
 
   test('should convert and display deprecated hooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.deprecateHook('a', 'b')
     hook.deprecateHook('b', { to: 'c' })
     hook.deprecateHook('x', { to: 'y', message: 'Custom' })
@@ -67,7 +66,7 @@ describe('core: hookable', () => {
   })
 
   test('deprecateHooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.deprecateHooks({
       'test:hook': 'test:before'
     })
@@ -80,7 +79,7 @@ describe('core: hookable', () => {
   })
 
   test('should call registered hook', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.hook('test:hook', () => console.log('test:hook called'))
 
     await hook.callHook('test:hook')
@@ -89,7 +88,7 @@ describe('core: hookable', () => {
   })
 
   test('should ignore unregistered hook', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
 
     await hook.callHook('test:hook')
 
@@ -97,7 +96,7 @@ describe('core: hookable', () => {
   })
 
   test('should report hook error', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const error = new Error('Hook Error')
     hook.hook('test:hook', () => { throw error })
 
@@ -107,7 +106,7 @@ describe('core: hookable', () => {
   })
 
   test('should call error hook', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const error = new Error('Hook Error')
     hook.hook('error', jest.fn())
     hook.hook('test:hook', () => { throw error })
@@ -119,7 +118,7 @@ describe('core: hookable', () => {
   })
 
   test('should return a self-removal function', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const remove = hook.hook('test:hook', () => {
       console.log('test:hook called')
     })
@@ -132,7 +131,7 @@ describe('core: hookable', () => {
   })
 
   test('should clear only its own hooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const callback = () => { }
 
     hook.hook('test:hook', callback)
@@ -149,7 +148,7 @@ describe('core: hookable', () => {
   })
 
   test('should clear removed hooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const callback = () => { }
     hook.hook('test:hook', callback)
     hook.hook('test:hook', callback)
@@ -166,7 +165,7 @@ describe('core: hookable', () => {
   })
 
   test('should call self-removing hooks once', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const remove = hook.hook('test:hook', () => {
       console.log('test:hook called')
       remove()
@@ -197,7 +196,7 @@ describe('core: hookable', () => {
   })
 
   test('should add object hooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     hook.addHooks({
       test: {
         hook: () => { },
@@ -216,7 +215,7 @@ describe('core: hookable', () => {
   })
 
   test('should clear multiple hooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const callback = () => {}
 
     const hooks = {
@@ -240,7 +239,7 @@ describe('core: hookable', () => {
   })
 
   test('should clear only the hooks added by addHooks', () => {
-    const hook = new Hookable()
+    const hook = createHooks()
     const callback1 = () => {}
     const callback2 = () => {}
     hook.hook('test:hook', callback1)
@@ -264,7 +263,7 @@ describe('core: hookable', () => {
   })
 
   test('hook once', async () => {
-    const hook = new Hookable()
+    const hook = createHooks()
 
     let x = 0
 
@@ -276,7 +275,7 @@ describe('core: hookable', () => {
     expect(x).toBe(1)
   })
 
-  test('mergeHooks util', () => {
+  test('mergeHooks', () => {
     const fn = () => { }
     const hooks1 = {
       foo: fn,
@@ -293,7 +292,7 @@ describe('core: hookable', () => {
       }
     }
 
-    const merged = Hookable.mergeHooks(hooks1, hooks2)
+    const merged = mergeHooks(hooks1, hooks2)
 
     expect(Object.keys(merged)).toMatchObject([
       'foo',
@@ -303,28 +302,5 @@ describe('core: hookable', () => {
       'baz',
       'a:d'
     ])
-  })
-
-  test('mergeHooks util (proto)', async () => {
-    const hook = new Hookable()
-
-    const hooks1 = {
-      'test:hook': () => console.log('test:hook called1')
-    }
-
-    const hooks2 = {
-      test: {
-        hook: () => console.log('test:hook called2')
-      }
-    }
-
-    const mergedHooks = hook.mergeHooks(hooks1, hooks2)
-
-    hook.addHooks(mergedHooks)
-
-    await hook.callHook('test:hook')
-
-    expect(console.log).toBeCalledWith('test:hook called1')
-    expect(console.log).toBeCalledWith('test:hook called2')
   })
 })

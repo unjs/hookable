@@ -25,10 +25,25 @@ npm install hookable
 
 ## Usage
 
-**Extend your base class from Hookable:**
+**Method A: Create a hookable instance:**
 
 ```js
-import Hookable from 'hookable'
+import { createHooks } from 'hookable'
+
+// Create a hookable instance
+const hooks = createHooks()
+
+// Hook on 'hello'
+hooks.hook('hello', () => { console.log('Hello World' )})
+
+// Call 'hello' hook
+hooks.callHook('hello')
+```
+
+**Method B: Extend your base class from Hookable:**
+
+```js
+import { Hookable } from 'hookable'
 
 export default class Foo extends Hookable {
   constructor() {
