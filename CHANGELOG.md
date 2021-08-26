@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-0](https://github.com/unjs/hookable/compare/v4.4.1...v5.0.0-0) (2021-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* You should directly handle errors with callHook
+* use named exports and expose createHooks
+* remove mergehooks from Hookable prototype
+* drop browser build and use exports field
+* improve type checking
+
+### Features
+
+* drop browser build and use exports field ([b626770](https://github.com/unjs/hookable/commit/b626770192a62b23acc1be16b4e4eac2383e9136))
+* drop logger and global error handler ([ee6ea87](https://github.com/unjs/hookable/commit/ee6ea87ad0e15a52252389b9b3112060bd411330))
+* improve type checking ([c2e1e22](https://github.com/unjs/hookable/commit/c2e1e223d16e7bf87117cd8d72ad3ba211a333d8))
+* use named exports and expose createHooks ([fadfcbd](https://github.com/unjs/hookable/commit/fadfcbd07c3e2fa6905d0e31deabc37fc55d8317))
+
+
+* remove mergehooks from Hookable prototype ([d50af59](https://github.com/unjs/hookable/commit/d50af595d3cb05be8fb5060374f4e28b3d6259fa))
+
 ### [4.4.1](https://github.com/unjs/hookable/compare/v4.4.0...v4.4.1) (2021-02-26)
 
 
