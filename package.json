@@ -36,7 +36,6 @@
     "@nuxtjs/eslint-config-typescript": "latest",
     "@types/jest": "latest",
     "babel-jest": "latest",
-    "bili": "latest",
     "codecov": "latest",
     "eslint": "latest",
     "jest": "latest",
