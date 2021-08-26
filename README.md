@@ -198,14 +198,14 @@ MIT - Made with 💖 by Nuxt.js team!
 [npm-downloads-src]: https://flat.badgen.net/npm/v/hookable
 [npm-downloads-href]: https://npmjs.com/package/hookable
 
-[github-actions-ci-src]: https://github.com/nuxt-contrib/hookable/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/nuxt-contrib/hookable/actions?query=workflow%3Aci
+[github-actions-ci-src]: https://github.com/unjs/hookable/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/unjs/hookable/actions?query=workflow%3Aci
 
-[codecov-src]: https://flat.badgen.net/codecov/c/github/nuxt-contrib/hookable
-[codecov-href]: https://codecov.io/gh/nuxt-contrib/hookable
+[codecov-src]: https://flat.badgen.net/codecov/c/github/unjs/hookable
+[codecov-href]: https://codecov.io/gh/unjs/hookable
 
-[david-dm-src]: https://flat.badgen.net/david/dep/nuxt-contrib/hookable
-[david-dm-href]: https://david-dm.org/nuxt-contrib/hookable
+[david-dm-src]: https://flat.badgen.net/david/dep/unjs/hookable
+[david-dm-href]: https://david-dm.org/unjs/hookable
 
 [packagephobia-src]: https://flat.badgen.net/packagephobia/install/hookable
 [packagephobia-href]: https://packagephobia.now.sh/result?p=hookable

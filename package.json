@@ -9,7 +9,7 @@
     "tapable",
     "tappable"
   ],
-  "repository": "nuxt-contrib/hookable",
+  "repository": "unjs/hookable",
   "license": "MIT",
   "contributors": [
     "Sebastien Chopin (@Atinux)",
