@@ -1,28 +1,29 @@
-import { configHooksT, flatHooksT } from './types'
+import { NestedHooks } from './types'
 
-export function flatHooks (configHooks: configHooksT, hooks: flatHooksT = {}, parentName?: string): flatHooksT {
+export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
   for (const key in configHooks) {
     const subHook = configHooks[key]
     const name = parentName ? `${parentName}:${key}` : key
     if (typeof subHook === 'object' && subHook !== null) {
       flatHooks(subHook, hooks, name)
     } else if (typeof subHook === 'function') {
+      // @ts-ignore
       hooks[name] = subHook
     }
   }
-  return hooks
+  return hooks as any
 }
 
-export function mergeHooks (...hooks: configHooksT[]): flatHooksT {
-  const finalHooks: any = {}
+export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
+  const finalHooks = {} as any
 
-  for (let _hook of hooks) {
-    _hook = flatHooks(_hook)
-    for (const key in _hook) {
+  for (let hook of hooks) {
+    const flatenHook = flatHooks(hook)
+    for (const key in flatenHook) {
       if (finalHooks[key]) {
-        finalHooks[key].push(_hook[key])
+        finalHooks[key].push(flatenHook[key])
       } else {
-        finalHooks[key] = [_hook[key]]
+        finalHooks[key] = [flatenHook[key]]
       }
     }
   }
@@ -36,7 +37,7 @@ export function mergeHooks (...hooks: configHooksT[]): flatHooksT {
     }
   }
 
-  return finalHooks
+  return finalHooks as any
 }
 
 export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {

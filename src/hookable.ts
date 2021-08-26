@@ -1,10 +1,14 @@
 import { serial, flatHooks, mergeHooks } from './utils'
-import { LoggerT, hookFnT, configHooksT, deprecatedHookT, deprecatedHooksT } from './types'
+import type { LoggerT, DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 export * from './types'
 
-class Hookable {
-  private _hooks: { [name: string]: hookFnT[] }
-  private _deprecatedHooks: deprecatedHooksT
+class Hookable <
+  _HooksT = Record<string, HookCallback>,
+  HooksT = _HooksT & { error: (error: Error | any) => void },
+  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
+> {
+  private _hooks: { [key: string]: HookCallback[] }
+  private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
   private _logger: LoggerT | false
 
   static mergeHooks: typeof mergeHooks
@@ -20,7 +24,7 @@ class Hookable {
     this.callHook = this.callHook.bind(this)
   }
 
-  hook (name: string, fn: hookFnT) {
+  hook <NameT extends HookNameT>(name: NameT, fn: HooksT[NameT] & HookCallback) {
     if (!name || typeof fn !== 'function') {
       return () => {}
     }
@@ -56,7 +60,7 @@ class Hookable {
     }
   }
 
-  hookOnce (name: string, fn: hookFnT) {
+  hookOnce <NameT extends HookNameT>(name: NameT, fn: HooksT[NameT] & HookCallback) {
     let _unreg
     let _fn = (...args) => {
       _unreg()
@@ -64,11 +68,11 @@ class Hookable {
       _fn = null
       return fn(...args)
     }
-    _unreg = this.hook(name, _fn)
+    _unreg = this.hook(name, _fn as typeof fn)
     return _unreg
   }
 
-  removeHook (name: string, fn: hookFnT) {
+  removeHook <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
     if (this._hooks[name]) {
       const idx = this._hooks[name].indexOf(fn)
 
@@ -82,16 +86,17 @@ class Hookable {
     }
   }
 
-  deprecateHook (name: string, deprecated: deprecatedHookT) {
+  deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: DeprecatedHook<HooksT>) {
     this._deprecatedHooks[name] = deprecated
   }
 
-  deprecateHooks (deprecatedHooks: deprecatedHooksT) {
+  deprecateHooks (deprecatedHooks: Record<HookNameT, DeprecatedHook<HooksT>>) {
     Object.assign(this._deprecatedHooks, deprecatedHooks)
   }
 
-  addHooks (configHooks: configHooksT) {
-    const hooks = flatHooks(configHooks)
+  addHooks (configHooks: NestedHooks<HooksT>) {
+    const hooks = flatHooks<HooksT>(configHooks)
+    // @ts-ignore
     const removeFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]))
 
     return () => {
@@ -101,14 +106,16 @@ class Hookable {
     }
   }
 
-  removeHooks (configHooks: configHooksT) {
-    const hooks = flatHooks(configHooks)
+  removeHooks (configHooks: NestedHooks<HooksT>) {
+    const hooks = flatHooks<HooksT>(configHooks)
     for (const key in hooks) {
+      // @ts-ignore
       this.removeHook(key, hooks[key])
     }
   }
 
-  async callHook (name: string, ...args: any) {
+  // @ts-ignore HooksT[NameT] & HookCallback prevents typechecking
+  async callHook <NameT extends HookNameT> (name: NameT, ...args: Parameters<HooksT[NameT]>) {
     if (!this._hooks[name]) {
       return
     }
@@ -116,6 +123,7 @@ class Hookable {
       await serial(this._hooks[name], fn => fn(...args))
     } catch (err) {
       if (name !== 'error') {
+        // @ts-ignore Stranger Things
         await this.callHook('error', err)
       }
       if (this._logger) {
