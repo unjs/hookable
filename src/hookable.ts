@@ -1,18 +1,15 @@
 import { serial, flatHooks } from './utils'
-import type { LoggerT, DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
+import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 export * from './types'
 
 export class Hookable <
-  _HooksT = Record<string, HookCallback>,
-  HooksT = _HooksT & { error: (error: Error | any) => void },
+  HooksT = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
   private _hooks: { [key: string]: HookCallback[] }
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
-  private _logger: LoggerT | false
 
-  constructor (logger: LoggerT | false = console) {
-    this._logger = logger
+  constructor () {
     this._hooks = {}
     this._deprecatedHooks = {}
 
@@ -35,14 +32,14 @@ export class Hookable <
       }
       name = deprecatedHook.to
     }
-    if (deprecatedHook && this._logger) {
+    if (deprecatedHook) {
       if (!deprecatedHook.message) {
-        this._logger.warn(
+        console.warn(
           `${originalName} hook has been deprecated` +
           (deprecatedHook.to ? `, please use ${deprecatedHook.to}` : '')
         )
       } else {
-        this._logger.warn(deprecatedHook.message)
+        console.warn(deprecatedHook.message)
       }
     }
 
@@ -112,28 +109,14 @@ export class Hookable <
   }
 
   // @ts-ignore HooksT[NameT] & HookCallback prevents typechecking
-  async callHook <NameT extends HookNameT> (name: NameT, ...args: Parameters<HooksT[NameT]>) {
+  callHook <NameT extends HookNameT> (name: NameT, ...args: Parameters<HooksT[NameT]>) {
     if (!this._hooks[name]) {
       return
     }
-    try {
-      await serial(this._hooks[name], fn => fn(...args))
-    } catch (err) {
-      if (name !== 'error') {
-        // @ts-ignore Stranger Things
-        await this.callHook('error', err)
-      }
-      if (this._logger) {
-        if (this._logger.fatal) {
-          this._logger.fatal(err)
-        } else {
-          this._logger.error(err)
-        }
-      }
-    }
+    return serial(this._hooks[name], fn => fn(...args))
   }
 }
 
-export function createHooks<T> (logger: LoggerT | false): Hookable<T> {
-  return new Hookable<T>(logger)
+export function createHooks<T> (): Hookable<T> {
+  return new Hookable<T>()
 }

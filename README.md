@@ -115,14 +115,7 @@ const unregister = lib.hook('hook0', async () => {
 
 ## Hookable class
 
-### `constructor(logger)`
-
-Custom logger. Default logger is `console` but you can use your own or [consola](https://github.com/nuxt/consola).
-
-It should be an object implementing following functions:
-- warn
-- error
-- fatal (optional)
+### `constructor()`
 
 ### `hook (name, fn)`
 

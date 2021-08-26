@@ -95,26 +95,11 @@ describe('core: hookable', () => {
     expect(console.debug).not.toBeCalled()
   })
 
-  test('should report hook error', async () => {
+  test('should throw hook error', async () => {
     const hook = createHooks()
     const error = new Error('Hook Error')
     hook.hook('test:hook', () => { throw error })
-
-    await hook.callHook('test:hook')
-
-    expect(console.error).toBeCalledWith(error)
-  })
-
-  test('should call error hook', async () => {
-    const hook = createHooks()
-    const error = new Error('Hook Error')
-    hook.hook('error', jest.fn())
-    hook.hook('test:hook', () => { throw error })
-
-    await hook.callHook('test:hook')
-
-    expect(hook._hooks.error[0]).toBeCalledWith(error)
-    expect(console.error).toBeCalledWith(error)
+    await expect(() => hook.callHook('test:hook')).rejects.toThrow(error)
   })
 
   test('should return a self-removal function', async () => {
