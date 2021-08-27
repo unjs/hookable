@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-2](https://github.com/unjs/hookable/compare/v5.0.0-1...v5.0.0-2) (2021-08-27)
+
+
+### Bug Fixes
+
+* allow type inference for `hook`, `hookOnce` and `removeHook` ([#29](https://github.com/unjs/hookable/issues/29)) ([22b74d3](https://github.com/unjs/hookable/commit/22b74d30805f35000709ba32220e6e4e059f4cc5))
+
 ## [5.0.0-1](https://github.com/unjs/hookable/compare/v5.0.0-0...v5.0.0-1) (2021-08-27)
 
 

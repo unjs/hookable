@@ -1,6 +1,6 @@
 {
   "name": "hookable",
-  "version": "5.0.0-1",
+  "version": "5.0.0-2",
   "description": "Awaitable hooks for Node.js",
   "keywords": [
     "hook",
