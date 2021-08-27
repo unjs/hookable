@@ -2,6 +2,8 @@ import { serial, flatHooks } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 export * from './types'
 
+type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
+
 export class Hookable <
   HooksT = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
@@ -18,28 +20,30 @@ export class Hookable <
     this.callHook = this.callHook.bind(this)
   }
 
-  hook <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
+  hook<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>) {
     if (!name || typeof fn !== 'function') {
       return () => {}
     }
 
     const originalName = name
-    let deprecatedHook
+    let deprecatedHookObj: Exclude<DeprecatedHook<HooksT>, string>
     while (this._deprecatedHooks[name]) {
-      deprecatedHook = this._deprecatedHooks[name]
+      const deprecatedHook = this._deprecatedHooks[name]
       if (typeof deprecatedHook === 'string') {
-        deprecatedHook = { to: deprecatedHook }
+        deprecatedHookObj = { to: deprecatedHook as NameT }
+      } else {
+        deprecatedHookObj = deprecatedHook
       }
-      name = deprecatedHook.to
+      name = deprecatedHookObj.to as NameT
     }
-    if (deprecatedHook) {
-      if (!deprecatedHook.message) {
+    if (deprecatedHookObj) {
+      if (!deprecatedHookObj.message) {
         console.warn(
           `${originalName} hook has been deprecated` +
-          (deprecatedHook.to ? `, please use ${deprecatedHook.to}` : '')
+          (deprecatedHookObj.to ? `, please use ${deprecatedHookObj.to}` : '')
         )
       } else {
-        console.warn(deprecatedHook.message)
+        console.warn(deprecatedHookObj.message)
       }
     }
 
@@ -54,9 +58,9 @@ export class Hookable <
     }
   }
 
-  hookOnce <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
-    let _unreg
-    let _fn = (...args) => {
+  hookOnce<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>) {
+    let _unreg: () => void
+    let _fn = (...args: any) => {
       _unreg()
       _unreg = null
       _fn = null
@@ -66,7 +70,7 @@ export class Hookable <
     return _unreg
   }
 
-  removeHook <NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] & HookCallback) {
+  removeHook<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>) {
     if (this._hooks[name]) {
       const idx = this._hooks[name].indexOf(fn)
 
@@ -108,12 +112,11 @@ export class Hookable <
     }
   }
 
-  // @ts-ignore HooksT[NameT] & HookCallback prevents typechecking
-  callHook <NameT extends HookNameT> (name: NameT, ...args: Parameters<HooksT[NameT]>) {
+  callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
     if (!this._hooks[name]) {
       return
     }
-    return serial(this._hooks[name], fn => fn(...args))
+    return serial(this._hooks[name], fn => fn(...args as any))
   }
 }
 
