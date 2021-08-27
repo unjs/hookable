@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-1](https://github.com/unjs/hookable/compare/v5.0.0-0...v5.0.0-1) (2021-08-27)
+
+
+### Bug Fixes
+
+* allow nested hooks type to omit some hooks ([#28](https://github.com/unjs/hookable/issues/28)) ([75f2a05](https://github.com/unjs/hookable/commit/75f2a057a526d018b9cf39f01ddfd2a3d2a6bbc1))
+
 ## [5.0.0-0](https://github.com/unjs/hookable/compare/v4.4.1...v5.0.0-0) (2021-08-26)
 
 
