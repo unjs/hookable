@@ -3,7 +3,7 @@ import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './type
 export * from './types'
 
 export class Hookable <
-  HooksT extends Record<string, HookCallback> = Record<string, HookCallback>,
+  HooksT = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
   private _hooks: { [key: string]: HookCallback[] }
@@ -18,7 +18,7 @@ export class Hookable <
     this.callHook = this.callHook.bind(this)
   }
 
-  hook<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT]) {
+  hook<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] extends HookCallback ? HooksT[NameT] : never) {
     if (!name || typeof fn !== 'function') {
       return () => {}
     }
@@ -56,7 +56,7 @@ export class Hookable <
     }
   }
 
-  hookOnce<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT]) {
+  hookOnce<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] extends HookCallback ? HooksT[NameT] : never) {
     let _unreg: () => void
     let _fn = (...args: any) => {
       _unreg()
@@ -68,7 +68,7 @@ export class Hookable <
     return _unreg
   }
 
-  removeHook<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT]) {
+  removeHook<NameT extends HookNameT> (name: NameT, fn: HooksT[NameT] extends HookCallback ? HooksT[NameT] : never) {
     if (this._hooks[name]) {
       const idx = this._hooks[name].indexOf(fn)
 
@@ -110,7 +110,7 @@ export class Hookable <
     }
   }
 
-  callHook <NameT extends HookNameT> (name: NameT, ...args: Parameters<HooksT[NameT]>) {
+  callHook<NameT extends HookNameT> (name: NameT, ...args: HooksT[NameT] extends HookCallback ? Parameters<HooksT[NameT]> : never[]) {
     if (!this._hooks[name]) {
       return
     }
@@ -118,6 +118,6 @@ export class Hookable <
   }
 }
 
-export function createHooks<T extends Record<string, HookCallback>> (): Hookable<T> {
+export function createHooks<T> (): Hookable<T> {
   return new Hookable<T>()
 }
