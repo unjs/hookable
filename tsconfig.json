@@ -3,12 +3,11 @@
     "target": "ESNext",
     "module": "ESNext",
     "esModuleInterop": true,
+    "moduleResolution": "Node",
     "outDir": "dist",
     "types": [
+      "jest",
       "node"
     ]
-  },
-  "include": [
-    "src"
-  ]
+  }
 }

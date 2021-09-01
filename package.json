@@ -35,6 +35,7 @@
     "babel-jest": "latest",
     "codecov": "latest",
     "eslint": "latest",
+    "expect-type": "^0.12.0",
     "jest": "latest",
     "rollup-plugin-typescript2": "latest",
     "siroc": "latest",
