@@ -1,5 +1,3 @@
-import { createHooks } from '.'
-
 export type HookCallback = (...args: any) => Promise<void> | void
 export interface Hooks { [key: string]: HookCallback }
 export type HookKeys<T> = keyof T & string
@@ -9,6 +7,11 @@ export type DeprecatedHooks<T> = { [name in HookKeys<T>]: DeprecatedHook<T> }
 // Utilities
 type ValueOf<C> = C extends Record<any, any> ? C[keyof C] : never
 type Strings<T> = Exclude<keyof T, number | symbol>
+type KnownKeys<T> = keyof {
+  [K in keyof T as string extends K ? never : number extends K ? never : K]: never
+}
+type StripGeneric<T> = Pick<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
+type OnlyGeneric<T> = Omit<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
 
 // Unwrapping utilities
 type Namespaces<T> = ValueOf<{
@@ -23,11 +26,7 @@ type HooksInNamespace<T, Namespace extends string> = ValueOf<{
 type WithoutNamespace<T, Namespace extends string> = {
   [key in HooksInNamespace<T, Namespace>]: `${Namespace}:${key}` extends keyof T ? T[`${Namespace}:${key}`] : never
 }
-type KnownKeys<T> = keyof {
-  [K in keyof T as string extends K ? never : number extends K ? never : K]: never
-}
-type StripGeneric<T> = Pick<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
-type OnlyGeneric<T> = Omit<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
+
 export type NestedHooks<T> =
   (Partial<StripGeneric<T>> | Partial<OnlyGeneric<T>>) &
   Partial<{ [key in Namespaces<StripGeneric<T>>]: NestedHooks<WithoutNamespace<StripGeneric<T>, key>> }> &
