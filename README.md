@@ -88,7 +88,7 @@ const hook2 = async () => { /* ... */ }
 
 // The hook() method returns an "unregister" function
 const unregisterHook0 = lib.hook('hook0', hook0)
-const unregisterHooks1and2 lib.addHooks({ hook1, hook2 })
+const unregisterHooks1and2 = lib.addHooks({ hook1, hook2 })
 
 /* ... */
 
