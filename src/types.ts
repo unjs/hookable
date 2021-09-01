@@ -1,3 +1,5 @@
+import { createHooks } from '.'
+
 export type HookCallback = (...args: any) => Promise<void> | void
 export interface Hooks { [key: string]: HookCallback }
 export type HookKeys<T> = keyof T & string
@@ -21,8 +23,12 @@ type HooksInNamespace<T, Namespace extends string> = ValueOf<{
 type WithoutNamespace<T, Namespace extends string> = {
   [key in HooksInNamespace<T, Namespace>]: `${Namespace}:${key}` extends keyof T ? T[`${Namespace}:${key}`] : never
 }
-export type NestedHooks<T> = Partial<T> & Partial<{
-  [key in Namespaces<T>]: NestedHooks<WithoutNamespace<T, key>>
-}> & Partial<{
-  [key in BareHooks<T>]: T[key]
-}>
+type KnownKeys<T> = keyof {
+  [K in keyof T as string extends K ? never : number extends K ? never : K]: never
+}
+type StripGeneric<T> = Pick<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
+type OnlyGeneric<T> = Omit<T, KnownKeys<T> extends keyof T ? KnownKeys<T> : never>
+export type NestedHooks<T> =
+  (Partial<StripGeneric<T>> | Partial<OnlyGeneric<T>>) &
+  Partial<{ [key in Namespaces<StripGeneric<T>>]: NestedHooks<WithoutNamespace<StripGeneric<T>, key>> }> &
+  Partial<{ [key in BareHooks<StripGeneric<T>>]: T[key] }>
