@@ -37,6 +37,7 @@ describe('hook types', () => {
 
     // should both be valid
     hooks.addHooks({ namespace: { foo: (_arg) => { } }, bar: (_arg) => { }, 'namespace:foo': () => { } })
+    hooks.addHooks({ namespace: { nothing: (_arg) => { } } })
     hooks.addHooks({ nothing: (_arg) => { } })
   })
 })
