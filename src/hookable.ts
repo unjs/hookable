@@ -18,7 +18,7 @@ export class Hookable <
     // Allow destructuring hook and callHook functions out of instance object
     this.hook = this.hook.bind(this)
     this.callHook = this.callHook.bind(this)
-    this.callHookSync = this.callHookSync.bind(this)
+    this.callHookWith = this.callHookWith.bind(this)
   }
 
   hook<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>) {
@@ -114,17 +114,14 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    if (!this._hooks[name]) {
-      return
-    }
-    return serial(this._hooks[name], fn => fn(...args as any))
+    return this.callHookWith(name, hooks => serial(hooks, fn => fn(...args as any)))
   }
 
-  callHookSync<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
+  callHookWith<NameT extends HookNameT> (name: NameT, callFn: (fns: HookCallback[]) => any) {
     if (!this._hooks[name]) {
       return
     }
-    return this._hooks[name].map(fn => fn(...args as any))
+    return callFn(this._hooks[name])
   }
 }
 
