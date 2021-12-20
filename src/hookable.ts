@@ -1,6 +1,6 @@
 import { flatHooks } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
-import { serialCaller } from '.'
+import { parallelCaller, serialCaller } from '.'
 export * from './types'
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
@@ -117,6 +117,12 @@ export class Hookable <
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
     if (this._hooks[name]) {
       return serialCaller(this._hooks[name], args)
+    }
+  }
+
+  callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
+    if (this._hooks[name]) {
+      return parallelCaller(this._hooks[name], args)
     }
   }
 
