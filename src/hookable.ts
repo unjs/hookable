@@ -114,14 +114,14 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    return this.callHookWith(name, hooks => serial(hooks, fn => fn(...args as any)))
+    return this.callHookWith((hooks, ...args) => serial(hooks, fn => fn(...args as any)), name, ...args)
   }
 
-  callHookWith<NameT extends HookNameT> (name: NameT, callFn: (fns: HookCallback[]) => any) {
+  callHookWith<NameT extends HookNameT> (callFn: (hooks: HookCallback[], ...args: Parameters<InferCallback<HooksT, NameT>>) => any, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
     if (!this._hooks[name]) {
       return
     }
-    return callFn(this._hooks[name])
+    return callFn(this._hooks[name], ...args)
   }
 }
 
