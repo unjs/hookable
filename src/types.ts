@@ -31,5 +31,3 @@ export type NestedHooks<T> =
   (Partial<StripGeneric<T>> | Partial<OnlyGeneric<T>>) &
   Partial<{ [key in Namespaces<StripGeneric<T>>]: NestedHooks<WithoutNamespace<T, key>> }> &
   Partial<{ [key in BareHooks<StripGeneric<T>>]: T[key] }>
-
-// Hook caller
