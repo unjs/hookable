@@ -267,8 +267,8 @@ describe('core: hookable', () => {
 
     hook.hook('test', () => { x++ })
 
-    hook.callHookSync('test')
-    hook.callHookSync('test')
+    hook.callHookWith('test', hooks => hooks.map(hook => hook()))
+    hook.callHookWith('test', hooks => hooks.map(hook => hook()))
 
     expect(x).toBe(2)
   })
