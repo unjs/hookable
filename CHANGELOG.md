@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/unjs/hookable/compare/v5.0.0...v5.1.0) (2021-12-20)
+
+
+### Features
+
+* `callHookParallel` and `callHookWith` ([#35](https://github.com/unjs/hookable/issues/35)) ([4a8cc53](https://github.com/unjs/hookable/commit/4a8cc538a4fb938bfdf13d70a9158714b3d603b9))
+
 ## [5.0.0](https://github.com/unjs/hookable/compare/v5.0.0-2...v5.0.0) (2021-09-01)
 
 
