@@ -1,4 +1,4 @@
-import { NestedHooks, HookCallback } from './types'
+import type { NestedHooks, HookCallback } from './types'
 
 export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
   for (const key in configHooks) {

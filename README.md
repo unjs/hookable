@@ -5,11 +5,8 @@
 [![packagephobia][packagephobia-src]][packagephobia-href]
 [![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
 [![Codecov][codecov-src]][codecov-href]
-[![Dependencies][david-dm-src]][david-dm-href]
 
-> Awaitable hooks for Node.js and Browser
-
-**Please see [Migration Guide](#migration) for migrating from < 4.0.0 to >= 5.0.0**
+> Awaitable hook system
 
 ## Install
 
@@ -210,15 +207,13 @@ hookable.removeHooks({
 
 ## Credits
 
-Extracted from [Nuxt.js](https://github.com/nuxt/nuxt.js) hooks system
+Extracted from [Nuxt](https://github.com/nuxt/nuxt.js) hooks system originally introduced by [Sébastien Chopin](https://github.com/Atinux)
 
-Original author [Sébastien Chopin](https://github.com/Atinux)
-
-Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https://www.npmjs.com/package/hookable) package name
+Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https://www.npmjs.com/package/hookable) package name.
 
 ## License
 
-MIT - Made with 💖 by Nuxt.js team!
+MIT - Made with 💖
 
 <!-- Badges -->
 [npm-version-src]: https://flat.badgen.net/npm/dt/hookable
@@ -232,9 +227,6 @@ MIT - Made with 💖 by Nuxt.js team!
 
 [codecov-src]: https://flat.badgen.net/codecov/c/github/unjs/hookable
 [codecov-href]: https://codecov.io/gh/unjs/hookable
-
-[david-dm-src]: https://flat.badgen.net/david/dep/unjs/hookable
-[david-dm-href]: https://david-dm.org/unjs/hookable
 
 [packagephobia-src]: https://flat.badgen.net/packagephobia/install/hookable
 [packagephobia-href]: https://packagephobia.now.sh/result?p=hookable

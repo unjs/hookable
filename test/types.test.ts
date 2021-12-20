@@ -1,10 +1,10 @@
 import { expectTypeOf } from 'expect-type'
 import { createHooks } from '../src'
-import { HookCallback } from '../types'
+import type { HookCallback } from '../src/types'
 
 describe('hook types', () => {
   test('correctly handles non-nested hooks', () => {
-    const hooks = createHooks<{ foo: () => true, bar: (_arg: string) => 42 }>()
+    const hooks = createHooks<{ foo:() => true, bar: (_arg: string) => 42 }>()
 
     expectTypeOf(hooks.hook).parameter(0).not.toBeAny()
     expectTypeOf(hooks.hook).parameter(0).toEqualTypeOf<'foo' | 'bar'>()
@@ -15,7 +15,7 @@ describe('hook types', () => {
 
   test('handles nested hooks', () => {
     const hooks = createHooks<{
-      'namespace:foo': (arg: number) => void
+      'namespace:foo':(arg: number) => void
       bar: (_arg: string) => void
       'namespace:baz': (arg: '42') => void
     }>()
@@ -31,7 +31,7 @@ describe('hook types', () => {
   test('handles nested hooks with signature', () => {
     const hooks = createHooks<{
       [key: string]: HookCallback
-      'namespace:foo': (arg: number) => void
+      'namespace:foo':(arg: number) => void
       bar: (_arg: string) => void
     }>()
 

@@ -1,7 +1,5 @@
-import { flatHooks } from './utils'
+import { flatHooks, parallelCaller, serialCaller } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
-import { parallelCaller, serialCaller } from '.'
-export * from './types'
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
 
