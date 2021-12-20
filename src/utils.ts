@@ -44,10 +44,10 @@ export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {
   return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve(null))
 }
 
-export function serialCaller (hooks: HookCallback[], argv?: any[]) {
-  return hooks.reduce((promise, hookFn) => promise.then(() => hookFn.apply(undefined, argv)), Promise.resolve(null))
+export function serialCaller (hooks: HookCallback[], args?: any[]) {
+  return hooks.reduce((promise, hookFn) => promise.then(() => hookFn.apply(undefined, args)), Promise.resolve(null))
 }
 
-export function parallelCaller (hooks: HookCallback[], argv?: any[]) {
-  return Promise.all(hooks.map(hook => hook.apply(undefined, argv)))
+export function parallelCaller (hooks: HookCallback[], args?: any[]) {
+  return Promise.all(hooks.map(hook => hook.apply(undefined, args)))
 }
