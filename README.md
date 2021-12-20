@@ -222,8 +222,8 @@ MIT - Made with 💖
 [npm-downloads-src]: https://flat.badgen.net/npm/v/hookable
 [npm-downloads-href]: https://npmjs.com/package/hookable
 
-[github-actions-ci-src]: https://github.com/unjs/hookable/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/unjs/hookable/actions?query=workflow%3Aci
+[github-actions-ci-src]: https://flat.badgen.net/github/checks/unjs/hookable/main
+[github-actions-ci-href]: https://github.com/unjs/hookable/actions
 
 [codecov-src]: https://flat.badgen.net/codecov/c/github/unjs/hookable
 [codecov-href]: https://codecov.io/gh/unjs/hookable
