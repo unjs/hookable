@@ -155,9 +155,13 @@ Returns an `unregister` function that, when called, will remove all the register
 
 Used by class itself to **sequentially** call handlers of a specific hook.
 
-### `callHookWith (name, callFn)`
+### `callHookWith (name, callerFn)`
 
 If you need custom control over how hooks are called, you can provide a custom function that will receive an array of handlers of a specific hook.
+
+`callerFn` if a callback function that accepts two arguments, `hooks` and `args`:
+- `hooks`: Array of user hooks to be called
+- `args`: Array of arguments that should be passed each time calling a hook
 
 ### `deprecateHook (old, name)`
 
