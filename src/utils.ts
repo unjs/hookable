@@ -1,4 +1,4 @@
-import { NestedHooks } from './types'
+import { NestedHooks, HookCallback } from './types'
 
 export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
   for (const key in configHooks) {
@@ -42,4 +42,12 @@ export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
 
 export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {
   return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve(null))
+}
+
+export function serialCaller (hooks: HookCallback[], argv?: any[]) {
+  return hooks.reduce((promise, hookFn) => promise.then(() => hookFn.apply(undefined, argv)), Promise.resolve(null))
+}
+
+export function parallerCaller (hooks: HookCallback[], argv?: any[]) {
+  return Promise.all(hooks.map(hook => hook.apply(undefined, argv)))
 }

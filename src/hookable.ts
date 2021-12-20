@@ -1,5 +1,6 @@
-import { serial, flatHooks } from './utils'
+import { flatHooks } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
+import { serialCaller } from '.'
 export * from './types'
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
@@ -114,17 +115,15 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    if (!this._hooks[name]) {
-      return
+    if (this._hooks[name]) {
+      return serialCaller(this._hooks[name], args)
     }
-    return serial(this._hooks[name], fn => fn(...args as any))
   }
 
-  callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], ...args: Parameters<InferCallback<HooksT, NameT>>) => any> (callFn: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
-    if (!this._hooks[name]) {
-      return
+  callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
+    if (this._hooks[name]) {
+      return caller(this._hooks[name], args)
     }
-    return callFn(this._hooks[name], ...args)
   }
 }
 
