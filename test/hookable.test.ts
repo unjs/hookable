@@ -260,6 +260,19 @@ describe('core: hookable', () => {
     expect(x).toBe(1)
   })
 
+  test('hook sync', async () => {
+    const hook = createHooks()
+
+    let x = 0
+
+    hook.hook('test', () => { x++ })
+
+    hook.callHookSync('test')
+    hook.callHookSync('test')
+
+    expect(x).toBe(2)
+  })
+
   test('mergeHooks', () => {
     const fn = () => { }
     const hooks1 = {
