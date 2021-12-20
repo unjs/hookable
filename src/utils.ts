@@ -48,6 +48,6 @@ export function serialCaller (hooks: HookCallback[], argv?: any[]) {
   return hooks.reduce((promise, hookFn) => promise.then(() => hookFn.apply(undefined, argv)), Promise.resolve(null))
 }
 
-export function parallerCaller (hooks: HookCallback[], argv?: any[]) {
+export function parallelCaller (hooks: HookCallback[], argv?: any[]) {
   return Promise.all(hooks.map(hook => hook.apply(undefined, argv)))
 }
