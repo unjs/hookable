@@ -113,21 +113,15 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    if (this._hooks[name]) {
-      return serialCaller(this._hooks[name], args)
-    }
+    return serialCaller(this._hooks[name] || [], args)
   }
 
   callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    if (this._hooks[name]) {
-      return parallelCaller(this._hooks[name], args)
-    }
+    return parallelCaller(this._hooks[name] || [], args)
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
-    if (this._hooks[name]) {
-      return caller(this._hooks[name], args)
-    }
+    return caller(this._hooks[name] || [], args)
   }
 }
 
