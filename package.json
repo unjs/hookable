@@ -34,7 +34,7 @@
     "babel-jest": "latest",
     "codecov": "latest",
     "eslint": "latest",
-    "expect-type": "^0.12.0",
+    "expect-type": "^0.13.0",
     "jest": "latest",
     "standard-version": "latest",
     "ts-jest": "latest",
