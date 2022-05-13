@@ -44,7 +44,7 @@ hooks.callHook('hello')
 ```js
 import { Hookable } from 'hookable'
 
-export default class Foo extends Hookable {
+export default class FooLib extends Hookable {
   constructor() {
     // Call to parent to initialize
     super()
@@ -62,7 +62,7 @@ export default class Foo extends Hookable {
 **Inside plugins, register for any hook:**
 
 ```js
-const lib = newFooLib()
+const lib = new FooLib()
 
 // Register a handler for `hook2`
 lib.hook('hook2', async () => { /* ... */ })
@@ -77,7 +77,7 @@ lib.addHooks({
 **Unregistering hooks:**
 
 ```js
-const lib = newFooLib()
+const lib = new FooLib()
 
 const hook0 = async () => { /* ... */ }
 const hook1 = async () => { /* ... */ }
@@ -101,7 +101,7 @@ lib.removeHook('hook2', hook2)
 **Triggering a hook handler once:**
 
 ```js
-const lib = newFooLib()
+const lib = new FooLib()
 
 const unregister = lib.hook('hook0', async () => {
   // Unregister as soon as the hook is executed
