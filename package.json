@@ -24,21 +24,21 @@
   "scripts": {
     "build": "unbuild",
     "lint": "eslint --ext .ts src",
-    "prepublish": "yarn build",
-    "release": "yarn test && yarn build && standard-version && git push --follow-tags && npm publish",
-    "test": "yarn lint && yarn jest"
+    "prepublish": "pnpm build",
+    "release": "pnpm test && pnpm build && standard-version && git push --follow-tags && pnpm publish",
+    "test": "pnpm lint && vitest run",
+    "test:types": "tsc --noEmit"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "latest",
-    "@types/jest": "latest",
-    "babel-jest": "latest",
+    "c8": "latest",
     "codecov": "latest",
     "eslint": "latest",
     "expect-type": "^0.13.0",
-    "jest": "latest",
+    "vitest": "latest",
     "standard-version": "latest",
-    "ts-jest": "latest",
     "typescript": "latest",
     "unbuild": "latest"
-  }
+  },
+  "packageManager": "pnpm@7.9.0"
 }

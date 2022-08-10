@@ -1,10 +1,11 @@
 // @ts-nocheck
+import { describe, test, beforeEach, expect, vi } from 'vitest'
 import { createHooks, flatHooks, mergeHooks } from '../src/index'
 
 describe('core: hookable', () => {
   beforeEach(() => {
     ['log', 'warn', 'error', 'debug'].forEach((l) => {
-      console[l] = jest.fn()
+      console[l] = vi.fn()
     })
   })
 
