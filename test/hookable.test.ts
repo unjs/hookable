@@ -275,6 +275,20 @@ describe('core: hookable', () => {
     expect(x).toBe(2)
   })
 
+  test('beforeHook and afterHook spies', async () => {
+    const hook = createHooks()
+
+    let x = 0
+
+    hook.beforeHook((name) => { name === 'test' && x++ })
+    hook.afterHook((name) => { name === 'test' && x++ })
+
+    await hook.callHook('test')
+    await hook.callHookParallel('test')
+
+    expect(x).toBe(4)
+  })
+
   test('mergeHooks', () => {
     const fn = () => { }
     const hooks1 = {

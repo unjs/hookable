@@ -8,10 +8,14 @@ export class Hookable <
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
   private _hooks: { [key: string]: HookCallback[] }
+  private _before: HookCallback[]
+  private _after: HookCallback[]
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
 
   constructor () {
     this._hooks = {}
+    this._before = []
+    this._after = []
     this._deprecatedHooks = {}
 
     // Allow destructuring hook and callHook functions out of instance object
@@ -113,15 +117,29 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    return serialCaller(this._hooks[name] || [], args)
+    return this.callHookWith(serialCaller, name, ...args)
   }
 
   callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    return parallelCaller(this._hooks[name] || [], args)
+    return this.callHookWith(parallelCaller, name, ...args)
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
-    return caller(this._hooks[name] || [], args)
+    parallelCaller(this._before || [], [name, ...args])
+    const result = caller(this._hooks[name] || [], args)
+    if (result as any instanceof Promise) {
+      return result.finally(() => parallelCaller(this._after || [], [name, ...args]))
+    }
+    parallelCaller(this._after || [], [name, ...args])
+    return result
+  }
+
+  beforeHook (fn: (name: string, ...args: any[]) => any) {
+    this._before.push(fn)
+  }
+
+  afterHook (fn: (name: string, ...args: any[]) => any) {
+    this._after.push(fn)
   }
 }
 
