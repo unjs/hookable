@@ -1,4 +1,3 @@
-
 name: ci
 
 on:
@@ -15,11 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - run: corepack enable
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
-          cache: yarn
-      - run: yarn install
-      - run: yarn lint
-      - run: yarn jest
+          node-version: "16"
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm test:types
+      - run: pnpm vitest run --coverage
       - uses: codecov/codecov-action@v3

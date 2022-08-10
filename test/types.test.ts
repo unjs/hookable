@@ -1,3 +1,4 @@
+import { describe, test } from 'vitest'
 import { expectTypeOf } from 'expect-type'
 import { createHooks } from '../src'
 import type { HookCallback } from '../src/types'
