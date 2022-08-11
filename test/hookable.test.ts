@@ -276,12 +276,19 @@ describe('core: hookable', () => {
   })
 
   test('beforeHook and afterHook spies', async () => {
-    const hook = createHooks()
+    const hook = createHooks<{ test(): void }>()
 
     let x = 0
 
-    hook.beforeHook((name) => { name === 'test' && x++ })
-    hook.afterHook((name) => { name === 'test' && x++ })
+    hook.beforeHook(({ name, context }) => {
+      expect(context.count).toBeUndefined()
+      name === 'test' && x++
+      context.count = x
+    })
+    hook.afterHook(({ name, context }) => {
+      expect(context.count).toEqual(x)
+      name === 'test' && x++
+    })
 
     await hook.callHook('test')
     await hook.callHookParallel('test')

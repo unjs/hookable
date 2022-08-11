@@ -2,8 +2,8 @@ import { flatHooks, parallelCaller, serialCaller, syncCaller } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
-type InferSpy<HT extends Record<string, any>> = {
-  [key in keyof HT]: [key, Parameters<HT[key]>]
+type InferSpyEvent<HT extends Record<string, any>> = {
+  [key in keyof HT]: { name: key, args: Parameters<HT[key]>, context: Record<string, any> }
 }[keyof HT]
 
 export class Hookable <
@@ -128,20 +128,21 @@ export class Hookable <
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
-    syncCaller(this._before || [], [name, args])
+    const context = {}
+    syncCaller(this._before || [], [{ name, args, context }])
     const result = caller(this._hooks[name] || [], args)
     if (result as any instanceof Promise) {
-      return result.finally(() => syncCaller(this._after || [], [name, args]))
+      return result.finally(() => syncCaller(this._after || [], [{ name, args, context }]))
     }
-    syncCaller(this._after || [], [name, args])
+    syncCaller(this._after || [], [{ name, args, context }])
     return result
   }
 
-  beforeHook (fn: (...args: InferSpy<HooksT>) => Promise<void> | void) {
+  beforeHook (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
     this._before.push(fn)
   }
 
-  afterHook (fn: (...args: InferSpy<HooksT>) => Promise<void> | void) {
+  afterHook (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
     this._after.push(fn)
   }
 }
