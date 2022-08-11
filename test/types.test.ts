@@ -41,4 +41,21 @@ describe('hook types', () => {
     hooks.addHooks({ namespace: { nothing: (_arg) => { } } })
     hooks.addHooks({ nothing: (_arg) => { } })
   })
+
+  test('beforeHook and afterHook typings', () => {
+    const hooks = createHooks<{ foo:() => true, bar: (_arg: number) => 42 }>()
+
+    expectTypeOf(hooks.beforeHook).parameter(0).not.toBeAny()
+    expectTypeOf(hooks.afterHook).parameter(0).parameter(0).toEqualTypeOf<'foo' | 'bar'>()
+
+    hooks.beforeHook((name, args) => {
+      expectTypeOf(name).toEqualTypeOf<'foo' | 'bar'>()
+      if (name === 'foo') {
+        expectTypeOf(args).toEqualTypeOf<[]>()
+      }
+      if (name === 'bar') {
+        expectTypeOf(args[0]).toEqualTypeOf<number>()
+      }
+    })
+  })
 })
