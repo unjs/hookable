@@ -134,11 +134,11 @@ export class Hookable <
     return result
   }
 
-  beforeHook (fn: (name: string, ...args: any[]) => any) {
+  beforeHook (fn: (name: string, ...args: any[]) => Promise<void> | void) {
     this._before.push(fn)
   }
 
-  afterHook (fn: (name: string, ...args: any[]) => any) {
+  afterHook (fn: (name: string, ...args: any[]) => Promise<void> | void) {
     this._after.push(fn)
   }
 }
