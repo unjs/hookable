@@ -100,7 +100,7 @@ export class Hookable <
     }
   }
 
-  deprecateHooks (deprecatedHooks: Record<HookNameT, DeprecatedHook<HooksT>>) {
+  deprecateHooks (deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>) {
     Object.assign(this._deprecatedHooks, deprecatedHooks)
     for (const name in deprecatedHooks) {
       this.deprecateHook(name, deprecatedHooks[name])
