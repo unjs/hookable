@@ -14,6 +14,13 @@ describe('hook types', () => {
     hooks.hook('foo', _param => true)
   })
 
+  test('deprecates hooks', () => {
+    const hooks = createHooks<{ foo: () => true, bar: (_arg: string) => 42 }>()
+    hooks.deprecateHooks({
+      foo: { to: 'bar' }
+    })
+  })
+
   test('handles nested hooks', () => {
     const hooks = createHooks<{
       'namespace:foo':(arg: number) => void
