@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.1](https://github.com/unjs/hookable/compare/v5.2.0...v5.2.1) (2022-08-23)
+
+
+### Bug Fixes
+
+* ensure calling hooks always returns a promise ([44679c8](https://github.com/unjs/hookable/commit/44679c890f7b3b92331bd5dffeac95b61eab2858))
+
 ## [5.2.0](https://github.com/unjs/hookable/compare/v5.1.2...v5.2.0) (2022-08-23)
 
 
