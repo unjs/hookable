@@ -17,8 +17,8 @@ export class Hookable <
 
   constructor () {
     this._hooks = {}
-    this._before = []
-    this._after = []
+    this._before = null
+    this._after = null
     this._deprecatedHooks = {}
 
     // Allow destructuring hook and callHook functions out of instance object
@@ -137,20 +137,30 @@ export class Hookable <
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
     const context = {}
-    syncCaller(this._before || [], [{ name, args, context }])
+    if (this._before) {
+      syncCaller(this._before, [{ name, args, context }])
+    }
     const result = caller(this._hooks[name] || [], args)
     if (result as any instanceof Promise) {
-      return result.finally(() => syncCaller(this._after || [], [{ name, args, context }]))
+      return result.finally(() => {
+        if (this._after) {
+          syncCaller(this._after, [{ name, args, context }])
+        }
+      })
     }
-    syncCaller(this._after || [], [{ name, args, context }])
+    if (this._after) {
+      syncCaller(this._after, [{ name, args, context }])
+    }
     return result
   }
 
   beforeHook (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
+    this._before = this._before || []
     this._before.push(fn)
   }
 
   afterHook (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
+    this._after = this._after || []
     this._after.push(fn)
   }
 }
