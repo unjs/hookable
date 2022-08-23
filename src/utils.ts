@@ -52,7 +52,7 @@ export function parallelCaller (hooks: HookCallback[], args?: any[]) {
   return Promise.all(hooks.map(hook => hook.apply(undefined, args)))
 }
 
-export function callAllWith (callbacks: Function[], arg0?: any) {
+export function callEachWith (callbacks: Function[], arg0?: any) {
   for (const cb of callbacks) {
     cb(arg0)
   }
