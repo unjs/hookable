@@ -203,7 +203,7 @@ hookable.beforeEach((event) => { console.log(`${event.name} hook is being called
 hookable.hook('test', () => { console.log('running test hook') })
 
 // test hook is being called with []
-// running trst hook
+// running test hook
 await hookable.callHook('test')
 ```
 
@@ -215,7 +215,7 @@ Registers a (sync) callback to be called after each hook is being called.
 hookable.afterEach((event) => { console.log(`${event.name} hook called with ${event.args}`)})
 hookable.hook('test', () => { console.log('running test hook') })
 
-// running trst hook
+// running test hook
 // test hook called with []
 await hookable.callHook('test')
 ```
