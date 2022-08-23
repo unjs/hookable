@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.2](https://github.com/unjs/hookable/compare/v5.2.1...v5.2.2) (2022-08-23)
+
+
+### Bug Fixes
+
+* only specify return type for `callHook`/`callHookParallel` ([ed0d6a8](https://github.com/unjs/hookable/commit/ed0d6a82d8aa11044851888ab5c71ccbe4369c69))
+
 ### [5.2.1](https://github.com/unjs/hookable/compare/v5.2.0...v5.2.1) (2022-08-23)
 
 
