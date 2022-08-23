@@ -135,7 +135,7 @@ export class Hookable <
     return this.callHookWith(parallelCaller, name, ...args)
   }
 
-  callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
+  callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): ReturnType<CallFunction> {
     const event = (this._before || this._after) ? { name, args, context: {} } : undefined
     if (this._before) {
       callEachWith(this._before, event)
@@ -151,7 +151,10 @@ export class Hookable <
     if (this._after) {
       callEachWith(this._after, event)
     }
-    return result
+    if (result instanceof Promise) {
+      return result as ReturnType<CallFunction>
+    }
+    return Promise.resolve(result) as ReturnType<CallFunction>
   }
 
   beforeEach (fn: (event: InferSpyEvent<HooksT>) => void) {
