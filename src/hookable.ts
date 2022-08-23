@@ -127,11 +127,11 @@ export class Hookable <
     }
   }
 
-  callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
+  callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): Promise<any> {
     return this.callHookWith(serialCaller, name, ...args)
   }
 
-  callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
+  callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): Promise<any[]> {
     return this.callHookWith(parallelCaller, name, ...args)
   }
 
@@ -151,10 +151,7 @@ export class Hookable <
     if (this._after) {
       callEachWith(this._after, event)
     }
-    if (result instanceof Promise) {
-      return result as ReturnType<CallFunction>
-    }
-    return Promise.resolve(result) as ReturnType<CallFunction>
+    return result
   }
 
   beforeEach (fn: (event: InferSpyEvent<HooksT>) => void) {
