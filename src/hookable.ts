@@ -154,12 +154,12 @@ export class Hookable <
     return result
   }
 
-  beforeEach (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
+  beforeEach (fn: (event: InferSpyEvent<HooksT>) => void) {
     this._before = this._before || []
     this._before.push(fn)
   }
 
-  afterEach (fn: (event: InferSpyEvent<HooksT>) => Promise<void> | void) {
+  afterEach (fn: (event: InferSpyEvent<HooksT>) => void) {
     this._after = this._after || []
     this._after.push(fn)
   }
