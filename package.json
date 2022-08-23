@@ -23,22 +23,22 @@
   ],
   "scripts": {
     "build": "unbuild",
+    "dev": "vitest",
     "lint": "eslint --ext .ts src",
     "prepublish": "pnpm build",
     "release": "pnpm test && pnpm build && standard-version && git push --follow-tags && pnpm publish",
-    "test": "pnpm lint && vitest run",
+    "test": "pnpm lint && vitest run --coverage",
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "latest",
-    "c8": "latest",
-    "codecov": "latest",
+    "@vitest/coverage-c8": "^0.22.1",
     "eslint": "latest",
     "expect-type": "^0.13.0",
-    "vitest": "latest",
     "standard-version": "latest",
     "typescript": "latest",
-    "unbuild": "latest"
+    "unbuild": "latest",
+    "vitest": "latest"
   },
   "packageManager": "pnpm@7.9.0"
 }
