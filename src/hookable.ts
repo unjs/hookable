@@ -93,10 +93,18 @@ export class Hookable <
 
   deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: DeprecatedHook<HooksT>) {
     this._deprecatedHooks[name] = deprecated
+    const _hooks = this._hooks[name] || []
+    this._hooks[name] = undefined
+    for (const hook of _hooks) {
+      this.hook(name, hook as any)
+    }
   }
 
   deprecateHooks (deprecatedHooks: Record<HookNameT, DeprecatedHook<HooksT>>) {
     Object.assign(this._deprecatedHooks, deprecatedHooks)
+    for (const name in deprecatedHooks) {
+      this.deprecateHook(name, deprecatedHooks[name])
+    }
   }
 
   addHooks (configHooks: NestedHooks<HooksT>) {
