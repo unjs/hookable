@@ -1,3 +1,3 @@
-export * from './hookable'
-export * from './utils'
+export { Hookable, createHooks } from './hookable'
+export { flatHooks, mergeHooks, parallelCaller, serial, serialCaller } from './utils'
 export * from './types'
