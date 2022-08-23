@@ -285,6 +285,27 @@ describe('core: hookable', () => {
     expect(x).toBe(2)
   })
 
+  test('beforeEach and afterEach spies', async () => {
+    const hook = createHooks<{ test(): void }>()
+
+    let x = 0
+
+    hook.beforeEach((event) => {
+      expect(event.context.count).toBeUndefined()
+      event.name === 'test' && x++
+      event.context.count = x
+    })
+    hook.afterEach((event) => {
+      expect(event.context.count).toEqual(x)
+      event.name === 'test' && x++
+    })
+
+    await hook.callHook('test')
+    await hook.callHookParallel('test')
+
+    expect(x).toBe(4)
+  })
+
   test('mergeHooks', () => {
     const fn = () => { }
     const hooks1 = {

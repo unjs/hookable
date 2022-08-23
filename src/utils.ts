@@ -51,3 +51,9 @@ export function serialCaller (hooks: HookCallback[], args?: any[]) {
 export function parallelCaller (hooks: HookCallback[], args?: any[]) {
   return Promise.all(hooks.map(hook => hook.apply(undefined, args)))
 }
+
+export function callEachWith (callbacks: Function[], arg0?: any) {
+  for (const cb of callbacks) {
+    cb(arg0)
+  }
+}

@@ -1,17 +1,24 @@
-import { flatHooks, parallelCaller, serialCaller } from './utils'
+import { flatHooks, parallelCaller, serialCaller, callEachWith } from './utils'
 import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './types'
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
+type InferSpyEvent<HT extends Record<string, any>> = {
+  [key in keyof HT]: { name: key, args: Parameters<HT[key]>, context: Record<string, any> }
+}[keyof HT]
 
 export class Hookable <
   HooksT = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
   private _hooks: { [key: string]: HookCallback[] }
+  private _before: HookCallback[]
+  private _after: HookCallback[]
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
 
   constructor () {
     this._hooks = {}
+    this._before = null
+    this._after = null
     this._deprecatedHooks = {}
 
     // Allow destructuring hook and callHook functions out of instance object
@@ -121,15 +128,40 @@ export class Hookable <
   }
 
   callHook<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    return serialCaller(this._hooks[name] || [], args)
+    return this.callHookWith(serialCaller, name, ...args)
   }
 
   callHookParallel<NameT extends HookNameT> (name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>) {
-    return parallelCaller(this._hooks[name] || [], args)
+    return this.callHookWith(parallelCaller, name, ...args)
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): void | ReturnType<CallFunction> {
-    return caller(this._hooks[name] || [], args)
+    const event = (this._before || this._after) ? { name, args, context: {} } : undefined
+    if (this._before) {
+      callEachWith(this._before, event)
+    }
+    const result = caller(this._hooks[name] || [], args)
+    if (result as any instanceof Promise) {
+      return result.finally(() => {
+        if (this._after) {
+          callEachWith(this._after, event)
+        }
+      })
+    }
+    if (this._after) {
+      callEachWith(this._after, event)
+    }
+    return result
+  }
+
+  beforeEach (fn: (event: InferSpyEvent<HooksT>) => void) {
+    this._before = this._before || []
+    this._before.push(fn)
+  }
+
+  afterEach (fn: (event: InferSpyEvent<HooksT>) => void) {
+    this._after = this._after || []
+    this._after.push(fn)
   }
 }
 
