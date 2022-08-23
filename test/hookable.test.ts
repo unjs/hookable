@@ -290,14 +290,14 @@ describe('core: hookable', () => {
 
     let x = 0
 
-    hook.beforeHook(({ name, context }) => {
-      expect(context.count).toBeUndefined()
-      name === 'test' && x++
-      context.count = x
+    hook.beforeHook((event) => {
+      expect(event.context.count).toBeUndefined()
+      event.name === 'test' && x++
+      event.context.count = x
     })
-    hook.afterHook(({ name, context }) => {
-      expect(context.count).toEqual(x)
-      name === 'test' && x++
+    hook.afterHook((event) => {
+      expect(event.context.count).toEqual(x)
+      event.name === 'test' && x++
     })
 
     await hook.callHook('test')
