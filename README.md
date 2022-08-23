@@ -194,7 +194,7 @@ hookable.removeHooks({
 })
 ```
 
-### `beforeEach(syncHandler)`
+### `beforeEach (syncCallback)`
 
 Registers a (sync) callback to be called before each hook is being called.
 
@@ -207,7 +207,7 @@ hookable.hook('test', () => { console.log('running test hook') })
 await hookable.callHook('test')
 ```
 
-### `afterEach(syncHandler)`
+### `afterEach (syncCallback)`
 
 Registers a (sync) callback to be called after each hook is being called.
 
