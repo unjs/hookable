@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/unjs/hookable/compare/v5.1.2...v5.2.0) (2022-08-23)
+
+
+### Features
+
+* add `beforeEach` and `afterEach` spies ([#46](https://github.com/unjs/hookable/issues/46)) ([949d8b7](https://github.com/unjs/hookable/commit/949d8b76817dfc47e6b1ce4ed09204e7c33d0ec1))
+
+
+### Bug Fixes
+
+* deprecate hooks doesn't have to be passed all hooks ([#48](https://github.com/unjs/hookable/issues/48)) ([0c4fef0](https://github.com/unjs/hookable/commit/0c4fef0d39ccd123efca29a9506854f01ae685f7))
+
 ### [5.1.2](https://github.com/unjs/hookable/compare/v5.1.1...v5.1.2) (2022-08-23)
 
 
