@@ -54,6 +54,7 @@ describe('core: hookable', () => {
     hook.deprecateHook('x', { to: 'y', message: 'Custom' })
 
     hook.hook('a', () => { })
+    hook.hook('a', () => { })
     hook.hook('b', () => { })
     hook.hook('c', () => { })
     hook.hook('x', () => { })
@@ -61,9 +62,15 @@ describe('core: hookable', () => {
     expect(console.warn).toBeCalledWith('a hook has been deprecated, please use c')
     expect(console.warn).toBeCalledWith('b hook has been deprecated, please use c')
     expect(console.warn).toBeCalledWith('Custom')
+    expect(console.warn).toBeCalledTimes(3)
     expect(hook._hooks.a).toBeUndefined()
     expect(hook._hooks.b).toBeUndefined()
-    expect(hook._hooks.c).toEqual([expect.any(Function), expect.any(Function), expect.any(Function)])
+    expect(hook._hooks.c).toEqual([
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
+    ])
   })
 
   test('should handle deprecation after registering', () => {

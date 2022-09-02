@@ -14,11 +14,13 @@ export class Hookable <
   private _before: HookCallback[]
   private _after: HookCallback[]
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
+  private _deprecatedMessages: Set<string>
 
   constructor () {
     this._hooks = {}
     this._before = null
     this._after = null
+    this._deprecatedMessages = null
     this._deprecatedHooks = {}
 
     // Allow destructuring hook and callHook functions out of instance object
@@ -33,24 +35,23 @@ export class Hookable <
     }
 
     const originalName = name
-    let deprecatedHookObj: Exclude<DeprecatedHook<HooksT>, string>
+    let dep: DeprecatedHook<HooksT>
     while (this._deprecatedHooks[name]) {
-      const deprecatedHook = this._deprecatedHooks[name]
-      if (typeof deprecatedHook === 'string') {
-        deprecatedHookObj = { to: deprecatedHook as NameT }
-      } else {
-        deprecatedHookObj = deprecatedHook
-      }
-      name = deprecatedHookObj.to as NameT
+      dep = this._deprecatedHooks[name]
+      name = dep.to as NameT
     }
-    if (deprecatedHookObj) {
-      if (!deprecatedHookObj.message) {
-        console.warn(
-          `${originalName} hook has been deprecated` +
-          (deprecatedHookObj.to ? `, please use ${deprecatedHookObj.to}` : '')
-        )
-      } else {
-        console.warn(deprecatedHookObj.message)
+    if (dep) {
+      let message = dep.message
+      if (!message) {
+        message = `${originalName} hook has been deprecated` +
+          (dep.to ? `, please use ${dep.to}` : '')
+      }
+      if (!this._deprecatedMessages) {
+        this._deprecatedMessages = new Set()
+      }
+      if (!this._deprecatedMessages.has(message)) {
+        console.warn(message)
+        this._deprecatedMessages.add(message)
       }
     }
 
@@ -91,8 +92,8 @@ export class Hookable <
     }
   }
 
-  deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: DeprecatedHook<HooksT>) {
-    this._deprecatedHooks[name] = deprecated
+  deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>) {
+    this._deprecatedHooks[name] = typeof deprecated === 'string' ? { to: deprecated } : deprecated
     const _hooks = this._hooks[name] || []
     this._hooks[name] = undefined
     for (const hook of _hooks) {

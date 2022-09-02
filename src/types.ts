@@ -1,7 +1,7 @@
 export type HookCallback = (...args: any) => Promise<void> | void
 export interface Hooks { [key: string]: HookCallback }
 export type HookKeys<T> = keyof T & string
-export type DeprecatedHook<T> = string | { message?: string, to: HookKeys<T> }
+export type DeprecatedHook<T> = { message?: string, to: HookKeys<T> }
 export type DeprecatedHooks<T> = { [name in HookKeys<T>]: DeprecatedHook<T> }
 
 // Utilities
