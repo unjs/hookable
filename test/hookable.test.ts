@@ -73,6 +73,13 @@ describe('core: hookable', () => {
     ])
   })
 
+  test('allow hiding deprecation warns', () => {
+    const hook = createHooks()
+    hook.deprecateHook('a', 'b')
+    hook.hook('a', () => {}, { allowDeprecated: true })
+    expect(console.warn).toBeCalledTimes(0)
+  })
+
   test('should handle deprecation after registering', () => {
     const hook = createHooks()
     hook.hook('a', () => { })

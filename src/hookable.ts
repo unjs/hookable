@@ -29,7 +29,7 @@ export class Hookable <
     this.callHookWith = this.callHookWith.bind(this)
   }
 
-  hook<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>) {
+  hook<NameT extends HookNameT> (name: NameT, fn: InferCallback<HooksT, NameT>, opts: { allowDeprecated?: boolean } = {}) {
     if (!name || typeof fn !== 'function') {
       return () => {}
     }
@@ -40,7 +40,7 @@ export class Hookable <
       dep = this._deprecatedHooks[name]
       name = dep.to as NameT
     }
-    if (dep) {
+    if (dep && !opts.allowDeprecated) {
       let message = dep.message
       if (!message) {
         message = `${originalName} hook has been deprecated` +
