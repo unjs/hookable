@@ -1,6 +1,6 @@
 {
   "name": "hookable",
-  "version": "5.2.2",
+  "version": "5.3.0",
   "description": "Awaitable hook system",
   "keywords": [
     "hook",
