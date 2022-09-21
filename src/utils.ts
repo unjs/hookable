@@ -62,10 +62,13 @@ export function callEachWith (callbacks: Function[], arg0?: any) {
 const isBrowser = typeof window !== 'undefined'
 
 /** Start debugging hook names and timing in console */
-export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, group = isBrowser, filter: _filter = () => true }: CreateDebuggerOptions = {}) {
-  const wrapName = tag ? (event: string) => `[${tag}] ${event}` : (event: string) => event
+export function createDebugger (hooks: Hookable, options: CreateDebuggerOptions = {}) {
+  const inspect = options.inspect ?? isBrowser
+  const group = options.group ?? isBrowser
+  const _filter = options.filter
+  const filter = !_filter ? () => true : typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
 
-  const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
+  const wrapName = options.tag ? (event: string) => `[${options.tag}] ${event}` : (event: string) => event
 
   const unsubscribeBefore = hooks.beforeEach(({ name }) => {
     if (!filter(name)) { return }
