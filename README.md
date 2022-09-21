@@ -227,7 +227,7 @@ Automatically logs each hook that is called and how long it takes to run.
 ```js
 const debugger = hookable.createDebugger(hooks, { tag: 'something' })
 
-hooks.callHook('something', 'some-arg')
+hooks.callHook('some-hook', 'some-arg')
 // [something] some-hook: 0.21ms
 
 debugger.close()
