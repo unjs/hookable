@@ -59,7 +59,7 @@ export function callEachWith (callbacks: Function[], arg0?: any) {
   }
 }
 
-const isBrowser = typeof navigator !== 'undefined'
+const isBrowser = typeof window !== 'undefined'
 
 /** Start debugging hook names and timing in console */
 export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, group = isBrowser, filter: _filter = () => true }: CreateDebuggerOptions = {}) {
