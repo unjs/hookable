@@ -1,4 +1,5 @@
-import type { NestedHooks, HookCallback } from './types'
+import type { NestedHooks, HookCallback, CreateDebuggerOptions } from './types'
+import type { Hookable } from '.'
 
 export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
   for (const key in configHooks) {
@@ -55,5 +56,42 @@ export function parallelCaller (hooks: HookCallback[], args?: any[]) {
 export function callEachWith (callbacks: Function[], arg0?: any) {
   for (const cb of callbacks) {
     cb(arg0)
+  }
+}
+
+const isBrowser = typeof navigator !== 'undefined'
+
+/** Start debugging hooks name and timing in console */
+export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, group = isBrowser, filter: _filter = () => true }: CreateDebuggerOptions) {
+  const wrapName = tag ? (event: string) => `[${tag}] ${event}` : (event: string) => event
+
+  const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
+
+  const unsubscribeBefore = hooks.beforeEach(({ name }) => {
+    if (!filter(name)) { return }
+
+    console.time(wrapName(name))
+  })
+
+  const unsubscribeAfter = hooks.afterEach(({ name, args }) => {
+    if (!filter(name)) { return }
+
+    if (group) { console.groupCollapsed(name) }
+
+    if (inspect) {
+      console.timeLog(name, args)
+    } else {
+      console.timeEnd(wrapName(name))
+    }
+
+    if (group) { console.groupEnd() }
+  })
+
+  return {
+    /** Stop debugging and remove listeners */
+    close: () => {
+      unsubscribeBefore()
+      unsubscribeAfter()
+    }
   }
 }
