@@ -62,7 +62,7 @@ export function callEachWith (callbacks: Function[], arg0?: any) {
 const isBrowser = typeof navigator !== 'undefined'
 
 /** Start debugging hook names and timing in console */
-export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, group = isBrowser, filter: _filter = () => true }: CreateDebuggerOptions) {
+export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, group = isBrowser, filter: _filter = () => true }: CreateDebuggerOptions = {}) {
   const wrapName = tag ? (event: string) => `[${tag}] ${event}` : (event: string) => event
 
   const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
@@ -79,7 +79,7 @@ export function createDebugger (hooks: Hookable, { tag, inspect = isBrowser, gro
     if (group) { console.groupCollapsed(name) }
 
     if (inspect) {
-      console.timeLog(name, args)
+      console.timeLog(wrapName(name), args)
     } else {
       console.timeEnd(wrapName(name))
     }
