@@ -225,12 +225,12 @@ await hookable.callHook('test')
 Automatically logs each hook that is called and how long it takes to run.
 
 ```js
-const debugger = hookable.createDebugger(hooks, { tag: 'something' })
+const debug = hookable.createDebugger(hooks, { tag: 'something' })
 
 hooks.callHook('some-hook', 'some-arg')
 // [something] some-hook: 0.21ms
 
-debugger.close()
+debug.close()
 ```
 
 ## Migration
