@@ -73,12 +73,12 @@ export function createDebugger (hooks: Hookable, _options: CreateDebuggerOptions
   const _filter = options.filter
   const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
 
-  const wrapName = options.tag ? (event: string) => `[${options.tag}] ${event}` : (event: string) => event
+  const logPrefix = options.tag ? `[${options.tag}] ` : ''
 
   const unsubscribeBefore = hooks.beforeEach(({ name }) => {
     if (!filter(name)) { return }
 
-    console.time(wrapName(name))
+    console.time(logPrefix + name)
   })
 
   const unsubscribeAfter = hooks.afterEach(({ name, args }) => {
@@ -87,9 +87,9 @@ export function createDebugger (hooks: Hookable, _options: CreateDebuggerOptions
     if (options.group) { console.groupCollapsed(name) }
 
     if (options.inspect) {
-      console.timeLog(wrapName(name), args)
+      console.timeLog(logPrefix + name, args)
     } else {
-      console.timeEnd(wrapName(name))
+      console.timeEnd(logPrefix + name)
     }
 
     if (options.group) { console.groupEnd() }
