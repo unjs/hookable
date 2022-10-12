@@ -31,3 +31,22 @@ export type NestedHooks<T> =
   (Partial<StripGeneric<T>> | Partial<OnlyGeneric<T>>) &
   Partial<{ [key in Namespaces<StripGeneric<T>>]: NestedHooks<WithoutNamespace<T, key>> }> &
   Partial<{ [key in BareHooks<StripGeneric<T>>]: T[key] }>
+
+export interface CreateDebuggerOptions {
+  /** An optional tag to prefix console logs with */
+  tag?: string
+  /**
+   * Show hook params to the console output
+   *
+   * Enabled for browsers by default
+   */
+  inspect?: boolean
+  /**
+   * Use group/groupEnd wrapper around logs happening during a specific hook
+   *
+   * Enabled for browsers by default
+   */
+  group?: boolean
+  /** Filter which hooks to enable debugger for. Can be a string prefix or fn. */
+  filter?: string | ((event: string) => boolean)
+}

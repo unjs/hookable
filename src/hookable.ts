@@ -158,11 +158,19 @@ export class Hookable <
   beforeEach (fn: (event: InferSpyEvent<HooksT>) => void) {
     this._before = this._before || []
     this._before.push(fn)
+    return () => {
+      const index = this._before.indexOf(fn)
+      if (index !== -1) { this._before.splice(index, 1) }
+    }
   }
 
   afterEach (fn: (event: InferSpyEvent<HooksT>) => void) {
     this._after = this._after || []
     this._after.push(fn)
+    return () => {
+      const index = this._after.indexOf(fn)
+      if (index !== -1) { this._after.splice(index, 1) }
+    }
   }
 }
 

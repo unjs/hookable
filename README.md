@@ -220,6 +220,19 @@ hookable.hook('test', () => { console.log('running test hook') })
 await hookable.callHook('test')
 ```
 
+### `createDebugger`
+
+Automatically logs each hook that is called and how long it takes to run.
+
+```js
+const debug = hookable.createDebugger(hooks, { tag: 'something' })
+
+hooks.callHook('some-hook', 'some-arg')
+// [something] some-hook: 0.21ms
+
+debug.close()
+```
+
 ## Migration
 
 ### From `4.x` to `5.x`
