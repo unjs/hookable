@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/unjs/hookable/compare/v5.3.0...v5.4.0) (2022-10-13)
+
+
+### Features
+
+* add `createDebugger` utility ([#51](https://github.com/unjs/hookable/issues/51)) ([021eb34](https://github.com/unjs/hookable/commit/021eb34d999b61d8189cc1c10116252588dba34f))
+
 ## [5.3.0](https://github.com/unjs/hookable/compare/v5.2.2...v5.3.0) (2022-09-02)
 
 
