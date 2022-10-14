@@ -15,7 +15,6 @@ export class Hookable <
   private _after: HookCallback[]
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
   private _deprecatedMessages: Set<string>
-  private _count: number
 
   constructor () {
     this._hooks = {}
