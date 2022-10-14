@@ -74,11 +74,14 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
   const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
 
   const logPrefix = options.tag ? `[${options.tag}] ` : ''
+  let counterMap: Record<string, number> = {}
 
-  const unsubscribeBefore = hooks.beforeEach(({ name, count }) => {
-    if (!filter(name)) { return }
+  const unsubscribeBefore = hooks.beforeEach((event) => {
+    if (!filter(event.name)) { return }
+    counterMap[event.name] = counterMap[event.name] || 0
+    event.count = counterMap[event.name]++
 
-    console.time(logPrefix + ''.padEnd(count, '\0') + name)
+    console.time(logPrefix + ''.padEnd(event.count, '\0') + event.name)
   })
 
   const unsubscribeAfter = hooks.afterEach(({ name, count, args }) => {
@@ -93,6 +96,8 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
     }
 
     if (options.group) { console.groupEnd() }
+
+    counterMap[name]--
   })
 
   return {

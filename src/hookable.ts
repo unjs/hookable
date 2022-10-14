@@ -23,7 +23,6 @@ export class Hookable <
     this._after = null
     this._deprecatedMessages = null
     this._deprecatedHooks = {}
-    this._count = 0
 
     // Allow destructuring hook and callHook functions out of instance object
     this.hook = this.hook.bind(this)
@@ -139,7 +138,7 @@ export class Hookable <
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): ReturnType<CallFunction> {
-    const event = (this._before || this._after) ? { name, args, count: this._count++, context: {} } : undefined
+    const event = (this._before || this._after) ? { name, args, context: {} } : undefined
     if (this._before) {
       callEachWith(this._before, event)
     }
@@ -151,11 +150,8 @@ export class Hookable <
         }
       })
     }
-    if (event) {
-      if (this._after) {
-        callEachWith(this._after, event)
-      }
-      this._count--
+    if (this._after && event) {
+      callEachWith(this._after, event)
     }
     return result
   }
