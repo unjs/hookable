@@ -62,7 +62,7 @@ export function callEachWith (callbacks: Function[], arg0?: any) {
 const isBrowser = typeof window !== 'undefined'
 
 /** Start debugging hook names and timing in console */
-export function createDebugger (hooks: Hookable, _options: CreateDebuggerOptions = {}) {
+export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOptions = {}) {
   const options = {
     inspect: isBrowser,
     group: isBrowser,
