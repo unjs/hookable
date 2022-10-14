@@ -74,7 +74,7 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
   const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
 
   const logPrefix = options.tag ? `[${options.tag}] ` : ''
-  let counterMap: Record<string, number> = {}
+  const counterMap: Record<string, number> = {}
 
   const unsubscribeBefore = hooks.beforeEach((event) => {
     if (!filter(event.name)) { return }
