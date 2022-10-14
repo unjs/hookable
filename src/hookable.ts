@@ -3,7 +3,7 @@ import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './type
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
 type InferSpyEvent<HT extends Record<string, any>> = {
-  [key in keyof HT]: { name: key, args: Parameters<HT[key]>, context: Record<string, any> }
+  [key in keyof HT]: { name: key, count: number, args: Parameters<HT[key]>, context: Record<string, any> }
 }[keyof HT]
 
 export class Hookable <
@@ -15,6 +15,7 @@ export class Hookable <
   private _after: HookCallback[]
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>
   private _deprecatedMessages: Set<string>
+  private _count: number
 
   constructor () {
     this._hooks = {}
@@ -22,6 +23,7 @@ export class Hookable <
     this._after = null
     this._deprecatedMessages = null
     this._deprecatedHooks = {}
+    this._count = 0
 
     // Allow destructuring hook and callHook functions out of instance object
     this.hook = this.hook.bind(this)
@@ -137,7 +139,7 @@ export class Hookable <
   }
 
   callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], args: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...args: Parameters<InferCallback<HooksT, NameT>>): ReturnType<CallFunction> {
-    const event = (this._before || this._after) ? { name, args, context: {} } : undefined
+    const event = (this._before || this._after) ? { name, args, count: this._count++, context: {} } : undefined
     if (this._before) {
       callEachWith(this._before, event)
     }
@@ -149,8 +151,11 @@ export class Hookable <
         }
       })
     }
-    if (this._after && event) {
-      callEachWith(this._after, event)
+    if (event) {
+      if (this._after) {
+        callEachWith(this._after, event)
+      }
+      this._count--
     }
     return result
   }

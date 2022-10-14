@@ -75,21 +75,21 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
 
   const logPrefix = options.tag ? `[${options.tag}] ` : ''
 
-  const unsubscribeBefore = hooks.beforeEach(({ name }) => {
+  const unsubscribeBefore = hooks.beforeEach(({ name, count }) => {
     if (!filter(name)) { return }
 
-    console.time(logPrefix + name)
+    console.time(logPrefix + ''.padEnd(count, '\0') + name)
   })
 
-  const unsubscribeAfter = hooks.afterEach(({ name, args }) => {
+  const unsubscribeAfter = hooks.afterEach(({ name, count, args }) => {
     if (!filter(name)) { return }
 
     if (options.group) { console.groupCollapsed(name) }
 
     if (options.inspect) {
-      console.timeLog(logPrefix + name, args)
+      console.timeLog(logPrefix + ''.padEnd(count, '\0') + name, args)
     } else {
-      console.timeEnd(logPrefix + name)
+      console.timeEnd(logPrefix + ''.padEnd(count, '\0') + name)
     }
 
     if (options.group) { console.groupEnd() }
