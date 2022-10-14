@@ -54,8 +54,8 @@ describe('hook types', () => {
 
     expectTypeOf(hooks.beforeEach).parameter(0).not.toBeAny()
     expectTypeOf(hooks.afterEach).parameter(0).parameter(0).toEqualTypeOf<
-      { name: 'foo', args: [], context: Record<string, any> } |
-      { name: 'bar', args: [number], context: Record<string, any> }
+      { name: 'foo', count: number, args: [], context: Record<string, any> } |
+      { name: 'bar', count: number, args: [number], context: Record<string, any> }
     >()
 
     hooks.beforeEach(({ name, args }) => {
