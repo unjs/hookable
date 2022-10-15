@@ -3,7 +3,7 @@ import { createDebugger, Hookable } from '../src/index'
 
 const consoleMethods = ['time', 'timeEnd', 'timeLog', 'groupCollapsed', 'groupEnd'] as const
 
-describe('createDebugger', () => {
+describe('debugger', () => {
   let hooks: Hookable
 
   beforeAll(() => {
