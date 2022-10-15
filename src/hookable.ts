@@ -3,7 +3,7 @@ import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from './type
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
 type InferSpyEvent<HT extends Record<string, any>> = {
-  [key in keyof HT]: { name: key, count: number, args: Parameters<HT[key]>, context: Record<string, any> }
+  [key in keyof HT]: { name: key, args: Parameters<HT[key]>, context: Record<string, any> }
 }[keyof HT]
 
 export class Hookable <
