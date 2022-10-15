@@ -63,7 +63,7 @@ const isBrowser = typeof window !== 'undefined'
 
 /** Start debugging hook names and timing in console */
 export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOptions = {}) {
-  const options = {
+  const options = <CreateDebuggerOptions> {
     inspect: isBrowser,
     group: isBrowser,
     filter: () => true,
@@ -73,26 +73,34 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
   const _filter = options.filter
   const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
 
-  const logPrefix = options.tag ? `[${options.tag}] ` : ''
+  const _tag = options.tag ? `[${options.tag}] ` : ''
+  const logPrefix = event => _tag + event.name + ''.padEnd(event._id, '\0')
 
-  const unsubscribeBefore = hooks.beforeEach(({ name }) => {
-    if (!filter(name)) { return }
+  const _idCtr: Record<string, number> = {}
 
-    console.time(logPrefix + name)
+  // Before each
+  const unsubscribeBefore = hooks.beforeEach((event: any) => {
+    if (!filter(event.name)) { return }
+    _idCtr[event.name] = _idCtr[event.name] || 0
+    event._id = _idCtr[event.name]++
+    console.time(logPrefix(event))
   })
 
-  const unsubscribeAfter = hooks.afterEach(({ name, args }) => {
-    if (!filter(name)) { return }
-
-    if (options.group) { console.groupCollapsed(name) }
-
-    if (options.inspect) {
-      console.timeLog(logPrefix + name, args)
-    } else {
-      console.timeEnd(logPrefix + name)
+  // After each
+  const unsubscribeAfter = hooks.afterEach((event) => {
+    if (!filter(event.name)) { return }
+    if (options.group) {
+      console.groupCollapsed(event.name)
     }
-
-    if (options.group) { console.groupEnd() }
+    if (options.inspect) {
+      console.timeLog(logPrefix(event), event.args)
+    } else {
+      console.timeEnd(logPrefix(event))
+    }
+    if (options.group) {
+      console.groupEnd()
+    }
+    _idCtr[event.name]--
   })
 
   return {

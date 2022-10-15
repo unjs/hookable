@@ -15,7 +15,7 @@ describe('hook types', () => {
   })
 
   test('deprecates hooks', () => {
-    const hooks = createHooks<{ foo: () => true, bar: (_arg: string) => 42 }>()
+    const hooks = createHooks<{ foo:() => true, bar: (_arg: string) => 42 }>()
     hooks.deprecateHooks({
       foo: { to: 'bar' }
     })
