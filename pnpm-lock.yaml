@@ -1,24 +1,24 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@nuxtjs/eslint-config-typescript': latest
-  '@vitest/coverage-c8': ^0.24.1
-  eslint: latest
+  '@nuxtjs/eslint-config-typescript': ^11.0.0
+  '@vitest/coverage-c8': ^0.24.3
+  eslint: ^8.25.0
   expect-type: ^0.14.2
-  standard-version: latest
+  standard-version: ^9.5.0
   typescript: latest
-  unbuild: latest
-  vitest: latest
+  unbuild: ^0.8.2
+  vitest: ^0.24.3
 
 devDependencies:
   '@nuxtjs/eslint-config-typescript': 11.0.0_z4bbprzjrhnsfa24uvmcbu7f5q
-  '@vitest/coverage-c8': 0.24.1
+  '@vitest/coverage-c8': 0.24.3
   eslint: 8.25.0
   expect-type: 0.14.2
   standard-version: 9.5.0
   typescript: 4.8.4
   unbuild: 0.8.11
-  vitest: 0.24.1
+  vitest: 0.24.3
 
 packages:
 
@@ -146,11 +146,6 @@ packages:
 
   /@babel/helper-string-parser/7.19.4:
     resolution: {integrity: sha512-nHtDoQcuqFmwYNYPz3Rah5ph2p8PFeFCsZk9A/48dPc/rGocJ5J3hAAZ7pb76VWX3fZKu+uEr/FhH5jLx7umrw==}
-    engines: {node: '>=6.9.0'}
-    dev: true
-
-  /@babel/helper-validator-identifier/7.18.6:
-    resolution: {integrity: sha512-MmetCkz9ej86nJQV+sFCxoGGrUbU3q02kgLciwkrt9QqEB7cP39oKEY0PakknEO0Gu20SskMRi+AYZ3b1TpN9g==}
     engines: {node: '>=6.9.0'}
     dev: true
 
@@ -674,11 +669,11 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vitest/coverage-c8/0.24.1:
-    resolution: {integrity: sha512-cOFHXRHB9WHtGgsHE4FX4Ef1c9Hon668RNJQOJvqSy1/1Y7zIYIBhFWmuFKLZRCMV4jGT5CRiuB9KtdNsOc3og==}
+  /@vitest/coverage-c8/0.24.3:
+    resolution: {integrity: sha512-tAmMyHxWYnAwGeJb7QgTuEX8aLasTg4X1/6INobXa/7wYGEJ28CACFO5iLn1HzFVPoLvhsS3luQjiflGjjSMRQ==}
     dependencies:
       c8: 7.12.0
-      vitest: 0.24.1
+      vitest: 0.24.3
     transitivePeerDependencies:
       - '@edge-runtime/vm'
       - '@vitest/browser'
@@ -1993,7 +1988,7 @@ packages:
     peerDependencies:
       eslint: '>=8.18.0'
     dependencies:
-      '@babel/helper-validator-identifier': 7.18.6
+      '@babel/helper-validator-identifier': 7.19.1
       ci-info: 3.3.2
       clean-regexp: 1.0.0
       eslint: 8.25.0
@@ -4074,8 +4069,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.24.1:
-    resolution: {integrity: sha512-NKkK1xnDIOOr42pKBfGQQl6b6IWdFVBpG6ZS1T+nUlJuqcOiZ7lxjVwHy9wrtTYpJ0BWww9y6bSGYXubD29Nag==}
+  /vitest/0.24.3:
+    resolution: {integrity: sha512-aM0auuPPgMSstWvr851hB74g/LKaKBzSxcG3da7ejfZbx08Y21JpZmbmDYrMTCGhVZKqTGwzcnLMwyfz2WzkhQ==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
     peerDependencies:

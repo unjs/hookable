@@ -31,14 +31,14 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config-typescript": "latest",
-    "@vitest/coverage-c8": "^0.24.1",
-    "eslint": "latest",
+    "@nuxtjs/eslint-config-typescript": "^11.0.0",
+    "@vitest/coverage-c8": "^0.24.3",
+    "eslint": "^8.25.0",
     "expect-type": "^0.14.2",
-    "standard-version": "latest",
+    "standard-version": "^9.5.0",
     "typescript": "latest",
-    "unbuild": "latest",
-    "vitest": "latest"
+    "unbuild": "^0.8.2",
+    "vitest": "^0.24.3"
   },
   "packageManager": "pnpm@7.13.4"
 }
