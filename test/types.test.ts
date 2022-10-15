@@ -15,7 +15,7 @@ describe('hook types', () => {
   })
 
   test('deprecates hooks', () => {
-    const hooks = createHooks<{ foo: () => true, bar: (_arg: string) => 42 }>()
+    const hooks = createHooks<{ foo:() => true, bar: (_arg: string) => 42 }>()
     hooks.deprecateHooks({
       foo: { to: 'bar' }
     })
@@ -54,8 +54,8 @@ describe('hook types', () => {
 
     expectTypeOf(hooks.beforeEach).parameter(0).not.toBeAny()
     expectTypeOf(hooks.afterEach).parameter(0).parameter(0).toEqualTypeOf<
-      { name: 'foo', count: number, args: [], context: Record<string, any> } |
-      { name: 'bar', count: number, args: [number], context: Record<string, any> }
+      { name: 'foo', args: [], context: Record<string, any> } |
+      { name: 'bar', args: [number], context: Record<string, any> }
     >()
 
     hooks.beforeEach(({ name, args }) => {
