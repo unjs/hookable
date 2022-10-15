@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.4.1](https://github.com/unjs/hookable/compare/v5.4.0...v5.4.1) (2022-10-15)
+
+
+### Bug Fixes
+
+* accept any hookable ([#53](https://github.com/unjs/hookable/issues/53)) ([0eac02c](https://github.com/unjs/hookable/commit/0eac02cc6f975990ca458a587007f3bfd33e8a95))
+* allow parallel hooks with unique time strings ([#55](https://github.com/unjs/hookable/issues/55)) ([ee64dc8](https://github.com/unjs/hookable/commit/ee64dc8299d15367eb2c62806c5b96eb1f88db32))
+* handle case where hook adds debugger ([#54](https://github.com/unjs/hookable/issues/54)) ([f6d4475](https://github.com/unjs/hookable/commit/f6d4475166a5941f6fba16f836c2c8e91971b974))
+
 ## [5.4.0](https://github.com/unjs/hookable/compare/v5.3.0...v5.4.0) (2022-10-13)
 
 
