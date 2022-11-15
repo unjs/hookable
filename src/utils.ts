@@ -1,59 +1,61 @@
-import type { NestedHooks, HookCallback } from './types'
+import type { NestedHooks, HookCallback } from "./types";
 
 export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
   for (const key in configHooks) {
-    const subHook = configHooks[key]
-    const name = parentName ? `${parentName}:${key}` : key
-    if (typeof subHook === 'object' && subHook !== null) {
-      flatHooks(subHook, hooks, name)
-    } else if (typeof subHook === 'function') {
+    const subHook = configHooks[key];
+    const name = parentName ? `${parentName}:${key}` : key;
+    if (typeof subHook === "object" && subHook !== null) {
+      flatHooks(subHook, hooks, name);
+    } else if (typeof subHook === "function") {
       // @ts-ignore
-      hooks[name] = subHook
+      hooks[name] = subHook;
     }
   }
-  return hooks as any
+  return hooks as any;
 }
 
 export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
-  const finalHooks = {} as any
+  const finalHooks = {} as any;
 
   for (const hook of hooks) {
-    const flatenHook = flatHooks(hook)
+    const flatenHook = flatHooks(hook);
     for (const key in flatenHook) {
       if (finalHooks[key]) {
-        finalHooks[key].push(flatenHook[key])
+        finalHooks[key].push(flatenHook[key]);
       } else {
-        finalHooks[key] = [flatenHook[key]]
+        finalHooks[key] = [flatenHook[key]];
       }
     }
   }
 
   for (const key in finalHooks) {
     if (finalHooks[key].length > 1) {
-      const arr = finalHooks[key]
-      finalHooks[key] = (...args) => serial(arr, (fn: any) => fn(...args))
+      const array = finalHooks[key];
+      finalHooks[key] = (...arguments_) => serial(array, (function_: any) => function_(...arguments_));
     } else {
-      finalHooks[key] = finalHooks[key][0]
+      finalHooks[key] = finalHooks[key][0];
     }
   }
 
-  return finalHooks as any
+  return finalHooks as any;
 }
 
-export function serial<T> (tasks: T[], fn: (task: T) => Promise<any> | any) {
-  return tasks.reduce((promise, task) => promise.then(() => fn(task)), Promise.resolve(null))
+export function serial<T> (tasks: T[], function_: (task: T) => Promise<any> | any) {
+  // eslint-disable-next-line unicorn/no-array-reduce
+  return tasks.reduce((promise, task) => promise.then(() => function_(task)), Promise.resolve());
 }
 
-export function serialCaller (hooks: HookCallback[], args?: any[]) {
-  return hooks.reduce((promise, hookFn) => promise.then(() => hookFn.apply(undefined, args)), Promise.resolve(null))
+export function serialCaller (hooks: HookCallback[], arguments_?: any[]) {
+  // eslint-disable-next-line unicorn/no-array-reduce
+  return hooks.reduce((promise, hookFunction) => promise.then(() => hookFunction.apply(undefined, arguments_)), Promise.resolve());
 }
 
-export function parallelCaller (hooks: HookCallback[], args?: any[]) {
-  return Promise.all(hooks.map(hook => hook.apply(undefined, args)))
+export function parallelCaller (hooks: HookCallback[], arguments_?: any[]) {
+  return Promise.all(hooks.map(hook => hook.apply(undefined, arguments_)));
 }
 
-export function callEachWith (callbacks: Function[], arg0?: any) {
-  for (const cb of callbacks) {
-    cb(arg0)
+export function callEachWith (callbacks: Function[], argument0?: any) {
+  for (const callback of callbacks) {
+    callback(argument0);
   }
 }

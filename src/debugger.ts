@@ -1,4 +1,4 @@
-import type { Hookable } from './hookable'
+import type { Hookable } from "./hookable";
 
 export interface CreateDebuggerOptions {
   /** An optional tag to prefix console logs with */
@@ -22,7 +22,7 @@ export interface CreateDebuggerOptions {
   filter?: string | ((event: string) => boolean)
 }
 
-const isBrowser = typeof window !== 'undefined'
+const isBrowser = typeof window !== "undefined";
 
 /** Start debugging hook names and timing in console */
 export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOptions = {}) {
@@ -31,46 +31,46 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
     group: isBrowser,
     filter: () => true,
     ..._options
-  }
+  };
 
-  const _filter = options.filter
-  const filter = typeof _filter === 'string' ? (name: string) => name.startsWith(_filter) : _filter
+  const _filter = options.filter;
+  const filter = typeof _filter === "string" ? (name: string) => name.startsWith(_filter) : _filter;
 
-  const _tag = options.tag ? `[${options.tag}] ` : ''
-  const logPrefix = event => _tag + event.name + ''.padEnd(event._id, '\0')
+  const _tag = options.tag ? `[${options.tag}] ` : "";
+  const logPrefix = event => _tag + event.name + "".padEnd(event._id, "\0");
 
-  const _idCtr: Record<string, number> = {}
+  const _idCtr: Record<string, number> = {};
 
   // Before each
   const unsubscribeBefore = hooks.beforeEach((event: any) => {
-    if (!filter(event.name)) { return }
-    _idCtr[event.name] = _idCtr[event.name] || 0
-    event._id = _idCtr[event.name]++
-    console.time(logPrefix(event))
-  })
+    if (!filter(event.name)) { return; }
+    _idCtr[event.name] = _idCtr[event.name] || 0;
+    event._id = _idCtr[event.name]++;
+    console.time(logPrefix(event));
+  });
 
   // After each
   const unsubscribeAfter = hooks.afterEach((event) => {
-    if (!filter(event.name)) { return }
+    if (!filter(event.name)) { return; }
     if (options.group) {
-      console.groupCollapsed(event.name)
+      console.groupCollapsed(event.name);
     }
     if (options.inspect) {
-      console.timeLog(logPrefix(event), event.args)
+      console.timeLog(logPrefix(event), event.args);
     } else {
-      console.timeEnd(logPrefix(event))
+      console.timeEnd(logPrefix(event));
     }
     if (options.group) {
-      console.groupEnd()
+      console.groupEnd();
     }
-    _idCtr[event.name]--
-  })
+    _idCtr[event.name]--;
+  });
 
   return {
     /** Stop debugging and remove listeners */
     close: () => {
-      unsubscribeBefore()
-      unsubscribeAfter()
+      unsubscribeBefore();
+      unsubscribeAfter();
     }
-  }
+  };
 }

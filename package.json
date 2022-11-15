@@ -31,12 +31,12 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@vitest/coverage-c8": "^0.25.2",
     "eslint": "^8.27.0",
+    "eslint-config-unjs": "^0.0.2",
     "expect-type": "^0.15.0",
     "standard-version": "^9.5.0",
-    "typescript": "latest",
+    "typescript": "^4.8.4",
     "unbuild": "^0.9.4",
     "vitest": "^0.25.2"
   },
