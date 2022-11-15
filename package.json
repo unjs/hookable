@@ -13,6 +13,7 @@
   "license": "MIT",
   "exports": {
     "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "require": "./dist/index.cjs"
   },
   "main": "./dist/index.cjs",
