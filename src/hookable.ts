@@ -7,14 +7,14 @@ type InferSpyEvent<HT extends Record<string, any>> = {
 }[keyof HT]
 
 export class Hookable <
-  HooksT = Record<string, HookCallback>,
+  HooksT extends Record<string, any> = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
   private _hooks: { [key: string]: HookCallback[] };
-  private _before: HookCallback[];
-  private _after: HookCallback[];
+  private _before?: HookCallback[];
+  private _after?: HookCallback[];
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>;
-  private _deprecatedMessages: Set<string>;
+  private _deprecatedMessages?: Set<string>;
 
   constructor () {
     this._hooks = {};
@@ -35,7 +35,7 @@ export class Hookable <
     }
 
     const originalName = name;
-    let dep: DeprecatedHook<HooksT>;
+    let dep: DeprecatedHook<HooksT> | undefined = undefined;
     while (this._deprecatedHooks[name]) {
       dep = this._deprecatedHooks[name];
       name = dep.to as NameT;
@@ -61,14 +61,15 @@ export class Hookable <
     return () => {
       if (function_) {
         this.removeHook(name, function_);
+        // @ts-ignore
         function_ = undefined; // Free memory
       }
     };
   }
 
   hookOnce<NameT extends HookNameT> (name: NameT, function_: InferCallback<HooksT, NameT>) {
-    let _unreg: () => void;
-    let _function = (...arguments_: any) => {
+    let _unreg: (() => void) | undefined;
+    let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
       if (typeof _unreg === "function") {
         _unreg();
       }
@@ -97,7 +98,7 @@ export class Hookable <
   deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>) {
     this._deprecatedHooks[name] = typeof deprecated === "string" ? { to: deprecated } : deprecated;
     const _hooks = this._hooks[name] || [];
-    this._hooks[name] = undefined;
+    delete this._hooks[name];
     for (const hook of _hooks) {
       this.hook(name, hook as any);
     }
@@ -106,7 +107,7 @@ export class Hookable <
   deprecateHooks (deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>) {
     Object.assign(this._deprecatedHooks, deprecatedHooks);
     for (const name in deprecatedHooks) {
-      this.deprecateHook(name, deprecatedHooks[name]);
+      this.deprecateHook(name, deprecatedHooks[name] as DeprecatedHook<HooksT>);
     }
   }
 
@@ -161,8 +162,8 @@ export class Hookable <
     this._before = this._before || [];
     this._before.push(function_);
     return () => {
-      const index = this._before.indexOf(function_);
-      if (index !== -1) { this._before.splice(index, 1); }
+      const index = this._before!!.indexOf(function_);
+      if (index !== -1) { this._before!!.splice(index, 1); }
     };
   }
 
@@ -170,12 +171,12 @@ export class Hookable <
     this._after = this._after || [];
     this._after.push(function_);
     return () => {
-      const index = this._after.indexOf(function_);
-      if (index !== -1) { this._after.splice(index, 1); }
+      const index = this._after!!.indexOf(function_);
+      if (index !== -1) { this._after!!.splice(index, 1); }
     };
   }
 }
 
-export function createHooks<T> (): Hookable<T> {
+export function createHooks<T extends Record<string, any>> (): Hookable<T> {
   return new Hookable<T>();
 }
