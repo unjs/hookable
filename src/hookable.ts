@@ -35,7 +35,7 @@ export class Hookable <
     }
 
     const originalName = name;
-    let dep: DeprecatedHook<HooksT> | undefined = undefined;
+    let dep: DeprecatedHook<HooksT> | undefined;
     while (this._deprecatedHooks[name]) {
       dep = this._deprecatedHooks[name];
       name = dep.to as NameT;
