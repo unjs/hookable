@@ -142,7 +142,7 @@ export class Hookable<
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
     const removeFns = Object.keys(hooks).map((key) =>
-      this.hook(key, hooks[key])
+      this.hook(key as HookNameT, hooks[key])
     );
 
     return () => {
