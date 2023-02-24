@@ -33,6 +33,7 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@types/node": "^18.14.1",
     "@vitest/coverage-c8": "^0.28.5",
     "eslint": "^8.34.0",
     "eslint-config-unjs": "^0.1.0",
