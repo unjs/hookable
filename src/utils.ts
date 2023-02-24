@@ -59,17 +59,19 @@ export function serial<T>(
 export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
-    (promise, hookFunction) =>
-      promise.then(() => hookFunction.apply(undefined, arguments_)),
+    (promise, hookFunction) => promise.then(() => hookFunction(...arguments_)),
     Promise.resolve()
   );
 }
 
 export function parallelCaller(hooks: HookCallback[], arguments_?: any[]) {
-  return Promise.all(hooks.map((hook) => hook.apply(undefined, arguments_)));
+  return Promise.all(hooks.map((hook) => hook(...arguments_)));
 }
 
-export function callEachWith(callbacks: Function[], argument0?: any) {
+export function callEachWith(
+  callbacks: Array<(argument0: any) => any>,
+  argument0?: any
+) {
   for (const callback of callbacks) {
     callback(argument0);
   }
