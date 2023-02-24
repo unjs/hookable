@@ -1,6 +1,10 @@
 import type { NestedHooks, HookCallback } from "./types";
 
-export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, parentName?: string): T {
+export function flatHooks<T>(
+  configHooks: NestedHooks<T>,
+  hooks: T = {} as T,
+  parentName?: string
+): T {
   for (const key in configHooks) {
     const subHook = configHooks[key];
     const name = parentName ? `${parentName}:${key}` : key;
@@ -14,7 +18,7 @@ export function flatHooks<T> (configHooks: NestedHooks<T>, hooks: T = {} as T, p
   return hooks as any;
 }
 
-export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
+export function mergeHooks<T>(...hooks: NestedHooks<T>[]): T {
   const finalHooks = {} as any;
 
   for (const hook of hooks) {
@@ -31,7 +35,8 @@ export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
   for (const key in finalHooks) {
     if (finalHooks[key].length > 1) {
       const array = finalHooks[key];
-      finalHooks[key] = (...arguments_) => serial(array, (function_: any) => function_(...arguments_));
+      finalHooks[key] = (...arguments_) =>
+        serial(array, (function_: any) => function_(...arguments_));
     } else {
       finalHooks[key] = finalHooks[key][0];
     }
@@ -40,21 +45,33 @@ export function mergeHooks<T> (...hooks: NestedHooks<T>[]): T {
   return finalHooks as any;
 }
 
-export function serial<T> (tasks: T[], function_: (task: T) => Promise<any> | any) {
+export function serial<T>(
+  tasks: T[],
+  function_: (task: T) => Promise<any> | any
+) {
   // eslint-disable-next-line unicorn/no-array-reduce
-  return tasks.reduce((promise, task) => promise.then(() => function_(task)), Promise.resolve());
+  return tasks.reduce(
+    (promise, task) => promise.then(() => function_(task)),
+    Promise.resolve()
+  );
 }
 
-export function serialCaller (hooks: HookCallback[], arguments_?: any[]) {
+export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   // eslint-disable-next-line unicorn/no-array-reduce
-  return hooks.reduce((promise, hookFunction) => promise.then(() => hookFunction.apply(undefined, arguments_)), Promise.resolve());
+  return hooks.reduce(
+    (promise, hookFunction) => promise.then(() => hookFunction(...arguments_)),
+    Promise.resolve()
+  );
 }
 
-export function parallelCaller (hooks: HookCallback[], arguments_?: any[]) {
-  return Promise.all(hooks.map(hook => hook.apply(undefined, arguments_)));
+export function parallelCaller(hooks: HookCallback[], arguments_?: any[]) {
+  return Promise.all(hooks.map((hook) => hook(...arguments_)));
 }
 
-export function callEachWith (callbacks: Function[], argument0?: any) {
+export function callEachWith(
+  callbacks: Array<(argument0: any) => any>,
+  argument0?: any
+) {
   for (const callback of callbacks) {
     callback(argument0);
   }
