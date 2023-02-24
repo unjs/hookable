@@ -5,6 +5,7 @@ specifiers:
   eslint: ^8.27.0
   eslint-config-unjs: ^0.0.2
   expect-type: ^0.15.0
+  prettier: ^2.8.4
   standard-version: ^9.5.0
   typescript: ^4.8.4
   unbuild: ^0.9.4
@@ -15,6 +16,7 @@ devDependencies:
   eslint: 8.27.0
   eslint-config-unjs: 0.0.2_rmayb2veg2btbq6mbmnyivgasy
   expect-type: 0.15.0
+  prettier: 2.8.4
   standard-version: 9.5.0
   typescript: 4.8.4
   unbuild: 0.9.4
@@ -3356,6 +3358,12 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier/2.8.4:
+    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /pretty-bytes/6.0.0:
