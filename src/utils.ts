@@ -56,16 +56,26 @@ export function serial<T>(
   );
 }
 
+type Task = ReturnType<typeof console.createTask>;
+const defaultTask = { run: (function_) => function_() } as Task;
+const createTask =
+  typeof console.createTask !== "undefined"
+    ? console.createTask
+    : () => defaultTask;
+
 export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
+  const task = createTask(this.name);
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
-    (promise, hookFunction) => promise.then(() => hookFunction(...arguments_)),
+    (promise, hookFunction) =>
+      promise.then(() => task.run(() => hookFunction(...arguments_))),
     Promise.resolve()
   );
 }
 
 export function parallelCaller(hooks: HookCallback[], arguments_?: any[]) {
-  return Promise.all(hooks.map((hook) => hook(...arguments_)));
+  const task = createTask(this.name);
+  return Promise.all(hooks.map((hook) => task.run(() => hook(...arguments_))));
 }
 
 export function callEachWith(

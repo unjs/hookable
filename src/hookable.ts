@@ -194,7 +194,7 @@ export class Hookable<
     if (this._before) {
       callEachWith(this._before, event);
     }
-    const result = caller(this._hooks[name] || [], arguments_);
+    const result = caller.call({ name }, this._hooks[name] || [], arguments_);
     if ((result as any) instanceof Promise) {
       return result.finally(() => {
         if (this._after && event) {
