@@ -73,7 +73,7 @@ export class Hookable<
 
     // Add name to hook for better debugging experience
     if (!function_.name) {
-      Object.defineProperty(function_, 'name', { get: () => name + ' callback' })
+      Object.defineProperty(function_, 'name', { get: () => name + ' callback', configurable: true })
     }
 
     this._hooks[name] = this._hooks[name] || [];
