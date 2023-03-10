@@ -1,4 +1,9 @@
-import { flatHooks, parallelCaller, serialCaller, callEachWith } from "./utils";
+import {
+  flatHooks,
+  parallelTaskCaller,
+  serialTaskCaller,
+  callEachWith,
+} from "./utils";
 import type {
   DeprecatedHook,
   NestedHooks,
@@ -176,14 +181,14 @@ export class Hookable<
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any> {
-    return this.callHookWith(serialCaller, name, ...arguments_);
+    return this.callHookWith(serialTaskCaller, name, ...arguments_);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any[]> {
-    return this.callHookWith(parallelCaller, name, ...arguments_);
+    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
   }
 
   callHookWith<
