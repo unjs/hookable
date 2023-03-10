@@ -56,12 +56,11 @@ export function serial<T>(
   );
 }
 
-type Task = ReturnType<typeof console.createTask>;
-const defaultTask = { run: (function_) => function_() } as Task;
+type CreateTask = typeof console.createTask;
+const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
+const _createTask: CreateTask = () => defaultTask;
 const createTask =
-  typeof console.createTask !== "undefined"
-    ? console.createTask
-    : () => defaultTask;
+  typeof console.createTask !== "undefined" ? console.createTask : _createTask;
 
 export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   const task = createTask(this.name);
