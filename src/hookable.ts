@@ -1,4 +1,9 @@
-import { flatHooks, parallelCaller, serialCaller, callEachWith } from "./utils";
+import {
+  flatHooks,
+  parallelTaskCaller,
+  serialTaskCaller,
+  callEachWith,
+} from "./utils";
 import type {
   DeprecatedHook,
   NestedHooks,
@@ -69,6 +74,16 @@ export class Hookable<
         console.warn(message);
         this._deprecatedMessages.add(message);
       }
+    }
+
+    // Add name to hook for better debugging experience
+    if (!function_.name) {
+      try {
+        Object.defineProperty(function_, "name", {
+          get: () => "_" + name.replace(/\W+/g, "_") + "_hook_cb",
+          configurable: true,
+        });
+      } catch {}
     }
 
     this._hooks[name] = this._hooks[name] || [];
@@ -172,14 +187,14 @@ export class Hookable<
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any> {
-    return this.callHookWith(serialCaller, name, ...arguments_);
+    return this.callHookWith(serialTaskCaller, name, ...arguments_);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any[]> {
-    return this.callHookWith(parallelCaller, name, ...arguments_);
+    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
   }
 
   callHookWith<

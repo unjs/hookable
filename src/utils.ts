@@ -56,6 +56,37 @@ export function serial<T>(
   );
 }
 
+// https://developer.chrome.com/blog/devtools-modern-web-debugging/#linked-stack-traces
+type CreateTask = typeof console.createTask;
+const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
+const _createTask: CreateTask = () => defaultTask;
+const createTask =
+  typeof console.createTask !== "undefined" ? console.createTask : _createTask;
+
+export function serialTaskCaller(
+  hooks: HookCallback[],
+  name: string,
+  ...args: any[]
+) {
+  const task = createTask(name);
+  // eslint-disable-next-line unicorn/no-array-reduce
+  return hooks.reduce(
+    (promise, hookFunction) =>
+      promise.then(() => task.run(() => hookFunction(...args))),
+    Promise.resolve()
+  );
+}
+
+export function parallelTaskCaller(
+  hooks: HookCallback[],
+  name: string,
+  ...args: any[]
+) {
+  const task = createTask(name);
+  return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
+}
+
+/** @deprecated */
 export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
@@ -64,15 +95,13 @@ export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   );
 }
 
-export function parallelCaller(hooks: HookCallback[], arguments_?: any[]) {
-  return Promise.all(hooks.map((hook) => hook(...arguments_)));
+/** @deprecated */
+export function parallelCaller(hooks: HookCallback[], args?: any[]) {
+  return Promise.all(hooks.map((hook) => hook(...args)));
 }
 
-export function callEachWith(
-  callbacks: Array<(argument0: any) => any>,
-  argument0?: any
-) {
+export function callEachWith(callbacks: Array<(arg0: any) => any>, arg0?: any) {
   for (const callback of callbacks) {
-    callback(argument0);
+    callback(arg0);
   }
 }
