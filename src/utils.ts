@@ -56,6 +56,7 @@ export function serial<T>(
   );
 }
 
+// https://developer.chrome.com/blog/devtools-modern-web-debugging/#linked-stack-traces
 type CreateTask = typeof console.createTask;
 const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
 const _createTask: CreateTask = () => defaultTask;
