@@ -74,7 +74,7 @@ export class Hookable<
     // Add name to hook for better debugging experience
     if (!function_.name) {
       Object.defineProperty(function_, "name", {
-        get: () => name + " callback",
+        get: () => '_' + name.replace(/\W+/g, '_') + "_hook_cb",
         configurable: true,
       });
     }
