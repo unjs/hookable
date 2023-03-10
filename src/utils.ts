@@ -62,8 +62,6 @@ const _createTask: CreateTask = () => defaultTask;
 const createTask =
   typeof console.createTask !== "undefined" ? console.createTask : _createTask;
 
-
-
 export function serialTaskCaller(hooks: HookCallback[], name: string, ...args: any[]) {
   const task = createTask(name);
   // eslint-disable-next-line unicorn/no-array-reduce
