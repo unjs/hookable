@@ -71,6 +71,16 @@ export class Hookable<
       }
     }
 
+    // Add name to hook for better debugging experience
+    if (!function_.name) {
+      try {
+        Object.defineProperty(function_, "name", {
+          get: () => "_" + name.replace(/\W+/g, "_") + "_hook_cb",
+          configurable: true,
+        });
+      } catch {}
+    }
+
     this._hooks[name] = this._hooks[name] || [];
     this._hooks[name].push(function_);
 
