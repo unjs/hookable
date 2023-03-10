@@ -390,4 +390,12 @@ describe("core: hookable", () => {
       "a:d",
     ]);
   });
+
+  test("arguments", async () => {
+    let result;
+    const hooks = createHooks();
+    hooks.hook("test", (a: number, b: number) => (result = a + b));
+    await hooks.callHook("test", 1, 2);
+    expect(result).toBe(3);
+  });
 });
