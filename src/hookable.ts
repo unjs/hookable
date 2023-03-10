@@ -187,14 +187,14 @@ export class Hookable<
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any> {
-    return this.callHookWith(serialTaskCaller, name, ...arguments_);
+    return this.callHookWith(serialTaskCaller, name, name, ...arguments_);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any[]> {
-    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
+    return this.callHookWith(parallelTaskCaller, name, name, ...arguments_);
   }
 
   callHookWith<
