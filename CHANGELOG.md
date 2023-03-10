@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v5.5.1
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.5.0...v5.5.1)
+
+
+### 🩹 Fixes
+
+  - Shift name out of arg array ([#71](https://github.com/unjs/hookable/pull/71))
+
+### 📖 Documentation
+
+  - Update badges ([13b0c90](https://github.com/unjs/hookable/commit/13b0c90))
+
+### ❤️  Contributors
+
+- Daniel Roe <daniel@roe.dev>
+- Sébastien Chopin <seb@nuxtjs.com>
+
 ## v5.5.0
 
 [compare changes](https://github.com/unjs/hookable/compare/v5.4.2...v5.5.0)
