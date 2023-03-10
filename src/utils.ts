@@ -96,15 +96,12 @@ export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
 }
 
 /** @deprecated */
-export function parallelCaller(hooks: HookCallback[], arguments_?: any[]) {
-  return Promise.all(hooks.map((hook) => hook(...arguments_)));
+export function parallelCaller(hooks: HookCallback[], args?: any[]) {
+  return Promise.all(hooks.map((hook) => hook(...args)));
 }
 
-export function callEachWith(
-  callbacks: Array<(argument0: any) => any>,
-  argument0?: any
-) {
+export function callEachWith(callbacks: Array<(arg0: any) => any>, arg0?: any) {
   for (const callback of callbacks) {
-    callback(argument0);
+    callback(arg0);
   }
 }

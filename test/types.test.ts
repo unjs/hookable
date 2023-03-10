@@ -7,7 +7,7 @@ describe("hook types", () => {
   test("correctly handles non-nested hooks", () => {
     const hooks = createHooks<{
       foo: () => true;
-      bar: (_argument: string) => 42;
+      bar: (_arg: string) => 42;
     }>();
 
     expectTypeOf(hooks.hook).parameter(0).not.toBeAny();
@@ -20,7 +20,7 @@ describe("hook types", () => {
   test("deprecates hooks", () => {
     const hooks = createHooks<{
       foo: () => true;
-      bar: (_argument: string) => 42;
+      bar: (_arg: string) => 42;
     }>();
     hooks.deprecateHooks({
       foo: { to: "bar" },
@@ -30,43 +30,43 @@ describe("hook types", () => {
   test("handles nested hooks", () => {
     const hooks = createHooks<{
       "namespace:foo": (argument: number) => void;
-      bar: (_argument: string) => void;
+      bar: (_arg: string) => void;
       "namespace:baz": (argument: "42") => void;
     }>();
 
     // should be valid
     hooks.addHooks({
-      namespace: { foo: (_argument) => {}, baz: (_argument) => {} },
-      bar: (_argument) => {},
+      namespace: { foo: (_arg) => {}, baz: (_arg) => {} },
+      bar: (_arg) => {},
       "namespace:foo": () => {},
     });
     // @ts-expect-error
-    hooks.addHooks({ a: (_argument) => {} });
+    hooks.addHooks({ a: (_arg) => {} });
     // @ts-expect-error
-    hooks.addHooks({ namespace: { nonexistent: (_argument) => {} } });
+    hooks.addHooks({ namespace: { nonexistent: (_arg) => {} } });
   });
 
   test("handles nested hooks with signature", () => {
     const hooks = createHooks<{
       [key: string]: HookCallback;
       "namespace:foo": (argument: number) => void;
-      bar: (_argument: string) => void;
+      bar: (_arg: string) => void;
     }>();
 
     // should both be valid
     hooks.addHooks({
-      namespace: { foo: (_argument) => {} },
-      bar: (_argument) => {},
+      namespace: { foo: (_arg) => {} },
+      bar: (_arg) => {},
       "namespace:foo": () => {},
     });
-    hooks.addHooks({ namespace: { nothing: (_argument) => {} } });
-    hooks.addHooks({ nothing: (_argument) => {} });
+    hooks.addHooks({ namespace: { nothing: (_arg) => {} } });
+    hooks.addHooks({ nothing: (_arg) => {} });
   });
 
   test("beforeEach and afterEach typings", () => {
     const hooks = createHooks<{
       foo: () => true;
-      bar: (_argument: number) => 42;
+      bar: (_arg: number) => 42;
     }>();
 
     expectTypeOf(hooks.beforeEach).parameter(0).not.toBeAny();
