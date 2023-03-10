@@ -177,6 +177,12 @@ export class Hookable<
     }
   }
 
+  removeAllHooks() {
+    for (const key in this._hooks) {
+      delete this._hooks[key];
+    }
+  }
+
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>

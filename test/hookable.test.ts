@@ -263,6 +263,29 @@ describe("core: hookable", () => {
     expect(hook._hooks["test:before"]).toBeUndefined();
   });
 
+  test("should clear all hooks", () => {
+    const hook = createHooks();
+    const callback = () => {};
+
+    const hooks = {
+      test: {
+        hook: () => {},
+        before: () => {},
+      },
+    };
+
+    hook.addHooks(hooks);
+
+    hook.hook("test:hook", callback);
+
+    expect(hook._hooks["test:hook"]).toHaveLength(2);
+    expect(hook._hooks["test:before"]).toHaveLength(1);
+
+    hook.removeAllHooks();
+
+    expect(hook._hooks).toEqual({});
+  });
+
   test("should clear only the hooks added by addHooks", () => {
     const hook = createHooks();
     const callback1 = () => {};
