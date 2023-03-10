@@ -65,9 +65,9 @@ const createTask =
 
 export function serialTaskCaller(
   hooks: HookCallback[],
-  name: string,
-  ...args: any[]
+  args: any[]
 ) {
+  const name = args.shift();
   const task = createTask(name);
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
@@ -79,9 +79,9 @@ export function serialTaskCaller(
 
 export function parallelTaskCaller(
   hooks: HookCallback[],
-  name: string,
-  ...args: any[]
+  args: any[]
 ) {
+  const name = args.shift();
   const task = createTask(name);
   return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
 }
