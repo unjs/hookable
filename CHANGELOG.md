@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v5.5.1
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.5.0...v5.5.1)
+
+
+### 🩹 Fixes
+
+  - Shift name out of arg array ([#71](https://github.com/unjs/hookable/pull/71))
+
+### 📖 Documentation
+
+  - Update badges ([13b0c90](https://github.com/unjs/hookable/commit/13b0c90))
+
+### ❤️  Contributors
+
+- Daniel Roe <daniel@roe.dev>
+- Sébastien Chopin <seb@nuxtjs.com>
+
+## v5.5.0
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.4.2...v5.5.0)
+
+
+### 🚀 Enhancements
+
+  - Add function name to hook for better dx in stacktraces ([#68](https://github.com/unjs/hookable/pull/68))
+  - Use `console.createTask` to improve traces where supported ([#69](https://github.com/unjs/hookable/pull/69))
+  - Add `removeAllHooks` utility ([#61](https://github.com/unjs/hookable/pull/61))
+
+### 🏡 Chore
+
+  - Add latest `@types/node` package ([#66](https://github.com/unjs/hookable/pull/66))
+  - Add `.prettierrc` ([4b3e99b](https://github.com/unjs/hookable/commit/4b3e99b))
+  - Use changelogen for releases ([151d16b](https://github.com/unjs/hookable/commit/151d16b))
+  - Simplify variable names ([369a2fe](https://github.com/unjs/hookable/commit/369a2fe))
+
+### ✅ Tests
+
+  - Fix vitest type issue ([#70](https://github.com/unjs/hookable/pull/70))
+
+### 🎨 Styles
+
+  - Format with prettier ([#65](https://github.com/unjs/hookable/pull/65))
+
+### ❤️  Contributors
+
+- Nozomu Ikuta 
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe <daniel@roe.dev>
+
 ### [5.4.2](https://github.com/unjs/hookable/compare/v5.4.1...v5.4.2) (2022-11-15)
 
 

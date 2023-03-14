@@ -1,12 +1,28 @@
-import { flatHooks, parallelCaller, serialCaller, callEachWith } from "./utils";
-import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from "./types";
+import {
+  flatHooks,
+  parallelTaskCaller,
+  serialTaskCaller,
+  callEachWith,
+} from "./utils";
+import type {
+  DeprecatedHook,
+  NestedHooks,
+  HookCallback,
+  HookKeys,
+} from "./types";
 
-type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never
+type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
+  ? HT[HN]
+  : never;
 type InferSpyEvent<HT extends Record<string, any>> = {
-  [key in keyof HT]: { name: key, args: Parameters<HT[key]>, context: Record<string, any> }
-}[keyof HT]
+  [key in keyof HT]: {
+    name: key;
+    args: Parameters<HT[key]>;
+    context: Record<string, any>;
+  };
+}[keyof HT];
 
-export class Hookable <
+export class Hookable<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
 > {
@@ -16,7 +32,7 @@ export class Hookable <
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>;
   private _deprecatedMessages?: Set<string>;
 
-  constructor () {
+  constructor() {
     this._hooks = {};
     this._before = undefined;
     this._after = undefined;
@@ -29,7 +45,11 @@ export class Hookable <
     this.callHookWith = this.callHookWith.bind(this);
   }
 
-  hook<NameT extends HookNameT> (name: NameT, function_: InferCallback<HooksT, NameT>, options: { allowDeprecated?: boolean } = {}) {
+  hook<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>,
+    options: { allowDeprecated?: boolean } = {}
+  ) {
     if (!name || typeof function_ !== "function") {
       return () => {};
     }
@@ -43,7 +63,8 @@ export class Hookable <
     if (dep && !options.allowDeprecated) {
       let message = dep.message;
       if (!message) {
-        message = `${originalName} hook has been deprecated` +
+        message =
+          `${originalName} hook has been deprecated` +
           (dep.to ? `, please use ${dep.to}` : "");
       }
       if (!this._deprecatedMessages) {
@@ -53,6 +74,16 @@ export class Hookable <
         console.warn(message);
         this._deprecatedMessages.add(message);
       }
+    }
+
+    // Add name to hook for better debugging experience
+    if (!function_.name) {
+      try {
+        Object.defineProperty(function_, "name", {
+          get: () => "_" + name.replace(/\W+/g, "_") + "_hook_cb",
+          configurable: true,
+        });
+      } catch {}
     }
 
     this._hooks[name] = this._hooks[name] || [];
@@ -67,7 +98,10 @@ export class Hookable <
     };
   }
 
-  hookOnce<NameT extends HookNameT> (name: NameT, function_: InferCallback<HooksT, NameT>) {
+  hookOnce<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>
+  ) {
     let _unreg: (() => void) | undefined;
     let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
       if (typeof _unreg === "function") {
@@ -81,7 +115,10 @@ export class Hookable <
     return _unreg;
   }
 
-  removeHook<NameT extends HookNameT> (name: NameT, function_: InferCallback<HooksT, NameT>) {
+  removeHook<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>
+  ) {
     if (this._hooks[name]) {
       const index = this._hooks[name].indexOf(function_);
 
@@ -95,8 +132,12 @@ export class Hookable <
     }
   }
 
-  deprecateHook <NameT extends HookNameT> (name: NameT, deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>) {
-    this._deprecatedHooks[name] = typeof deprecated === "string" ? { to: deprecated } : deprecated;
+  deprecateHook<NameT extends HookNameT>(
+    name: NameT,
+    deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>
+  ) {
+    this._deprecatedHooks[name] =
+      typeof deprecated === "string" ? { to: deprecated } : deprecated;
     const _hooks = this._hooks[name] || [];
     delete this._hooks[name];
     for (const hook of _hooks) {
@@ -104,26 +145,32 @@ export class Hookable <
     }
   }
 
-  deprecateHooks (deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>) {
+  deprecateHooks(
+    deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>
+  ) {
     Object.assign(this._deprecatedHooks, deprecatedHooks);
     for (const name in deprecatedHooks) {
       this.deprecateHook(name, deprecatedHooks[name] as DeprecatedHook<HooksT>);
     }
   }
 
-  addHooks (configHooks: NestedHooks<HooksT>) {
+  addHooks(configHooks: NestedHooks<HooksT>) {
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
-    const removeFns = Object.keys(hooks).map(key => this.hook(key, hooks[key]));
+    const removeFns = Object.keys(hooks).map((key) =>
+      this.hook(key as HookNameT, hooks[key])
+    );
 
     return () => {
       // Splice will ensure that all fns are called once, and free all
       // unreg functions from memory.
-      for (const unreg of removeFns.splice(0, removeFns.length)) { unreg(); }
+      for (const unreg of removeFns.splice(0, removeFns.length)) {
+        unreg();
+      }
     };
   }
 
-  removeHooks (configHooks: NestedHooks<HooksT>) {
+  removeHooks(configHooks: NestedHooks<HooksT>) {
     const hooks = flatHooks<HooksT>(configHooks);
     for (const key in hooks) {
       // @ts-ignore
@@ -131,21 +178,48 @@ export class Hookable <
     }
   }
 
-  callHook<NameT extends HookNameT> (name: NameT, ...arguments_: Parameters<InferCallback<HooksT, NameT>>): Promise<any> {
-    return this.callHookWith(serialCaller, name, ...arguments_);
+  removeAllHooks() {
+    for (const key in this._hooks) {
+      delete this._hooks[key];
+    }
   }
 
-  callHookParallel<NameT extends HookNameT> (name: NameT, ...arguments_: Parameters<InferCallback<HooksT, NameT>>): Promise<any[]> {
-    return this.callHookWith(parallelCaller, name, ...arguments_);
+  callHook<NameT extends HookNameT>(
+    name: NameT,
+    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
+  ): Promise<any> {
+    arguments_.unshift(name);
+    return this.callHookWith(serialTaskCaller, name, ...arguments_);
   }
 
-  callHookWith<NameT extends HookNameT, CallFunction extends (hooks: HookCallback[], arguments_: Parameters<InferCallback<HooksT, NameT>>) => any> (caller: CallFunction, name: NameT, ...arguments_: Parameters<InferCallback<HooksT, NameT>>): ReturnType<CallFunction> {
-    const event = (this._before || this._after) ? { name, args: arguments_, context: {} } : undefined;
+  callHookParallel<NameT extends HookNameT>(
+    name: NameT,
+    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
+  ): Promise<any[]> {
+    arguments_.unshift(name);
+    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
+  }
+
+  callHookWith<
+    NameT extends HookNameT,
+    CallFunction extends (
+      hooks: HookCallback[],
+      arguments_: Parameters<InferCallback<HooksT, NameT>>
+    ) => any
+  >(
+    caller: CallFunction,
+    name: NameT,
+    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
+  ): ReturnType<CallFunction> {
+    const event =
+      this._before || this._after
+        ? { name, args: arguments_, context: {} }
+        : undefined;
     if (this._before) {
       callEachWith(this._before, event);
     }
     const result = caller(this._hooks[name] || [], arguments_);
-    if (result as any instanceof Promise) {
+    if ((result as any) instanceof Promise) {
       return result.finally(() => {
         if (this._after && event) {
           callEachWith(this._after, event);
@@ -158,25 +232,29 @@ export class Hookable <
     return result;
   }
 
-  beforeEach (function_: (event: InferSpyEvent<HooksT>) => void) {
+  beforeEach(function_: (event: InferSpyEvent<HooksT>) => void) {
     this._before = this._before || [];
     this._before.push(function_);
     return () => {
       const index = this._before!!.indexOf(function_);
-      if (index !== -1) { this._before!!.splice(index, 1); }
+      if (index !== -1) {
+        this._before!!.splice(index, 1);
+      }
     };
   }
 
-  afterEach (function_: (event: InferSpyEvent<HooksT>) => void) {
+  afterEach(function_: (event: InferSpyEvent<HooksT>) => void) {
     this._after = this._after || [];
     this._after.push(function_);
     return () => {
       const index = this._after!!.indexOf(function_);
-      if (index !== -1) { this._after!!.splice(index, 1); }
+      if (index !== -1) {
+        this._after!!.splice(index, 1);
+      }
     };
   }
 }
 
-export function createHooks<T extends Record<string, any>> (): Hookable<T> {
+export function createHooks<T extends Record<string, any>>(): Hookable<T> {
   return new Hookable<T>();
 }

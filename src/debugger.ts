@@ -2,39 +2,45 @@ import type { Hookable } from "./hookable";
 
 export interface CreateDebuggerOptions {
   /** An optional tag to prefix console logs with */
-  tag?: string
+  tag?: string;
 
   /**
    * Show hook params to the console output
    *
    * Enabled for browsers by default
    */
-  inspect?: boolean
+  inspect?: boolean;
 
   /**
    * Use group/groupEnd wrapper around logs happening during a specific hook
    *
    * Enabled for browsers by default
    */
-  group?: boolean
+  group?: boolean;
 
   /** Filter which hooks to enable debugger for. Can be a string prefix or fn. */
-  filter?: string | ((event: string) => boolean)
+  filter?: string | ((event: string) => boolean);
 }
 
 const isBrowser = typeof window !== "undefined";
 
 /** Start debugging hook names and timing in console */
-export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOptions = {}) {
-  const options = <CreateDebuggerOptions> {
+export function createDebugger(
+  hooks: Hookable<any>,
+  _options: CreateDebuggerOptions = {}
+) {
+  const options = <CreateDebuggerOptions>{
     inspect: isBrowser,
     group: isBrowser,
     filter: () => true,
-    ..._options
+    ..._options,
   };
 
   const _filter = options.filter;
-  const filter = typeof _filter === "string" ? (name: string) => name.startsWith(_filter) : _filter;
+  const filter =
+    typeof _filter === "string"
+      ? (name: string) => name.startsWith(_filter)
+      : _filter;
 
   const _tag = options.tag ? `[${options.tag}] ` : "";
   const logPrefix = (event: any) => _tag + event.name + "".padEnd(event._id, "\0");
@@ -43,7 +49,9 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
 
   // Before each
   const unsubscribeBefore = hooks.beforeEach((event: any) => {
-    if (!filter!!(event.name)) { return; }
+    if (!filter!!(event.name)) {
+      return;
+    }
     _idCtr[event.name] = _idCtr[event.name] || 0;
     event._id = _idCtr[event.name]++;
     console.time(logPrefix(event));
@@ -51,7 +59,9 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
 
   // After each
   const unsubscribeAfter = hooks.afterEach((event) => {
-    if (!filter!!(event.name)) { return; }
+    if (!filter!!(event.name)) {
+      return;
+    }
     if (options.group) {
       console.groupCollapsed(event.name);
     }
@@ -71,6 +81,6 @@ export function createDebugger (hooks: Hookable<any>, _options: CreateDebuggerOp
     close: () => {
       unsubscribeBefore();
       unsubscribeAfter();
-    }
+    },
   };
 }

@@ -2,11 +2,11 @@
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![packagephobia][packagephobia-src]][packagephobia-href]
-[![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
+[![bundle][bundle-src]][bundle-href]
 [![Codecov][codecov-src]][codecov-href]
+[![License][license-src]][license-href]
 
-> Awaitable hook system
+Awaitable hooks system.
 
 ## Install
 
@@ -194,12 +194,16 @@ hookable.removeHooks({
 })
 ```
 
+### `removeAllHooks`
+
+Remove all hook handlers.
+
 ### `beforeEach (syncCallback)`
 
 Registers a (sync) callback to be called before each hook is being called.
 
 ```js
-hookable.beforeEach((event) => { console.log(`${event.name} hook is being called with ${event.args}`)})
+hookable.beforeEach((event) => { console.log(`${event.name} hook is being called with ${event.args}`)}`)
 hookable.hook('test', () => { console.log('running test hook') })
 
 // test hook is being called with []
@@ -212,7 +216,7 @@ await hookable.callHook('test')
 Registers a (sync) callback to be called after each hook is being called.
 
 ```js
-hookable.afterEach((event) => { console.log(`${event.name} hook called with ${event.args}`)})
+hookable.afterEach((event) => { console.log(`${event.name} hook called with ${event.args}`)}`)
 hookable.hook('test', () => { console.log('running test hook') })
 
 // running test hook
@@ -255,17 +259,13 @@ Thanks to [Joe Paice](https://github.com/RGBboy) for donating [hookable](https:/
 MIT - Made with 💖
 
 <!-- Badges -->
-[npm-version-src]: https://flat.badgen.net/npm/dt/hookable
+[npm-version-src]: https://img.shields.io/npm/v/hookable?style=flat&colorA=18181B&colorB=F0DB4F
 [npm-version-href]: https://npmjs.com/package/hookable
-
-[npm-downloads-src]: https://flat.badgen.net/npm/v/hookable
+[npm-downloads-src]: https://img.shields.io/npm/dm/hookable?style=flat&colorA=18181B&colorB=F0DB4F
 [npm-downloads-href]: https://npmjs.com/package/hookable
-
-[github-actions-ci-src]: https://flat.badgen.net/github/checks/unjs/hookable/main
-[github-actions-ci-href]: https://github.com/unjs/hookable/actions
-
-[codecov-src]: https://flat.badgen.net/codecov/c/github/unjs/hookable
-[codecov-href]: https://codecov.io/gh/unjs/hookable
-
-[packagephobia-src]: https://flat.badgen.net/packagephobia/install/hookable
-[packagephobia-href]: https://packagephobia.now.sh/result?p=hookable
+[codecov-src]: https://img.shields.io/codecov/c/gh/unjs/hookable/main?style=flat&colorA=18181B&colorB=F0DB4F
+[codecov-href]: https://codecov.io/gh/unjs/h3
+[bundle-src]: https://img.shields.io/bundlephobia/minzip/hookable?style=flat&colorA=18181B&colorB=F0DB4F
+[bundle-href]: https://bundlephobia.com/result?p=hookable
+[license-src]: https://img.shields.io/github/license/unjs/hookable.svg?style=flat&colorA=18181B&colorB=F0DB4F
+[license-href]: https://github.com/unjs/hookable/blob/main/LICENSE

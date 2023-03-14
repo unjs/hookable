@@ -1,5 +1,10 @@
 node_modules
-*.lock
+coverage
 dist
 types
-coverage
+.vscode
+.DS_Store
+.eslintcache
+*.log*
+*.conf*
+*.env*

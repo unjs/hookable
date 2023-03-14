@@ -1,5 +1,6 @@
 {
-  "extends": [
-    "eslint-config-unjs"
-  ]
+  "extends": ["eslint-config-unjs"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": 0
+  }
 }

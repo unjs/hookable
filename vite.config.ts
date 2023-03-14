@@ -1,9 +1,11 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     coverage: {
-      reporter: ['text', 'clover', 'json']
+      // TODO: fix in vitest
+      provider: undefined,
+      reporter: ["text", "clover", "json"]
     }
   }
-})
+});
