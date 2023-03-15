@@ -49,7 +49,7 @@ export function createDebugger(
 
   // Before each
   const unsubscribeBefore = hooks.beforeEach((event: any) => {
-    if (!filter!!(event.name)) {
+    if (filter !== undefined && !filter(event.name)) {
       return;
     }
     _idCtr[event.name] = _idCtr[event.name] || 0;
@@ -59,7 +59,7 @@ export function createDebugger(
 
   // After each
   const unsubscribeAfter = hooks.afterEach((event) => {
-    if (!filter!!(event.name)) {
+    if (filter !== undefined && !filter(event.name)) {
       return;
     }
     if (options.group) {

@@ -236,20 +236,24 @@ export class Hookable<
     this._before = this._before || [];
     this._before.push(function_);
     return () => {
-      const index = this._before!!.indexOf(function_);
-      if (index !== -1) {
-        this._before!!.splice(index, 1);
+      if (this._before !== undefined) {
+        const index = this._before.indexOf(function_);
+        if (index !== -1) {
+          this._before.splice(index, 1);
+        }
       }
     };
   }
 
   afterEach(function_: (event: InferSpyEvent<HooksT>) => void) {
-    this._after = this._after || [];
+    this._after = (this._after || []);
     this._after.push(function_);
     return () => {
-      const index = this._after!!.indexOf(function_);
-      if (index !== -1) {
-        this._after!!.splice(index, 1);
+      if (this._after !== undefined) {
+        const index = this._after.indexOf(function_);
+        if (index !== -1) {
+          this._after.splice(index, 1);
+        }
       }
     };
   }
