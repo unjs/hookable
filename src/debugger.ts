@@ -43,13 +43,13 @@ export function createDebugger(
       : _filter;
 
   const _tag = options.tag ? `[${options.tag}] ` : "";
-  const logPrefix = (event) => _tag + event.name + "".padEnd(event._id, "\0");
+  const logPrefix = (event: any) => _tag + event.name + "".padEnd(event._id, "\0");
 
   const _idCtr: Record<string, number> = {};
 
   // Before each
   const unsubscribeBefore = hooks.beforeEach((event: any) => {
-    if (!filter(event.name)) {
+    if (filter !== undefined && !filter(event.name)) {
       return;
     }
     _idCtr[event.name] = _idCtr[event.name] || 0;
@@ -59,7 +59,7 @@ export function createDebugger(
 
   // After each
   const unsubscribeAfter = hooks.afterEach((event) => {
-    if (!filter(event.name)) {
+    if (filter !== undefined && !filter(event.name)) {
       return;
     }
     if (options.group) {
