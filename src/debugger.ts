@@ -43,7 +43,8 @@ export function createDebugger(
       : _filter;
 
   const _tag = options.tag ? `[${options.tag}] ` : "";
-  const logPrefix = (event: any) => _tag + event.name + "".padEnd(event._id, "\0");
+  const logPrefix = (event: any) =>
+    _tag + event.name + "".padEnd(event._id, "\0");
 
   const _idCtr: Record<string, number> = {};
 

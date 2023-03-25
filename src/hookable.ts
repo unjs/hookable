@@ -103,7 +103,9 @@ export class Hookable<
     function_: InferCallback<HooksT, NameT>
   ) {
     let _unreg: (() => void) | undefined;
-    let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
+    let _function: ((...arguments_: any) => any) | undefined = (
+      ...arguments_: any
+    ) => {
       if (typeof _unreg === "function") {
         _unreg();
       }
@@ -246,7 +248,7 @@ export class Hookable<
   }
 
   afterEach(function_: (event: InferSpyEvent<HooksT>) => void) {
-    this._after = (this._after || []);
+    this._after = this._after || [];
     this._after.push(function_);
     return () => {
       if (this._after !== undefined) {
