@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v5.5.2
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.5.1...v5.5.2)
+
+
+### 📖 Documentation
+
+  - Add `removeAllHooks` and fix typos ([#72](https://github.com/unjs/hookable/pull/72))
+
+### 🌊 Types
+
+  - Work with strict config ([#63](https://github.com/unjs/hookable/pull/63))
+
+### 🏡 Chore
+
+  - **lint:** Run lint:fix to fix formatting ([#77](https://github.com/unjs/hookable/pull/77))
+  - Update dependencies ([9443040](https://github.com/unjs/hookable/commit/9443040))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Rafał Chłodnicki ([@rchl](http://github.com/rchl))
+- Vinccool96 <Vinccool96@gmail.com>
+- Nozomu Ikuta
+
 ## v5.5.1
 
 [compare changes](https://github.com/unjs/hookable/compare/v5.5.0...v5.5.1)
