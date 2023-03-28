@@ -347,14 +347,14 @@ describe("core: hookable", () => {
     let x = 0;
 
     const unreg = hook.beforeEach((event) => {
-      unreg()
+      unreg();
       expect(event.context.count).toBeUndefined();
       event.name === "test" && x++;
       event.context.count = x;
     });
     hook.beforeEach((event) => {
-      event.name === "test" && x++
-      event.context.count = x
+      event.name === "test" && x++;
+      event.context.count = x;
     });
     hook.afterEach((event) => {
       expect(event.context.count).toEqual(x);
@@ -408,14 +408,14 @@ describe("core: hookable", () => {
   test("callEachWith", async () => {
     let result = 0;
     const hooks = createHooks();
-    hooks.hookOnce("test", () => (result++));
-    hooks.hookOnce("test", () => (result++));
-    hooks.hookOnce("test", () => (result++));
+    hooks.hookOnce("test", () => result++);
+    hooks.hookOnce("test", () => result++);
+    hooks.hookOnce("test", () => result++);
     const customSerialCaller = (hooks) => {
       for (const hook of hooks) {
-        hook()
+        hook();
       }
-    }
+    };
     await hooks.callHookWith(customSerialCaller, "test");
     expect(result).toBe(3);
   });
