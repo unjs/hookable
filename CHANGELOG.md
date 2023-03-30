@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v5.5.3
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.5.2...v5.5.3)
+
+
+### 🩹 Fixes
+
+  - Clone hook arrays before calling ([#79](https://github.com/unjs/hookable/pull/79))
+
+### 🏡 Chore
+
+  - Update deps ([8b5765f](https://github.com/unjs/hookable/commit/8b5765f))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe <daniel@roe.dev>
+
 ## v5.5.2
 
 [compare changes](https://github.com/unjs/hookable/compare/v5.5.1...v5.5.2)
