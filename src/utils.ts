@@ -97,7 +97,8 @@ export function parallelCaller(hooks: HookCallback[], args?: any[]) {
 }
 
 export function callEachWith(callbacks: Array<(arg0: any) => any>, arg0?: any) {
-  for (const callback of callbacks) {
+  // eslint-disable-next-line unicorn/no-useless-spread
+  for (const callback of [...callbacks]) {
     callback(arg0);
   }
 }

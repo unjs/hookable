@@ -346,8 +346,13 @@ describe("core: hookable", () => {
 
     let x = 0;
 
-    hook.beforeEach((event) => {
+    const unreg = hook.beforeEach((event) => {
+      unreg();
       expect(event.context.count).toBeUndefined();
+      event.name === "test" && x++;
+      event.context.count = x;
+    });
+    hook.beforeEach((event) => {
       event.name === "test" && x++;
       event.context.count = x;
     });
@@ -357,9 +362,10 @@ describe("core: hookable", () => {
     });
 
     await hook.callHook("test");
-    await hook.callHookParallel("test");
+    expect(x).toBe(3);
 
-    expect(x).toBe(4);
+    await hook.callHookParallel("test");
+    expect(x).toBe(5);
   });
 
   test("mergeHooks", () => {
@@ -396,6 +402,21 @@ describe("core: hookable", () => {
     const hooks = createHooks();
     hooks.hook("test", (a: number, b: number) => (result = a + b));
     await hooks.callHook("test", 1, 2);
+    expect(result).toBe(3);
+  });
+
+  test("callEachWith", async () => {
+    let result = 0;
+    const hooks = createHooks();
+    hooks.hookOnce("test", () => result++);
+    hooks.hookOnce("test", () => result++);
+    hooks.hookOnce("test", () => result++);
+    const customSerialCaller = (hooks) => {
+      for (const hook of hooks) {
+        hook();
+      }
+    };
+    await hooks.callHookWith(customSerialCaller, "test");
     expect(result).toBe(3);
   });
 });
