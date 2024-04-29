@@ -9,7 +9,10 @@
     "tapable",
     "tappable"
   ],
-  "repository": "unjs/hookable",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unjs/hookable.git"
+  },
   "license": "MIT",
   "exports": {
     "import": "./dist/index.mjs",
