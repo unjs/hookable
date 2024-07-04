@@ -30,7 +30,8 @@
     "prepublish": "pnpm build",
     "release": "pnpm test && pnpm build && changelogen --release --push && pnpm publish",
     "test": "pnpm lint && vitest run --coverage",
-    "test:types": "tsc --noEmit"
+    "test:types": "tsc --noEmit",
+    "benchmark": "vitest bench"
   },
   "devDependencies": {
     "@types/node": "^18.16.1",
