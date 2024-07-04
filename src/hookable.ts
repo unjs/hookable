@@ -189,16 +189,16 @@ export class Hookable<
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any> {
-    arguments_.unshift(name);
-    return this.callHookWith(serialTaskCaller, name, ...arguments_);
+    // @ts-expect-error we always inject name
+    return this.callHookWith(serialTaskCaller, name, name, ...arguments_);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any[]> {
-    arguments_.unshift(name);
-    return this.callHookWith(parallelTaskCaller, name, ...arguments_);
+    // @ts-expect-error we always inject name
+    return this.callHookWith(parallelTaskCaller, name, name, ...arguments_);
   }
 
   callHookWith<
