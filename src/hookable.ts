@@ -158,16 +158,18 @@ export class Hookable<
   addHooks(configHooks: NestedHooks<HooksT>) {
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
-    const removeFns = Object.keys(hooks).map((key) =>
+    let removeFns = Object.keys(hooks).map((key) =>
       this.hook(key as HookNameT, hooks[key])
     );
 
     return () => {
-      // Splice will ensure that all fns are called once, and free all
-      // unreg functions from memory.
-      for (const unreg of removeFns.splice(0, removeFns.length)) {
+      for (const unreg of removeFns) {
         unreg();
       }
+
+      // Splice will ensure that all fns are called once, and free all
+      // unreg functions from memory.
+      removeFns = [];
     };
   }
 
