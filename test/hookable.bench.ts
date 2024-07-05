@@ -204,6 +204,32 @@ describe("hook", () => {
   );
 });
 
+describe("addHooks", () => {
+  let hooks = createHooks();
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const fn = () => {};
+
+  bench(
+    "addHooks",
+    () => {
+      hooks.addHooks({
+        hello: fn,
+        hello1: fn,
+        helloNested: {
+          hello2: fn,
+          hello3: fn,
+        }
+      });
+    },
+    {
+      setup: () => {
+        hooks = createHooks();
+      },
+    }
+  );
+});
+
 describe("empty removeHook", () => {
   const hooks = createHooks();
 
