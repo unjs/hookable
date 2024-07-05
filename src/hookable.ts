@@ -121,14 +121,16 @@ export class Hookable<
     name: NameT,
     function_: InferCallback<HooksT, NameT>
   ) {
-    if (this._hooks[name]) {
-      const index = this._hooks[name].indexOf(function_);
+    const hooks = this._hooks[name];
+
+    if (hooks) {
+      const index = hooks.indexOf(function_);
 
       if (index !== -1) {
-        this._hooks[name].splice(index, 1);
+        hooks.splice(index, 1);
       }
 
-      if (this._hooks[name].length === 0) {
+      if (hooks.length === 0) {
         delete this._hooks[name];
       }
     }
