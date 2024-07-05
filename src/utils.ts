@@ -66,7 +66,7 @@ const createTask =
 
 export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
   if (hooks.length === 0) {
-    return Promise.resolve();
+    return;
   }
 
   const name = args.shift();
@@ -81,7 +81,7 @@ export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
 
 export function parallelTaskCaller(hooks: HookCallback[], args: any[]) {
   if (hooks.length === 0) {
-    return Promise.resolve();
+    return;
   }
 
   const name = args.shift();
