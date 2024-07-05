@@ -131,7 +131,7 @@ export class Hookable<
       }
 
       if (hooks.length === 0) {
-        delete this._hooks[name];
+        this._hooks[name] = undefined;
       }
     }
   }
@@ -143,7 +143,7 @@ export class Hookable<
     this._deprecatedHooks[name] =
       typeof deprecated === "string" ? { to: deprecated } : deprecated;
     const _hooks = this._hooks[name] || [];
-    delete this._hooks[name];
+    this._hooks[name] = undefined;
     for (const hook of _hooks) {
       this.hook(name, hook as any);
     }
@@ -222,7 +222,7 @@ export class Hookable<
       callEachWith(this._before, event);
     }
     const result = caller(
-      name in this._hooks ? [...this._hooks[name]] : [],
+      this._hooks[name] ? [...this._hooks[name]] : [],
       arguments_
     );
     if ((result as any) instanceof Promise) {
