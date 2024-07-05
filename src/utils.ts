@@ -65,6 +65,10 @@ const createTask =
   typeof console.createTask !== "undefined" ? console.createTask : _createTask;
 
 export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
+  if (hooks.length === 0) {
+    return Promise.resolve();
+  }
+
   const name = args.shift();
   const task = createTask(name);
   // eslint-disable-next-line unicorn/no-array-reduce
@@ -76,6 +80,10 @@ export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
 }
 
 export function parallelTaskCaller(hooks: HookCallback[], args: any[]) {
+  if (hooks.length === 0) {
+    return Promise.resolve();
+  }
+
   const name = args.shift();
   const task = createTask(name);
   return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
