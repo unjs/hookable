@@ -184,9 +184,7 @@ export class Hookable<
   }
 
   removeAllHooks() {
-    for (const key in this._hooks) {
-      delete this._hooks[key];
-    }
+    this._hooks = {};
   }
 
   callHook<NameT extends HookNameT>(
