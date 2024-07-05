@@ -219,7 +219,7 @@ describe("addHooks", () => {
         helloNested: {
           hello2: fn,
           hello3: fn,
-        }
+        },
       });
     },
     {
