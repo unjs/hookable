@@ -203,3 +203,65 @@ describe("hook", () => {
     }
   );
 });
+
+describe("empty removeHook", () => {
+  const hooks = createHooks();
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const fn = () => {};
+
+  bench("empty removeHook", () => {
+    return hooks.removeHook("hello", fn);
+  });
+});
+
+describe("removeHook", () => {
+  const hooks = createHooks();
+
+  // eslint-disable-next-line unicorn/new-for-builtins
+  const fns = Array(10).fill(() => {});
+
+  let i = 0;
+
+  bench(
+    "removeHook",
+    () => {
+      i += 1;
+
+      return hooks.removeHook("hello", fns[i % fns.length]);
+    },
+    {
+      setup: () => {
+        hooks.removeAllHooks();
+        for (const fn of fns) {
+          hooks.hook("hello", fn);
+        }
+      },
+    }
+  );
+
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const extraOneFn = () => {};
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const extraTwoFn = () => {};
+
+  bench(
+    "removeHook with extra",
+    () => {
+      i += 1;
+
+      return hooks.removeHook("hello", fns[i % fns.length]);
+    },
+    {
+      setup: () => {
+        hooks.removeAllHooks();
+
+        hooks.addHooks(extraOneFn);
+        for (const fn of fns) {
+          hooks.hook("hello", fn);
+        }
+        hooks.addHooks(extraTwoFn);
+      },
+    }
+  );
+});
