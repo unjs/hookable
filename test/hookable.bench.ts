@@ -1,6 +1,6 @@
 import { bench, describe } from "vitest";
 import { createHooks } from "../src/index";
-import { serialTaskCaller, parallelTaskCaller } from "../src/utils";
+import { serialTaskCaller, parallelTaskCaller, flatHooks } from "../src/utils";
 
 describe("empty serialTaskCaller", () => {
   const emptyTasks = [];
@@ -290,4 +290,20 @@ describe("removeHook", () => {
       },
     }
   );
+});
+
+describe("flatHooks", () => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const fn = () => {};
+
+  bench("flatHooks", () => {
+    return flatHooks({
+      hello: fn,
+      hello1: fn,
+      helloNested: {
+        hello2: fn,
+        hello3: fn,
+      },
+    }) as unknown as void;
+  });
 });
