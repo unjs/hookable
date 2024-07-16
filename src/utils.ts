@@ -68,24 +68,18 @@ function nextDispatch(
   hooks: HookCallback[],
   args: any[],
   task: typeof defaultTask,
-  index: number
+  startIndex: number
 ) {
-  const hook = hooks[index];
+  for (let i = startIndex; i < hooks.length; i += 1) {
+    try {
+      const result = task.run(() => hooks[i](...args));
 
-  if (!hook) {
-    return;
-  }
-
-  try {
-    const result = task.run(() => hook(...args));
-
-    if (result instanceof Promise) {
-      return result.then(() => nextDispatch(hooks, args, task, index + 1));
+      if (result instanceof Promise) {
+        return result.then(() => nextDispatch(hooks, args, task, i + 1));
+      }
+    } catch (error) {
+      return Promise.reject(error);
     }
-
-    return nextDispatch(hooks, args, task, index + 1);
-  } catch (error) {
-    return Promise.reject(error);
   }
 }
 
