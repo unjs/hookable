@@ -9,6 +9,7 @@ import type {
   NestedHooks,
   HookCallback,
   HookKeys,
+  Thenable,
 } from "./types";
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
@@ -190,7 +191,7 @@ export class Hookable<
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Promise<any> {
+  ): Thenable<any> {
     // @ts-expect-error we always inject name
     return this.callHookWith(serialTaskCaller, name, name, ...arguments_);
   }
@@ -198,7 +199,7 @@ export class Hookable<
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Promise<any[]> {
+  ): Thenable<any[]> {
     // @ts-expect-error we always inject name
     return this.callHookWith(parallelTaskCaller, name, name, ...arguments_);
   }
