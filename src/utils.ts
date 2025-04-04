@@ -3,7 +3,7 @@ import type { NestedHooks, HookCallback } from "./types";
 export function flatHooks<T>(
   configHooks: NestedHooks<T>,
   hooks: T = {} as T,
-  parentName?: string
+  parentName?: string,
 ): T {
   for (const key in configHooks) {
     // @ts-ignore
@@ -48,12 +48,12 @@ export function mergeHooks<T>(...hooks: NestedHooks<T>[]): T {
 
 export function serial<T>(
   tasks: T[],
-  function_: (task: T) => Promise<any> | any
+  function_: (task: T) => Promise<any> | any,
 ) {
   // eslint-disable-next-line unicorn/no-array-reduce
   return tasks.reduce(
     (promise, task) => promise.then(() => function_(task)),
-    Promise.resolve()
+    Promise.resolve(),
   );
 }
 
@@ -62,7 +62,7 @@ type CreateTask = typeof console.createTask;
 const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
 const _createTask: CreateTask = () => defaultTask;
 const createTask =
-  typeof console.createTask !== "undefined" ? console.createTask : _createTask;
+  console.createTask === undefined ? _createTask : console.createTask;
 
 export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
   const name = args.shift();
@@ -71,7 +71,7 @@ export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
   return hooks.reduce(
     (promise, hookFunction) =>
       promise.then(() => task.run(() => hookFunction(...args))),
-    Promise.resolve()
+    Promise.resolve(),
   );
 }
 
@@ -87,7 +87,7 @@ export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
   return hooks.reduce(
     (promise, hookFunction) =>
       promise.then(() => hookFunction(...(arguments_ || []))),
-    Promise.resolve()
+    Promise.resolve(),
   );
 }
 

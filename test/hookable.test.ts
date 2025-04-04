@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/consistent-function-scoping */
 // @ts-nocheck
 import { describe, test, beforeEach, expect, vi } from "vitest";
 import { createHooks, flatHooks, mergeHooks } from "../src/index";
@@ -64,10 +63,10 @@ describe("core: hookable", () => {
     hook.hook("x", () => {});
 
     expect(console.warn).toBeCalledWith(
-      "a hook has been deprecated, please use c"
+      "a hook has been deprecated, please use c",
     );
     expect(console.warn).toBeCalledWith(
-      "b hook has been deprecated, please use c"
+      "b hook has been deprecated, please use c",
     );
     expect(console.warn).toBeCalledWith("Custom");
     expect(console.warn).toBeCalledTimes(3);
@@ -94,7 +93,7 @@ describe("core: hookable", () => {
     hook.hook("b", () => {});
     hook.deprecateHook("a", "b");
     expect(console.warn).toBeCalledWith(
-      "a hook has been deprecated, please use b"
+      "a hook has been deprecated, please use b",
     );
     expect(hook._hooks.a).toBeUndefined();
     expect(hook._hooks.b).toEqual([expect.any(Function), expect.any(Function)]);
@@ -109,7 +108,7 @@ describe("core: hookable", () => {
     hook.hook("test:hook", () => {});
 
     expect(console.warn).toBeCalledWith(
-      "test:hook hook has been deprecated, please use test:before"
+      "test:hook hook has been deprecated, please use test:before",
     );
     expect(hook._hooks["test:hook"]).toBeUndefined();
     expect(hook._hooks["test:before"]).toEqual([expect.any(Function)]);
@@ -349,16 +348,22 @@ describe("core: hookable", () => {
     const unreg = hook.beforeEach((event) => {
       unreg();
       expect(event.context.count).toBeUndefined();
-      event.name === "test" && x++;
+      if (event.name === "test") {
+        x++;
+      }
       event.context.count = x;
     });
     hook.beforeEach((event) => {
-      event.name === "test" && x++;
+      if (event.name === "test") {
+        x++;
+      }
       event.context.count = x;
     });
     hook.afterEach((event) => {
       expect(event.context.count).toEqual(x);
-      event.name === "test" && x++;
+      if (event.name === "test") {
+        x++;
+      }
     });
 
     await hook.callHook("test");

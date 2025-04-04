@@ -22,12 +22,13 @@ export interface CreateDebuggerOptions {
   filter?: string | ((event: string) => boolean);
 }
 
+// eslint-disable-next-line unicorn/prefer-global-this
 const isBrowser = typeof window !== "undefined";
 
 /** Start debugging hook names and timing in console */
 export function createDebugger(
   hooks: Hookable<any>,
-  _options: CreateDebuggerOptions = {}
+  _options: CreateDebuggerOptions = {},
 ) {
   const options = <CreateDebuggerOptions>{
     inspect: isBrowser,

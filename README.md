@@ -203,7 +203,7 @@ Remove all hook handlers.
 Registers a (sync) callback to be called before each hook is being called.
 
 ```js
-hookable.beforeEach((event) => { console.log(`${event.name} hook is being called with ${event.args}`)}`)
+hookable.beforeEach((event) => { console.log(`${event.name} hook is being called with ${event.args}`)})
 hookable.hook('test', () => { console.log('running test hook') })
 
 // test hook is being called with []
@@ -216,7 +216,7 @@ await hookable.callHook('test')
 Registers a (sync) callback to be called after each hook is being called.
 
 ```js
-hookable.afterEach((event) => { console.log(`${event.name} hook called with ${event.args}`)}`)
+hookable.afterEach((event) => { console.log(`${event.name} hook called with ${event.args}`)})
 hookable.hook('test', () => { console.log('running test hook') })
 
 // running test hook
