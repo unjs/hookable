@@ -21,6 +21,7 @@ type InferSpyEvent<HT extends Record<string, any>> = {
     context: Record<string, any>;
   };
 }[keyof HT];
+type Promisify<T> = T extends Promise<infer U> ? Promise<U> : Promise<T>
 
 export class Hookable<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
@@ -191,7 +192,7 @@ export class Hookable<
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Promise<any> {
+  ): Promisify<ReturnType<InferCallback<HooksT, NameT>>> {
     arguments_.unshift(name);
     return this.callHookWith(serialTaskCaller, name, ...arguments_);
   }
@@ -199,7 +200,7 @@ export class Hookable<
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Promise<any[]> {
+  ): Promisify<ReturnType<InferCallback<HooksT, NameT>>> {
     arguments_.unshift(name);
     return this.callHookWith(parallelTaskCaller, name, ...arguments_);
   }
