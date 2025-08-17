@@ -12,8 +12,8 @@
   "repository": "unjs/hookable",
   "license": "MIT",
   "exports": {
-    "import": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
+    "import": "./dist/index.mjs",
     "require": "./dist/index.cjs"
   },
   "main": "./dist/index.cjs",
