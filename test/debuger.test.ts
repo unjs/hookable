@@ -38,7 +38,7 @@ describe("debugger", () => {
     await hooks.callHook("hook");
     expect(console.time).toBeCalledWith(expect.stringContaining("[tag] hook"));
     expect(console.timeEnd).toBeCalledWith(
-      expect.stringContaining("[tag] hook")
+      expect.stringContaining("[tag] hook"),
     );
   });
   it("should respect `inspect` option", async () => {

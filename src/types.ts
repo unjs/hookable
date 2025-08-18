@@ -4,7 +4,6 @@ export interface Hooks {
 }
 export type HookKeys<T> = keyof T & string;
 export type DeprecatedHook<T> = { message?: string; to: HookKeys<T> };
-// eslint-disable-next-line no-unused-vars
 export type DeprecatedHooks<T> = { [name in HookKeys<T>]: DeprecatedHook<T> };
 
 // Utilities
@@ -14,8 +13,8 @@ type KnownKeys<T> = keyof {
   [K in keyof T as string extends K
     ? never
     : number extends K
-    ? never
-    : K]: never;
+      ? never
+      : K]: never;
 };
 type StripGeneric<T> = Pick<
   T,
