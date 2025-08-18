@@ -25,7 +25,7 @@ type InferSpyEvent<HT extends Record<string, any>> = {
 
 export class Hookable<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
-  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>
+  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
 > {
   private _hooks: { [key: string]: HookCallback[] };
   private _before?: HookCallback[];
@@ -49,7 +49,7 @@ export class Hookable<
   hook<NameT extends HookNameT>(
     name: NameT,
     function_: InferCallback<HooksT, NameT>,
-    options: { allowDeprecated?: boolean } = {}
+    options: { allowDeprecated?: boolean } = {},
   ) {
     if (!name || typeof function_ !== "function") {
       return () => {};
@@ -84,7 +84,9 @@ export class Hookable<
           get: () => "_" + name.replace(/\W+/g, "_") + "_hook_cb",
           configurable: true,
         });
-      } catch {}
+      } catch {
+        // ignore
+      }
     }
 
     this._hooks[name] = this._hooks[name] || [];
@@ -101,7 +103,7 @@ export class Hookable<
 
   hookOnce<NameT extends HookNameT>(
     name: NameT,
-    function_: InferCallback<HooksT, NameT>
+    function_: InferCallback<HooksT, NameT>,
   ) {
     let _unreg: (() => void) | undefined;
     let _function: ((...arguments_: any) => any) | undefined = (
@@ -120,7 +122,7 @@ export class Hookable<
 
   removeHook<NameT extends HookNameT>(
     name: NameT,
-    function_: InferCallback<HooksT, NameT>
+    function_: InferCallback<HooksT, NameT>,
   ) {
     const hooks = this._hooks[name];
 
@@ -139,7 +141,7 @@ export class Hookable<
 
   deprecateHook<NameT extends HookNameT>(
     name: NameT,
-    deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>
+    deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>,
   ) {
     this._deprecatedHooks[name] =
       typeof deprecated === "string" ? { to: deprecated } : deprecated;
@@ -151,7 +153,7 @@ export class Hookable<
   }
 
   deprecateHooks(
-    deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>
+    deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>,
   ) {
     for (const name in deprecatedHooks) {
       this.deprecateHook(name, deprecatedHooks[name] as DeprecatedHook<HooksT>);
@@ -162,7 +164,7 @@ export class Hookable<
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
     const removeFns = Object.keys(hooks).map((key) =>
-      this.hook(key as HookNameT, hooks[key])
+      this.hook(key as HookNameT, hooks[key]),
     );
 
     return () => {
@@ -208,8 +210,8 @@ export class Hookable<
     NameT extends HookNameT,
     CallFunction extends (
       hooks: HookCallback[],
-      arguments_: Parameters<InferCallback<HooksT, NameT>>
-    ) => any
+      arguments_: Parameters<InferCallback<HooksT, NameT>>,
+    ) => any,
   >(
     caller: CallFunction,
     name: NameT,
