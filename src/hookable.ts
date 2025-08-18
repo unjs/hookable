@@ -168,7 +168,7 @@ export class Hookable<
     return () => {
       // Splice will ensure that all fns are called once, and free all
       // unreg functions from memory.
-      for (const unreg of removeFns.splice(0, removeFns.length)) {
+      for (const unreg of removeFns.splice(0)) {
         unreg();
       }
     };
