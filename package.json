@@ -11,6 +11,7 @@
   ],
   "repository": "unjs/hookable",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./dist/index.mjs"
   },
