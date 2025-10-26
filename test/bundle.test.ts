@@ -23,6 +23,18 @@ describe("benchmark", () => {
     expect(bytes).toBeLessThan(3000);
     expect(gzipSize).toBeLessThan(1200);
   });
+
+  it("new HookableCore()", async () => {
+    const code = /* js */ `
+      import { HookableCore } from "../src/index.ts";
+      export default new HookableCore()
+    `;
+    const { bytes, gzipSize } = await getBundleSize(code);
+    // console.log("output:", output);
+    console.log("new HookableCore():", { bytes, gzipSize });
+    expect(bytes).toBeLessThan(640);
+    expect(gzipSize).toBeLessThan(380);
+  });
 });
 
 async function getBundleSize(code: string) {

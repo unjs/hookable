@@ -69,15 +69,18 @@ declare global {
   }
 }
 
-const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
-const _createTask: CreateTask = () => defaultTask;
-const createTask =
-  console.createTask === undefined ? _createTask : console.createTask;
+const createTask = /* @__PURE__ */ (() => {
+  if (console.createTask) {
+    return console.createTask;
+  }
+  const defaultTask: ReturnType<CreateTask> = { run: (fn) => fn() };
+  return () => defaultTask;
+})();
 
-function nextDispatch(
+export function nextDispatch(
   hooks: HookCallback[],
   args: any[],
-  task: typeof defaultTask,
+  task: ReturnType<CreateTask>,
   startIndex: number,
 ): Promise<any> | void {
   for (let i = startIndex; i < hooks.length; i += 1) {

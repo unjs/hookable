@@ -3,6 +3,7 @@ import {
   parallelTaskCaller,
   serialTaskCaller,
   callEachWith,
+  nextDispatch,
 } from "./utils.ts";
 
 import type {
@@ -268,4 +269,70 @@ export class Hookable<
 
 export function createHooks<T extends Record<string, any>>(): Hookable<T> {
   return new Hookable<T>();
+}
+
+export class HookableCore<
+  HooksT extends Record<string, any> = Record<string, HookCallback>,
+  HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
+> {
+  protected _hooks: { [key: string]: HookCallback[] | undefined };
+
+  constructor() {
+    this._hooks = {};
+  }
+
+  hook<NameT extends HookNameT>(
+    name: NameT,
+    fn: InferCallback<HooksT, NameT>,
+  ): () => void {
+    if (!name || typeof fn !== "function") {
+      return () => {};
+    }
+    this._hooks[name] = this._hooks[name] || [];
+    this._hooks[name]!.push(fn);
+    return () => {
+      if (fn) {
+        this.removeHook(name, fn);
+        // @ts-ignore
+        fn = undefined; // Free memory
+      }
+    };
+  }
+
+  removeHook<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>,
+  ): void {
+    const hooks = this._hooks[name];
+
+    if (hooks) {
+      const index = hooks.indexOf(function_);
+
+      if (index !== -1) {
+        hooks.splice(index, 1);
+      }
+
+      if (hooks.length === 0) {
+        this._hooks[name] = undefined;
+      }
+    }
+  }
+
+  callHook<NameT extends HookNameT>(
+    name: NameT,
+    ...args: Parameters<InferCallback<HooksT, NameT>>
+  ): Thenable<any> | void {
+    const hooks = this._hooks[name];
+    if (!hooks || hooks.length === 0) {
+      return;
+    }
+    return nextDispatch(
+      hooks,
+      (args?.length ? [name, ...args] : [name]) as Parameters<
+        InferCallback<HooksT, NameT>
+      >,
+      { run: (fn) => fn() },
+      0,
+    );
+  }
 }
