@@ -6,6 +6,8 @@ export type HookKeys<T> = keyof T & string;
 export type DeprecatedHook<T> = { message?: string; to: HookKeys<T> };
 export type DeprecatedHooks<T> = { [name in HookKeys<T>]: DeprecatedHook<T> };
 
+export type Thenable<T> = Promise<T> | T;
+
 // Utilities
 type ValueOf<C> = C extends Record<any, any> ? C[keyof C] : never;
 type Strings<T> = Exclude<keyof T, number | symbol>;

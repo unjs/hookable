@@ -74,26 +74,47 @@ const _createTask: CreateTask = () => defaultTask;
 const createTask =
   console.createTask === undefined ? _createTask : console.createTask;
 
+function nextDispatch(
+  hooks: HookCallback[],
+  args: any[],
+  task: typeof defaultTask,
+  startIndex: number,
+): Promise<any> | void {
+  for (let i = startIndex; i < hooks.length; i += 1) {
+    try {
+      const result = task.run(() => hooks[i](...args));
+
+      if (result instanceof Promise) {
+        return result.then(() => nextDispatch(hooks, args, task, i + 1));
+      }
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+}
+
 export function serialTaskCaller(
   hooks: HookCallback[],
   args: any[],
-): Promise<any> {
-  const name = args.shift();
-  const task = createTask(name);
-  // eslint-disable-next-line unicorn/no-array-reduce
-  return hooks.reduce(
-    (promise, hookFunction) =>
-      promise.then(() => task.run(() => hookFunction(...args))),
-    Promise.resolve(),
-  );
+): Promise<any> | void {
+  if (hooks.length === 0) {
+    return;
+  }
+
+  const task = createTask(args.shift());
+
+  return nextDispatch(hooks, args, task, 0);
 }
 
 export function parallelTaskCaller(
   hooks: HookCallback[],
   args: any[],
-): Promise<any> {
-  const name = args.shift();
-  const task = createTask(name);
+): Promise<any> | void {
+  if (hooks.length === 0) {
+    return;
+  }
+
+  const task = createTask(args.shift());
   return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
 }
 
