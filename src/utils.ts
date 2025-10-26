@@ -1,4 +1,4 @@
-import type { NestedHooks, HookCallback } from "./types";
+import type { NestedHooks, HookCallback } from "./types.ts";
 
 export function flatHooks<T>(
   configHooks: NestedHooks<T>,
@@ -49,7 +49,7 @@ export function mergeHooks<T>(...hooks: NestedHooks<T>[]): T {
 export function serial<T>(
   tasks: T[],
   function_: (task: T) => Promise<any> | any,
-) {
+): Promise<any> {
   // eslint-disable-next-line unicorn/no-array-reduce
   return tasks.reduce(
     (promise, task) => promise.then(() => function_(task)),
@@ -58,13 +58,26 @@ export function serial<T>(
 }
 
 // https://developer.chrome.com/blog/devtools-modern-web-debugging/#linked-stack-traces
-type CreateTask = typeof console.createTask;
+
+type CreateTask = (name?: string) => {
+  run: (function_: () => Promise<any> | any) => Promise<any> | any;
+};
+
+declare global {
+  interface Console {
+    createTask?: CreateTask;
+  }
+}
+
 const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
 const _createTask: CreateTask = () => defaultTask;
 const createTask =
   console.createTask === undefined ? _createTask : console.createTask;
 
-export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
+export function serialTaskCaller(
+  hooks: HookCallback[],
+  args: any[],
+): Promise<any> {
   const name = args.shift();
   const task = createTask(name);
   // eslint-disable-next-line unicorn/no-array-reduce
@@ -75,14 +88,20 @@ export function serialTaskCaller(hooks: HookCallback[], args: any[]) {
   );
 }
 
-export function parallelTaskCaller(hooks: HookCallback[], args: any[]) {
+export function parallelTaskCaller(
+  hooks: HookCallback[],
+  args: any[],
+): Promise<any> {
   const name = args.shift();
   const task = createTask(name);
   return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
 }
 
 /** @deprecated */
-export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
+export function serialCaller(
+  hooks: HookCallback[],
+  arguments_?: any[],
+): Promise<any> {
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
     (promise, hookFunction) =>
@@ -92,11 +111,17 @@ export function serialCaller(hooks: HookCallback[], arguments_?: any[]) {
 }
 
 /** @deprecated */
-export function parallelCaller(hooks: HookCallback[], args?: any[]) {
+export function parallelCaller(
+  hooks: HookCallback[],
+  args?: any[],
+): Promise<any> {
   return Promise.all(hooks.map((hook) => hook(...(args || []))));
 }
 
-export function callEachWith(callbacks: Array<(arg0: any) => any>, arg0?: any) {
+export function callEachWith(
+  callbacks: Array<(arg0: any) => any>,
+  arg0?: any,
+): void {
   // eslint-disable-next-line unicorn/no-useless-spread
   for (const callback of [...callbacks]) {
     callback(arg0);

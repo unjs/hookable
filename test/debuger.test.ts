@@ -7,7 +7,7 @@ import {
   expect,
   vi,
 } from "vitest";
-import { createDebugger, Hookable } from "../src/index";
+import { createDebugger, Hookable } from "../src/index.ts";
 
 const consoleMethods = [
   "time",

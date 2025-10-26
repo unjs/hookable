@@ -3,13 +3,14 @@ import {
   parallelTaskCaller,
   serialTaskCaller,
   callEachWith,
-} from "./utils";
+} from "./utils.ts";
+
 import type {
   DeprecatedHook,
   NestedHooks,
   HookCallback,
   HookKeys,
-} from "./types";
+} from "./types.ts";
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
   ? HT[HN]
@@ -49,7 +50,7 @@ export class Hookable<
     name: NameT,
     function_: InferCallback<HooksT, NameT>,
     options: { allowDeprecated?: boolean } = {},
-  ) {
+  ): () => void {
     if (!name || typeof function_ !== "function") {
       return () => {};
     }
@@ -103,7 +104,7 @@ export class Hookable<
   hookOnce<NameT extends HookNameT>(
     name: NameT,
     function_: InferCallback<HooksT, NameT>,
-  ) {
+  ): () => void {
     let _unreg: (() => void) | undefined;
     let _function: ((...arguments_: any) => any) | undefined = (
       ...arguments_: any
@@ -122,7 +123,7 @@ export class Hookable<
   removeHook<NameT extends HookNameT>(
     name: NameT,
     function_: InferCallback<HooksT, NameT>,
-  ) {
+  ): void {
     if (this._hooks[name]) {
       const index = this._hooks[name].indexOf(function_);
 
@@ -139,7 +140,7 @@ export class Hookable<
   deprecateHook<NameT extends HookNameT>(
     name: NameT,
     deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>,
-  ) {
+  ): void {
     this._deprecatedHooks[name] =
       typeof deprecated === "string" ? { to: deprecated } : deprecated;
     const _hooks = this._hooks[name] || [];
@@ -151,14 +152,14 @@ export class Hookable<
 
   deprecateHooks(
     deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>,
-  ) {
+  ): void {
     Object.assign(this._deprecatedHooks, deprecatedHooks);
     for (const name in deprecatedHooks) {
       this.deprecateHook(name, deprecatedHooks[name] as DeprecatedHook<HooksT>);
     }
   }
 
-  addHooks(configHooks: NestedHooks<HooksT>) {
+  addHooks(configHooks: NestedHooks<HooksT>): () => void {
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
     const removeFns = Object.keys(hooks).map((key) =>
@@ -174,7 +175,7 @@ export class Hookable<
     };
   }
 
-  removeHooks(configHooks: NestedHooks<HooksT>) {
+  removeHooks(configHooks: NestedHooks<HooksT>): void {
     const hooks = flatHooks<HooksT>(configHooks);
     for (const key in hooks) {
       // @ts-ignore
@@ -182,7 +183,7 @@ export class Hookable<
     }
   }
 
-  removeAllHooks() {
+  removeAllHooks(): void {
     for (const key in this._hooks) {
       delete this._hooks[key];
     }
@@ -239,7 +240,7 @@ export class Hookable<
     return result;
   }
 
-  beforeEach(function_: (event: InferSpyEvent<HooksT>) => void) {
+  beforeEach(function_: (event: InferSpyEvent<HooksT>) => void): () => void {
     this._before = this._before || [];
     this._before.push(function_);
     return () => {
@@ -252,7 +253,7 @@ export class Hookable<
     };
   }
 
-  afterEach(function_: (event: InferSpyEvent<HooksT>) => void) {
+  afterEach(function_: (event: InferSpyEvent<HooksT>) => void): () => void {
     this._after = this._after || [];
     this._after.push(function_);
     return () => {
