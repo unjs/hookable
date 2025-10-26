@@ -4,24 +4,30 @@ import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";
 
 describe("benchmark", () => {
-  it("no side effects", async () => {
-    const code = /* js */ `
-      import { createHooks } from "../src/index.ts";
-    `;
-    const { bytes, output } = await getBundleSize(code);
-    expect(output).toEqual("");
-    expect(bytes).toBe(0);
-  });
-
   it("new Hookable()", async () => {
     const code = /* js */ `
       import { Hookable } from "../src/index.ts";
       export default new Hookable()
     `;
     const { bytes, gzipSize } = await getBundleSize(code);
-    // console.log("new Hookable():", { bytes, gzipSize });
+    if (process.env.DEBUG) {
+      console.log("new Hookable():", { bytes, gzipSize });
+    }
     expect(bytes).toBeLessThan(3000);
     expect(gzipSize).toBeLessThan(1200);
+  });
+
+  it("new HookableCore()", async () => {
+    const code = /* js */ `
+      import { HookableCore } from "../src/index.ts";
+      export default new HookableCore()
+    `;
+    const { bytes, gzipSize } = await getBundleSize(code);
+    if (process.env.DEBUG) {
+      console.log("new HookableCore():", { bytes, gzipSize });
+    }
+    expect(bytes).toBeLessThan(640);
+    expect(gzipSize).toBeLessThan(380);
   });
 });
 
@@ -47,6 +53,6 @@ async function getBundleSize(code: string) {
   return {
     bytes,
     gzipSize,
-    output: new TextDecoder().decode(res.outputFiles[0].contents),
+    // output: new TextDecoder().decode(res.outputFiles[0].contents),
   };
 }

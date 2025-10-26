@@ -1,8 +1,20 @@
 // @ts-nocheck
 import { describe, test, beforeEach, expect, vi } from "vitest";
-import { createHooks, flatHooks, mergeHooks } from "../src/index.ts";
+import { Hookable, HookableCore, flatHooks, mergeHooks } from "../src/index.ts";
 
-describe("core: hookable", () => {
+describe("HookableCore", () => {
+  test("basic functionality", async () => {
+    const hookable = new HookableCore<{ test(): void }>();
+    let called = false;
+    hookable.hook("test", async () => {
+      called = true;
+    });
+    await hookable.callHook("test");
+    expect(called).toBe(true);
+  });
+});
+
+describe("hookable", () => {
   beforeEach(() => {
     for (const l of ["log", "warn", "error", "debug"]) {
       console[l] = vi.fn();
@@ -10,7 +22,7 @@ describe("core: hookable", () => {
   });
 
   test("should construct hook object", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
 
     expect(hook._hooks).toEqual({});
     expect(hook._deprecatedHooks).toEqual({});
@@ -19,7 +31,7 @@ describe("core: hookable", () => {
   });
 
   test("should register hook successfully", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.hook("test:hook", () => {});
     hook.hook("test:hook", () => {});
 
@@ -32,7 +44,7 @@ describe("core: hookable", () => {
   });
 
   test("should ignore empty hook name", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.hook(0, () => {});
     hook.hook("", () => {});
     hook.hook(undefined, () => {});
@@ -43,7 +55,7 @@ describe("core: hookable", () => {
   });
 
   test("should ignore non-function hook", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.hook("test:hook", "");
     hook.hook("test:hook");
 
@@ -51,7 +63,7 @@ describe("core: hookable", () => {
   });
 
   test("should convert and display deprecated hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.deprecateHook("a", "b");
     hook.deprecateHook("b", { to: "c" });
     hook.deprecateHook("x", { to: "y", message: "Custom" });
@@ -81,14 +93,14 @@ describe("core: hookable", () => {
   });
 
   test("allow hiding deprecation warns", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.deprecateHook("a", "b");
     hook.hook("a", () => {}, { allowDeprecated: true });
     expect(console.warn).toBeCalledTimes(0);
   });
 
   test("should handle deprecation after registering", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.hook("a", () => {});
     hook.hook("b", () => {});
     hook.deprecateHook("a", "b");
@@ -100,7 +112,7 @@ describe("core: hookable", () => {
   });
 
   test("deprecateHooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.deprecateHooks({
       "test:hook": "test:before",
     });
@@ -115,7 +127,7 @@ describe("core: hookable", () => {
   });
 
   test("should call registered hook", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.hook("test:hook", () => console.log("test:hook called"));
 
     await hook.callHook("test:hook");
@@ -124,7 +136,7 @@ describe("core: hookable", () => {
   });
 
   test("should ignore unregistered hook", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
 
     await hook.callHook("test:hook");
 
@@ -132,7 +144,7 @@ describe("core: hookable", () => {
   });
 
   test("should throw hook error", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const error = new Error("Hook Error");
     hook.hook("test:hook", () => {
       throw error;
@@ -141,7 +153,7 @@ describe("core: hookable", () => {
   });
 
   test("should return a self-removal function", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const remove = hook.hook("test:hook", () => {
       console.log("test:hook called");
     });
@@ -154,7 +166,7 @@ describe("core: hookable", () => {
   });
 
   test("should clear only its own hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const callback = () => {};
 
     hook.hook("test:hook", callback);
@@ -171,7 +183,7 @@ describe("core: hookable", () => {
   });
 
   test("should clear removed hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const callback = () => {};
     hook.hook("test:hook", callback);
     hook.hook("test:hook", callback);
@@ -188,7 +200,7 @@ describe("core: hookable", () => {
   });
 
   test("should call self-removing hooks once", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const remove = hook.hook("test:hook", () => {
       console.log("test:hook called");
       remove();
@@ -219,7 +231,7 @@ describe("core: hookable", () => {
   });
 
   test("should add object hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     hook.addHooks({
       test: {
         hook: () => {},
@@ -239,7 +251,7 @@ describe("core: hookable", () => {
   });
 
   test("should clear multiple hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const callback = () => {};
 
     const hooks = {
@@ -263,7 +275,7 @@ describe("core: hookable", () => {
   });
 
   test("should clear all hooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const callback = () => {};
 
     const hooks = {
@@ -286,7 +298,7 @@ describe("core: hookable", () => {
   });
 
   test("should clear only the hooks added by addHooks", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
     const callback1 = () => {};
     const callback2 = () => {};
     hook.hook("test:hook", callback1);
@@ -310,7 +322,7 @@ describe("core: hookable", () => {
   });
 
   test("hook once", async () => {
-    const hook = createHooks();
+    const hook = new Hookable();
 
     let x = 0;
 
@@ -325,7 +337,7 @@ describe("core: hookable", () => {
   });
 
   test("hook sync", () => {
-    const hook = createHooks();
+    const hook = new Hookable();
 
     let x = 0;
 
@@ -341,7 +353,7 @@ describe("core: hookable", () => {
   });
 
   test("beforeEach and afterEach spies", async () => {
-    const hook = createHooks<{ test(): void }>();
+    const hook = new Hookable<{ test(): void }>();
 
     let x = 0;
 
@@ -404,7 +416,7 @@ describe("core: hookable", () => {
 
   test("arguments", async () => {
     let result;
-    const hooks = createHooks();
+    const hooks = new Hookable();
     hooks.hook("test", (a: number, b: number) => (result = a + b));
     await hooks.callHook("test", 1, 2);
     expect(result).toBe(3);
@@ -412,7 +424,7 @@ describe("core: hookable", () => {
 
   test("callEachWith", async () => {
     let result = 0;
-    const hooks = createHooks();
+    const hooks = new Hookable();
     hooks.hookOnce("test", () => result++);
     hooks.hookOnce("test", () => result++);
     hooks.hookOnce("test", () => result++);

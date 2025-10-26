@@ -19,10 +19,10 @@ npx nypm i hookable
 **Method A: Create a hookable instance:**
 
 ```js
-import { createHooks } from "hookable";
+import { Hookable } from "hookable";
 
 // Create a hookable instance
-const hooks = createHooks();
+const hooks = new Hookable();
 
 // Hook on 'hello'
 hooks.hook("hello", () => {
@@ -32,6 +32,9 @@ hooks.hook("hello", () => {
 // Call 'hello' hook
 hooks.callHook("hello");
 ```
+
+> [!TIP]
+> You can use `HookableCore` alternatively for less bundle and runtime footprint if simple `hook`/`callHook` functionality is only needed.
 
 **Method B: Extend your base class from Hookable:**
 

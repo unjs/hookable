@@ -1,4 +1,4 @@
-export { Hookable, createHooks } from "./hookable.ts";
+export { Hookable, HookableCore, createHooks } from "./hookable.ts";
 
 export {
   flatHooks,
