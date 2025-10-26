@@ -33,12 +33,12 @@ export function createDebugger(
   /** Stop debugging and remove listeners */
   close: () => void;
 } {
-  const options = <CreateDebuggerOptions>{
+  const options = {
     inspect: isBrowser,
     group: isBrowser,
     filter: () => true,
     ..._options,
-  };
+  } satisfies CreateDebuggerOptions;
 
   const _filter = options.filter;
   const filter =
