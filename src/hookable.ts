@@ -193,41 +193,38 @@ export class Hookable<
 
   callHook<NameT extends HookNameT>(
     name: NameT,
-    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Thenable<any> {
-    // @ts-expect-error we always inject name
-    return this.callHookWith(serialTaskCaller, name, name, ...arguments_);
+    ...args: Parameters<InferCallback<HooksT, NameT>>
+  ): Thenable<any> | void {
+    return this.callHookWith(serialTaskCaller, name, args);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
-    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
-  ): Thenable<any[]> {
-    // @ts-expect-error we always inject name
-    return this.callHookWith(parallelTaskCaller, name, name, ...arguments_);
+    args: Parameters<InferCallback<HooksT, NameT>>,
+  ): Thenable<any[]> | void {
+    return this.callHookWith(parallelTaskCaller, name, args);
   }
 
   callHookWith<
     NameT extends HookNameT,
     CallFunction extends (
       hooks: HookCallback[],
-      arguments_: Parameters<InferCallback<HooksT, NameT>>,
+      args: Parameters<InferCallback<HooksT, NameT>>,
     ) => any,
   >(
     caller: CallFunction,
     name: NameT,
-    ...arguments_: Parameters<InferCallback<HooksT, NameT>>
+    args: Parameters<InferCallback<HooksT, NameT>>,
   ): ReturnType<CallFunction> {
     const event =
-      this._before || this._after
-        ? { name, args: arguments_, context: {} }
-        : undefined;
+      this._before || this._after ? { name, args, context: {} } : undefined;
     if (this._before) {
       callEachWith(this._before, event);
     }
+    const _args = args?.length ? [name, ...args] : [name];
     const result = caller(
       this._hooks[name] ? [...this._hooks[name]] : [],
-      arguments_,
+      _args as Parameters<InferCallback<HooksT, NameT>>,
     );
     if ((result as any) instanceof Promise) {
       return result.finally(() => {
