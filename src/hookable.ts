@@ -200,7 +200,7 @@ export class Hookable<
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
-    args: Parameters<InferCallback<HooksT, NameT>>,
+    ...args: Parameters<InferCallback<HooksT, NameT>>
   ): Thenable<any[]> | void {
     return this.callHookWith(parallelTaskCaller, name, args);
   }
