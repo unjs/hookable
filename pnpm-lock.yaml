@@ -17,6 +17,9 @@ importers:
       changelogen:
         specifier: ^0.6.2
         version: 0.6.2(magicast@0.3.5)
+      esbuild:
+        specifier: ^0.25.11
+        version: 0.25.11
       eslint:
         specifier: ^9.38.0
         version: 9.38.0(jiti@2.6.1)
