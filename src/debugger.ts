@@ -1,4 +1,4 @@
-import type { Hookable } from "./hookable";
+import type { Hookable } from "./hookable.ts";
 
 export interface CreateDebuggerOptions {
   /** An optional tag to prefix console logs with */
@@ -29,13 +29,16 @@ const isBrowser = typeof window !== "undefined";
 export function createDebugger(
   hooks: Hookable<any>,
   _options: CreateDebuggerOptions = {},
-) {
-  const options = <CreateDebuggerOptions>{
+): {
+  /** Stop debugging and remove listeners */
+  close: () => void;
+} {
+  const options = {
     inspect: isBrowser,
     group: isBrowser,
     filter: () => true,
     ..._options,
-  };
+  } satisfies CreateDebuggerOptions;
 
   const _filter = options.filter;
   const filter =

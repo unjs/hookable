@@ -1,10 +1,13 @@
-export { Hookable, createHooks } from "./hookable";
+export { Hookable, createHooks } from "./hookable.ts";
+
 export {
   flatHooks,
   mergeHooks,
   parallelCaller,
   serial,
   serialCaller,
-} from "./utils";
-export * from "./debugger";
-export * from "./types";
+} from "./utils.ts";
+
+export * from "./debugger.ts";
+
+export * from "./types.ts";

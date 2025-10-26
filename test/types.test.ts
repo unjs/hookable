@@ -1,7 +1,7 @@
 import { describe, test } from "vitest";
 import { expectTypeOf } from "expect-type";
-import { createHooks } from "../src";
-import type { HookCallback } from "../src/types";
+import { createHooks } from "../src/index.ts";
+import type { HookCallback } from "../src/types.ts";
 
 describe("hook types", () => {
   test("correctly handles non-nested hooks", () => {
@@ -55,11 +55,11 @@ describe("hook types", () => {
 
     // should both be valid
     hooks.addHooks({
-      namespace: { foo: (_arg) => {} },
+      namespace: { foo: (_arg: any) => {} },
       bar: (_arg) => {},
       "namespace:foo": () => {},
     });
-    hooks.addHooks({ namespace: { nothing: (_arg) => {} } });
+    hooks.addHooks({ namespace: { nothing: (_arg: any) => {} } });
     hooks.addHooks({ nothing: (_arg) => {} });
   });
 

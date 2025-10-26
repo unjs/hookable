@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { describe, test, beforeEach, expect, vi } from "vitest";
-import { createHooks, flatHooks, mergeHooks } from "../src/index";
+import { createHooks, flatHooks, mergeHooks } from "../src/index.ts";
 
 describe("core: hookable", () => {
   beforeEach(() => {

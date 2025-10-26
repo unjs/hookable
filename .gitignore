@@ -8,3 +8,4 @@ types
 *.log*
 *.env*
 !vitest.config.ts
+tsconfig.tsbuildinfo
