@@ -5,12 +5,12 @@ import { Hookable, HookableCore, flatHooks, mergeHooks } from "../src/index.ts";
 describe("HookableCore", () => {
   test("basic functionality", async () => {
     const hookable = new HookableCore<{ test(): void }>();
-    let called = false;
-    hookable.hook("test", async () => {
-      called = true;
+    hookable.hook("test", async (obj: { called: boolean }) => {
+      obj.called = true;
     });
-    await hookable.callHook("test");
-    expect(called).toBe(true);
+    const obj = { called: false };
+    await hookable.callHook("test", obj);
+    expect(obj.called).toBe(true);
   });
 });
 

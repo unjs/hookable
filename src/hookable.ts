@@ -3,7 +3,7 @@ import {
   parallelTaskCaller,
   serialTaskCaller,
   callEachWith,
-  nextDispatch,
+  callHooks,
 } from "./utils.ts";
 
 import type {
@@ -326,13 +326,6 @@ export class HookableCore<
     if (!hooks || hooks.length === 0) {
       return;
     }
-    return nextDispatch(
-      hooks,
-      (args?.length ? [name, ...args] : [name]) as Parameters<
-        InferCallback<HooksT, NameT>
-      >,
-      { run: (fn) => fn() },
-      0,
-    );
+    return callHooks(hooks, args, 0);
   }
 }

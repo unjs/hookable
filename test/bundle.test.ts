@@ -26,8 +26,8 @@ describe("benchmark", () => {
     if (process.env.DEBUG) {
       console.log("new HookableCore():", { bytes, gzipSize });
     }
-    expect(bytes).toBeLessThan(640);
-    expect(gzipSize).toBeLessThan(380);
+    expect(bytes).toBeLessThan(630);
+    expect(gzipSize).toBeLessThan(370);
   });
 });
 

@@ -77,18 +77,19 @@ const createTask = /* @__PURE__ */ (() => {
   return () => defaultTask;
 })();
 
-export function nextDispatch(
+export function callHooks(
   hooks: HookCallback[],
   args: any[],
-  task: ReturnType<CreateTask>,
   startIndex: number,
+  task?: ReturnType<CreateTask>,
 ): Promise<any> | void {
   for (let i = startIndex; i < hooks.length; i += 1) {
     try {
-      const result = task.run(() => hooks[i](...args));
-
+      const result = task
+        ? task.run(() => hooks[i](...args))
+        : hooks[i](...args);
       if (result instanceof Promise) {
-        return result.then(() => nextDispatch(hooks, args, task, i + 1));
+        return result.then(() => callHooks(hooks, args, i + 1, task));
       }
     } catch (error) {
       return Promise.reject(error);
@@ -100,25 +101,19 @@ export function serialTaskCaller(
   hooks: HookCallback[],
   args: any[],
 ): Promise<any> | void {
-  if (hooks.length === 0) {
-    return;
+  if (hooks.length > 0) {
+    return callHooks(hooks, args, 0, createTask(args.shift()));
   }
-
-  const task = createTask(args.shift());
-
-  return nextDispatch(hooks, args, task, 0);
 }
 
 export function parallelTaskCaller(
   hooks: HookCallback[],
   args: any[],
 ): Promise<any> | void {
-  if (hooks.length === 0) {
-    return;
+  if (hooks.length > 0) {
+    const task = createTask(args.shift());
+    return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
   }
-
-  const task = createTask(args.shift());
-  return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
 }
 
 /** @deprecated */
