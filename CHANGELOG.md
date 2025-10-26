@@ -2,6 +2,63 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.0.0-rc.1
+
+[compare changes](https://github.com/unjs/hookable/compare/v5.5.3...v6.0.0-rc.1)
+
+### 🚀 Enhancements
+
+- `HookableCore` ([#127](https://github.com/unjs/hookable/pull/127))
+
+### 🔥 Performance
+
+- ⚠️  Improve performance, reduce allocations, and avoid promises ([#102](https://github.com/unjs/hookable/pull/102))
+
+### 🩹 Fixes
+
+- **core:** Only pass args ([0bf8fdd](https://github.com/unjs/hookable/commit/0bf8fdd))
+
+### 💅 Refactors
+
+- Remove extra `splice` arg ([d13ac6e](https://github.com/unjs/hookable/commit/d13ac6e))
+- More explicit types ([3756887](https://github.com/unjs/hookable/commit/3756887))
+
+### 📦 Build
+
+- Correct `types` order in `exports ([#122](https://github.com/unjs/hookable/pull/122))
+- ⚠️  Esm-only dist ([89d1bcb](https://github.com/unjs/hookable/commit/89d1bcb))
+- Add `type: "module"` ([93e5d41](https://github.com/unjs/hookable/commit/93e5d41))
+- Add `"sideEffects": false` to package.json ([1eb317a](https://github.com/unjs/hookable/commit/1eb317a))
+
+### 🏡 Chore
+
+- Update deps ([ccecf5f](https://github.com/unjs/hookable/commit/ccecf5f))
+- Update ci ([00f1b70](https://github.com/unjs/hookable/commit/00f1b70))
+- Lint ([d057046](https://github.com/unjs/hookable/commit/d057046))
+- **test:** Replace vitest config ([#115](https://github.com/unjs/hookable/pull/115))
+- Update dev dependencies ([d3b134a](https://github.com/unjs/hookable/commit/d3b134a))
+- Update eslint config ([ccbe59d](https://github.com/unjs/hookable/commit/ccbe59d))
+- Update deps ([1c3670e](https://github.com/unjs/hookable/commit/1c3670e))
+- Avoid non erasable syntax ([04b5916](https://github.com/unjs/hookable/commit/04b5916))
+- New bench ([b53de70](https://github.com/unjs/hookable/commit/b53de70))
+- Prepare for v6 ([df45aff](https://github.com/unjs/hookable/commit/df45aff))
+
+### ✅ Tests
+
+- Add bundle size test ([e58f2e7](https://github.com/unjs/hookable/commit/e58f2e7))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Improve performance, reduce allocations, and avoid promises ([#102](https://github.com/unjs/hookable/pull/102))
+- ⚠️  Esm-only dist ([89d1bcb](https://github.com/unjs/hookable/commit/89d1bcb))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Vlad ([@negezor](https://github.com/negezor))
+- Kricsleo ([@kricsleo](https://github.com/kricsleo))
+- Kanon ([@ysknsid25](https://github.com/ysknsid25))
+
 ## v5.5.3
 
 [compare changes](https://github.com/unjs/hookable/compare/v5.5.2...v5.5.3)
