@@ -1,9 +1,13 @@
 import { bench, describe } from "vitest";
-import { createHooks } from "../src/index";
-import { serialTaskCaller, parallelTaskCaller, flatHooks } from "../src/utils";
+import { createHooks } from "../src/index.ts";
+import {
+  serialTaskCaller,
+  parallelTaskCaller,
+  flatHooks,
+} from "../src/utils.ts";
 
 describe("empty serialTaskCaller", () => {
-  const emptyTasks = [];
+  const emptyTasks: any[] = [];
 
   bench("empty serialTaskCaller", () => {
     return serialTaskCaller(emptyTasks, []);
@@ -39,7 +43,7 @@ describe("serialTaskCaller", () => {
 });
 
 describe("empty parallelTaskCaller", () => {
-  const emptyTasks = [];
+  const emptyTasks: any[] = [];
 
   bench("empty parallelTaskCaller", () => {
     return parallelTaskCaller(emptyTasks, []) as unknown as Promise<void>;
@@ -52,7 +56,7 @@ describe("empty parallelTaskCaller", () => {
   bench("empty parallelTaskCaller with arguments", () => {
     return parallelTaskCaller(
       emptyTasks,
-      [1, 2, 3, 4, 5]
+      [1, 2, 3, 4, 5],
     ) as unknown as Promise<void>;
   });
 });
@@ -75,7 +79,7 @@ describe("parallelTaskCaller", () => {
   bench("parallelTaskCaller with arguments", () => {
     return parallelTaskCaller(
       mixedTasks,
-      [1, 2, 3, 4, 5]
+      [1, 2, 3, 4, 5],
     ) as unknown as Promise<void>;
   });
 });
@@ -114,7 +118,7 @@ describe("empty callHookParallel", () => {
       2,
       3,
       4,
-      5
+      5,
     ) as unknown as Promise<void>;
   });
 });
@@ -161,7 +165,7 @@ describe("callHookParallel", () => {
       2,
       3,
       4,
-      5
+      5,
     ) as unknown as Promise<void>;
   });
 });
@@ -178,7 +182,7 @@ describe("hook", () => {
       setup: () => {
         hooks = createHooks();
       },
-    }
+    },
   );
 
   const createDeprecateHooks = () => {
@@ -200,14 +204,13 @@ describe("hook", () => {
       setup: () => {
         deprecatedHooks = createDeprecateHooks();
       },
-    }
+    },
   );
 });
 
 describe("addHooks", () => {
   let hooks = createHooks();
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const fn = () => {};
 
   bench(
@@ -226,14 +229,13 @@ describe("addHooks", () => {
       setup: () => {
         hooks = createHooks();
       },
-    }
+    },
   );
 });
 
 describe("empty removeHook", () => {
   const hooks = createHooks();
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const fn = () => {};
 
   bench("empty removeHook", () => {
@@ -263,12 +265,11 @@ describe("removeHook", () => {
           hooks.hook("hello", fn);
         }
       },
-    }
+    },
   );
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const extraOneFn = () => {};
-  // eslint-disable-next-line unicorn/consistent-function-scoping
+
   const extraTwoFn = () => {};
 
   bench(
@@ -288,12 +289,11 @@ describe("removeHook", () => {
         }
         hooks.addHooks(extraTwoFn);
       },
-    }
+    },
   );
 });
 
 describe("flatHooks", () => {
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const fn = () => {};
 
   bench("flatHooks", () => {
