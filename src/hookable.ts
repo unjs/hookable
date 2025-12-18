@@ -320,7 +320,7 @@ export class HookableCore<
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
-  ): Promise<any> {
+  ): Promise<any> | void {
     const hooks = this._hooks[name];
     if (!hooks || hooks.length === 0) {
       return Promise.resolve();
