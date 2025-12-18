@@ -11,7 +11,6 @@ import type {
   NestedHooks,
   HookCallback,
   HookKeys,
-  Thenable,
 } from "./types.ts";
 
 type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
@@ -195,14 +194,14 @@ export class Hookable<
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
-  ): Thenable<any> | void {
+  ): Promise<any> | void {
     return this.callHookWith(serialTaskCaller, name, args);
   }
 
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
-  ): Thenable<any[]> | void {
+  ): Promise<any[]> | void {
     return this.callHookWith(parallelTaskCaller, name, args);
   }
 
@@ -321,7 +320,7 @@ export class HookableCore<
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
-  ): Thenable<any> | void {
+  ): Promise<any> | void {
     const hooks = this._hooks[name];
     if (!hooks || hooks.length === 0) {
       return;
