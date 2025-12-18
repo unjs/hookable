@@ -1,11 +1,17 @@
 import { bench, compact, summary, run, do_not_optimize } from "mitata";
 import { Hookable, HookableCore } from "../src/hookable.ts";
-import { Hookable as HookablePrev } from "hookable-prev";
+import { Hookable as Hookable5 } from "hookable-5";
+import {
+  Hookable as Hookable6RC1,
+  HookableCore as Hookable6RC1Core,
+} from "hookable-6-rc1";
 
 const instances = {
   hookable: new Hookable(),
   hookableCore: new HookableCore(),
-  hookablePrev: new HookablePrev(),
+  Hookable5: new Hookable5(),
+  Hookable6RC1: new Hookable6RC1(),
+  Hookable6RC1Core: new Hookable6RC1Core(),
 } as const;
 
 for (const instance of Object.values(instances)) {
@@ -22,8 +28,14 @@ summary(() => {
     bench("HookableCore", () =>
       do_not_optimize(instances.hookableCore.callHook("test", {})),
     );
-    bench("HookablePrev", () =>
-      do_not_optimize(instances.hookablePrev.callHook("test", {})),
+    bench("Hookable5", () =>
+      do_not_optimize(instances.Hookable5.callHook("test", {})),
+    );
+    bench("Hookable6RC1", () =>
+      do_not_optimize(instances.Hookable6RC1.callHook("test", {})),
+    );
+    bench("Hookable6RC1Core", () =>
+      do_not_optimize(instances.Hookable6RC1Core.callHook("test", {})),
     );
   });
 });

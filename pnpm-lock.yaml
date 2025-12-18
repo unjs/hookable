@@ -29,9 +29,12 @@ importers:
       expect-type:
         specifier: ^1.3.0
         version: 1.3.0
-      hookable-prev:
+      hookable-5:
         specifier: npm:hookable@^5.5.3
         version: hookable@5.5.3
+      hookable-6-rc1:
+        specifier: npm:hookable@6.0.0-rc.1
+        version: hookable@6.0.0-rc.1
       mitata:
         specifier: ^1.0.34
         version: 1.0.34
@@ -1247,6 +1250,9 @@ packages:
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
+
+  hookable@6.0.0-rc.1:
+    resolution: {integrity: sha512-HTdlk761/7uL1OuzvMicnj5F5pGq+iITNCYuKVXakQGn95zyYl5b8u/t407RrU34Jv0vYMiqtkFXEJKHYSFViQ==}
 
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
@@ -2791,6 +2797,8 @@ snapshots:
   has-flag@4.0.0: {}
 
   hookable@5.5.3: {}
+
+  hookable@6.0.0-rc.1: {}
 
   html-escaper@2.0.2: {}
 

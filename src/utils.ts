@@ -82,7 +82,7 @@ export function callHooks(
   args: any[],
   startIndex: number,
   task?: ReturnType<CreateTask>,
-): Promise<any> | void {
+): Promise<any> {
   for (let i = startIndex; i < hooks.length; i += 1) {
     try {
       const result = task
@@ -95,25 +95,28 @@ export function callHooks(
       return Promise.reject(error);
     }
   }
+  return Promise.resolve();
 }
 
 export function serialTaskCaller(
   hooks: HookCallback[],
   args: any[],
-): Promise<any> | void {
+): Promise<any> {
   if (hooks.length > 0) {
     return callHooks(hooks, args, 0, createTask(args.shift()));
   }
+  return Promise.resolve();
 }
 
 export function parallelTaskCaller(
   hooks: HookCallback[],
   args: any[],
-): Promise<any> | void {
+): Promise<any> {
   if (hooks.length > 0) {
     const task = createTask(args.shift());
     return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
   }
+  return Promise.resolve([]);
 }
 
 /** @deprecated */
