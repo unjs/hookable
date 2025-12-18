@@ -100,18 +100,20 @@ export function callHooks(
 export function serialTaskCaller(
   hooks: HookCallback[],
   args: any[],
+  name: string,
 ): Promise<any> | void {
   if (hooks.length > 0) {
-    return callHooks(hooks, args, 0, createTask(args.shift()));
+    return callHooks(hooks, args, 0, createTask(name));
   }
 }
 
 export function parallelTaskCaller(
   hooks: HookCallback[],
   args: any[],
+  name: string,
 ): Promise<any> | void {
   if (hooks.length > 0) {
-    const task = createTask(args.shift());
+    const task = createTask(name);
     return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
   }
 }

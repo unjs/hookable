@@ -163,10 +163,11 @@ Used by class itself to **sequentially** call handlers of a specific hook.
 
 If you need custom control over how hooks are called, you can provide a custom function that will receive an array of handlers of a specific hook.
 
-`callerFn` if a callback function that accepts two arguments, `hooks` and `args`:
+`callerFn` if a callback function that accepts 3 arguments, `hooks`, `args` and `name`:
 
 - `hooks`: Array of user hooks to be called
 - `args`: Array of arguments that should be passed each time calling a hook
+- `name`: Name of the hook
 
 ### `deprecateHook (old, name)`
 

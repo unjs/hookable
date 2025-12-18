@@ -210,6 +210,7 @@ export class Hookable<
     CallFunction extends (
       hooks: HookCallback[],
       args: Parameters<InferCallback<HooksT, NameT>>,
+      name: NameT,
     ) => any,
   >(
     caller: CallFunction,
@@ -221,10 +222,10 @@ export class Hookable<
     if (this._before) {
       callEachWith(this._before, event);
     }
-    const _args = args?.length ? [name, ...args] : [name];
     const result = caller(
       this._hooks[name] ? [...this._hooks[name]] : [],
-      _args as Parameters<InferCallback<HooksT, NameT>>,
+      args as Parameters<InferCallback<HooksT, NameT>>,
+      name,
     );
     if ((result as any) instanceof Promise) {
       return result.finally(() => {
