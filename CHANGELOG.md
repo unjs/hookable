@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.0.0-rc.2
+
+[compare changes](https://github.com/unjs/hookable/compare/v6.0.0-rc.1...v6.0.0-rc.2)
+
+### 🩹 Fixes
+
+- **types:** Return type is normal `Promise` or void ([56f47e1](https://github.com/unjs/hookable/commit/56f47e1))
+
+### 🏡 Chore
+
+- Update deps ([b23cbe7](https://github.com/unjs/hookable/commit/b23cbe7))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v6.0.0-rc.1
 
 [compare changes](https://github.com/unjs/hookable/compare/v5.5.3...v6.0.0-rc.1)
