@@ -322,10 +322,6 @@ export class HookableCore<
     }
   }
 
-  clearHook<NameT extends HookNameT>(name: NameT): void {
-    this._hooks[name] = undefined;
-  }
-
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
