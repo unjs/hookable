@@ -37,10 +37,7 @@ describe("hookable", () => {
 
     expect(hook._hooks["test:hook"]).toHaveLength(2);
     expect(hook._hooks["test:hook"]).toBeInstanceOf(Array);
-    expect(hook._hooks["test:hook"]).toEqual([
-      expect.any(Function),
-      expect.any(Function),
-    ]);
+    expect(hook._hooks["test:hook"]).toEqual([expect.any(Function), expect.any(Function)]);
   });
 
   test("should ignore empty hook name", () => {
@@ -74,12 +71,8 @@ describe("hookable", () => {
     hook.hook("c", () => {});
     hook.hook("x", () => {});
 
-    expect(console.warn).toBeCalledWith(
-      "a hook has been deprecated, please use c",
-    );
-    expect(console.warn).toBeCalledWith(
-      "b hook has been deprecated, please use c",
-    );
+    expect(console.warn).toBeCalledWith("a hook has been deprecated, please use c");
+    expect(console.warn).toBeCalledWith("b hook has been deprecated, please use c");
     expect(console.warn).toBeCalledWith("Custom");
     expect(console.warn).toBeCalledTimes(3);
     expect(hook._hooks.a).toBeUndefined();
@@ -104,9 +97,7 @@ describe("hookable", () => {
     hook.hook("a", () => {});
     hook.hook("b", () => {});
     hook.deprecateHook("a", "b");
-    expect(console.warn).toBeCalledWith(
-      "a hook has been deprecated, please use b",
-    );
+    expect(console.warn).toBeCalledWith("a hook has been deprecated, please use b");
     expect(hook._hooks.a).toBeUndefined();
     expect(hook._hooks.b).toEqual([expect.any(Function), expect.any(Function)]);
   });
@@ -424,14 +415,7 @@ describe("hookable", () => {
 
     const merged = mergeHooks(hooks1, hooks2);
 
-    expect(Object.keys(merged)).toMatchObject([
-      "foo",
-      "bar",
-      "a:b",
-      "a:c",
-      "baz",
-      "a:d",
-    ]);
+    expect(Object.keys(merged)).toMatchObject(["foo", "bar", "a:b", "a:c", "baz", "a:d"]);
   });
 
   test("arguments", async () => {

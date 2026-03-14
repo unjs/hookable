@@ -41,14 +41,10 @@ export function createDebugger(
   } satisfies CreateDebuggerOptions;
 
   const _filter = options.filter;
-  const filter =
-    typeof _filter === "string"
-      ? (name: string) => name.startsWith(_filter)
-      : _filter;
+  const filter = typeof _filter === "string" ? (name: string) => name.startsWith(_filter) : _filter;
 
   const _tag = options.tag ? `[${options.tag}] ` : "";
-  const logPrefix = (event: any) =>
-    _tag + event.name + "".padEnd(event._id, "\0");
+  const logPrefix = (event: any) => _tag + event.name + "".padEnd(event._id, "\0");
 
   const _idCtr: Record<string, number> = {};
 

@@ -46,15 +46,9 @@ export function mergeHooks<T>(...hooks: NestedHooks<T>[]): T {
   return finalHooks as any;
 }
 
-export function serial<T>(
-  tasks: T[],
-  function_: (task: T) => Promise<any> | any,
-): Promise<any> {
+export function serial<T>(tasks: T[], function_: (task: T) => Promise<any> | any): Promise<any> {
   // eslint-disable-next-line unicorn/no-array-reduce
-  return tasks.reduce(
-    (promise, task) => promise.then(() => function_(task)),
-    Promise.resolve(),
-  );
+  return tasks.reduce((promise, task) => promise.then(() => function_(task)), Promise.resolve());
 }
 
 // https://developer.chrome.com/blog/devtools-modern-web-debugging/#linked-stack-traces
@@ -85,9 +79,7 @@ export function callHooks(
 ): Promise<any> | void {
   for (let i = startIndex; i < hooks.length; i += 1) {
     try {
-      const result = task
-        ? task.run(() => hooks[i](...args))
-        : hooks[i](...args);
+      const result = task ? task.run(() => hooks[i](...args)) : hooks[i](...args);
       if (result instanceof Promise) {
         return result.then(() => callHooks(hooks, args, i + 1, task));
       }
@@ -119,30 +111,20 @@ export function parallelTaskCaller(
 }
 
 /** @deprecated */
-export function serialCaller(
-  hooks: HookCallback[],
-  arguments_?: any[],
-): Promise<any> {
+export function serialCaller(hooks: HookCallback[], arguments_?: any[]): Promise<any> {
   // eslint-disable-next-line unicorn/no-array-reduce
   return hooks.reduce(
-    (promise, hookFunction) =>
-      promise.then(() => hookFunction(...(arguments_ || []))),
+    (promise, hookFunction) => promise.then(() => hookFunction(...(arguments_ || []))),
     Promise.resolve(),
   );
 }
 
 /** @deprecated */
-export function parallelCaller(
-  hooks: HookCallback[],
-  args?: any[],
-): Promise<any> {
+export function parallelCaller(hooks: HookCallback[], args?: any[]): Promise<any> {
   return Promise.all(hooks.map((hook) => hook(...(args || []))));
 }
 
-export function callEachWith(
-  callbacks: Array<(arg0: any) => any>,
-  arg0?: any,
-): void {
+export function callEachWith(callbacks: Array<(arg0: any) => any>, arg0?: any): void {
   // eslint-disable-next-line unicorn/no-useless-spread
   for (const callback of [...callbacks]) {
     callback(arg0);

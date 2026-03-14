@@ -1,21 +1,7 @@
-import {
-  afterAll,
-  beforeAll,
-  describe,
-  it,
-  beforeEach,
-  expect,
-  vi,
-} from "vitest";
+import { afterAll, beforeAll, describe, it, beforeEach, expect, vi } from "vitest";
 import { createDebugger, Hookable } from "../src/index.ts";
 
-const consoleMethods = [
-  "time",
-  "timeEnd",
-  "timeLog",
-  "groupCollapsed",
-  "groupEnd",
-] as const;
+const consoleMethods = ["time", "timeEnd", "timeLog", "groupCollapsed", "groupEnd"] as const;
 
 describe("debugger", () => {
   let hooks: Hookable;
@@ -37,9 +23,7 @@ describe("debugger", () => {
     createDebugger(hooks, { tag: "tag" });
     await hooks.callHook("hook");
     expect(console.time).toBeCalledWith(expect.stringContaining("[tag] hook"));
-    expect(console.timeEnd).toBeCalledWith(
-      expect.stringContaining("[tag] hook"),
-    );
+    expect(console.timeEnd).toBeCalledWith(expect.stringContaining("[tag] hook"));
   });
   it("should respect `inspect` option", async () => {
     createDebugger(hooks, { inspect: true });

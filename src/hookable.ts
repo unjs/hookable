@@ -6,16 +6,9 @@ import {
   callHooks,
 } from "./utils.ts";
 
-import type {
-  DeprecatedHook,
-  NestedHooks,
-  HookCallback,
-  HookKeys,
-} from "./types.ts";
+import type { DeprecatedHook, NestedHooks, HookCallback, HookKeys } from "./types.ts";
 
-type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback
-  ? HT[HN]
-  : never;
+type InferCallback<HT, HN extends keyof HT> = HT[HN] extends HookCallback ? HT[HN] : never;
 type InferSpyEvent<HT extends Record<string, any>> = {
   [key in keyof HT]: {
     name: key;
@@ -66,8 +59,7 @@ export class Hookable<
       let message = dep.message;
       if (!message) {
         message =
-          `${originalName} hook has been deprecated` +
-          (dep.to ? `, please use ${dep.to}` : "");
+          `${originalName} hook has been deprecated` + (dep.to ? `, please use ${dep.to}` : "");
       }
       if (!this._deprecatedMessages) {
         this._deprecatedMessages = new Set();
@@ -107,9 +99,7 @@ export class Hookable<
     function_: InferCallback<HooksT, NameT>,
   ): () => void {
     let _unreg: (() => void) | undefined;
-    let _function: ((...arguments_: any) => any) | undefined = (
-      ...arguments_: any
-    ) => {
+    let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
       if (typeof _unreg === "function") {
         _unreg();
       }
@@ -121,10 +111,7 @@ export class Hookable<
     return _unreg;
   }
 
-  removeHook<NameT extends HookNameT>(
-    name: NameT,
-    function_: InferCallback<HooksT, NameT>,
-  ): void {
+  removeHook<NameT extends HookNameT>(name: NameT, function_: InferCallback<HooksT, NameT>): void {
     const hooks = this._hooks[name];
 
     if (hooks) {
@@ -148,8 +135,7 @@ export class Hookable<
     name: NameT,
     deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>,
   ): void {
-    this._deprecatedHooks[name] =
-      typeof deprecated === "string" ? { to: deprecated } : deprecated;
+    this._deprecatedHooks[name] = typeof deprecated === "string" ? { to: deprecated } : deprecated;
     const _hooks = this._hooks[name] || [];
     this._hooks[name] = undefined;
     for (const hook of _hooks) {
@@ -157,9 +143,7 @@ export class Hookable<
     }
   }
 
-  deprecateHooks(
-    deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>,
-  ): void {
+  deprecateHooks(deprecatedHooks: Partial<Record<HookNameT, DeprecatedHook<HooksT>>>): void {
     for (const name in deprecatedHooks) {
       this.deprecateHook(name, deprecatedHooks[name] as DeprecatedHook<HooksT>);
     }
@@ -168,9 +152,7 @@ export class Hookable<
   addHooks(configHooks: NestedHooks<HooksT>): () => void {
     const hooks = flatHooks<HooksT>(configHooks);
     // @ts-ignore
-    const removeFns = Object.keys(hooks).map((key) =>
-      this.hook(key as HookNameT, hooks[key]),
-    );
+    const removeFns = Object.keys(hooks).map((key) => this.hook(key as HookNameT, hooks[key]));
 
     return () => {
       for (const unreg of removeFns) {
@@ -221,8 +203,7 @@ export class Hookable<
     name: NameT,
     args: Parameters<InferCallback<HooksT, NameT>>,
   ): ReturnType<CallFunction> {
-    const event =
-      this._before || this._after ? { name, args, context: {} } : undefined;
+    const event = this._before || this._after ? { name, args, context: {} } : undefined;
     if (this._before) {
       callEachWith(this._before, event);
     }
@@ -285,10 +266,7 @@ export class HookableCore<
     this._hooks = {};
   }
 
-  hook<NameT extends HookNameT>(
-    name: NameT,
-    fn: InferCallback<HooksT, NameT>,
-  ): () => void {
+  hook<NameT extends HookNameT>(name: NameT, fn: InferCallback<HooksT, NameT>): () => void {
     if (!name || typeof fn !== "function") {
       return () => {};
     }
@@ -303,10 +281,7 @@ export class HookableCore<
     };
   }
 
-  removeHook<NameT extends HookNameT>(
-    name: NameT,
-    function_: InferCallback<HooksT, NameT>,
-  ): void {
+  removeHook<NameT extends HookNameT>(name: NameT, function_: InferCallback<HooksT, NameT>): void {
     const hooks = this._hooks[name];
 
     if (hooks) {

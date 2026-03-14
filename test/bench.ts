@@ -16,15 +16,9 @@ for (const instance of Object.values(instances)) {
 
 summary(() => {
   compact(() => {
-    bench("Hookable", () =>
-      do_not_optimize(instances.hookable.callHook("test", {})),
-    );
-    bench("HookableCore", () =>
-      do_not_optimize(instances.hookableCore.callHook("test", {})),
-    );
-    bench("HookablePrev", () =>
-      do_not_optimize(instances.hookablePrev.callHook("test", {})),
-    );
+    bench("Hookable", () => do_not_optimize(instances.hookable.callHook("test", {})));
+    bench("HookableCore", () => do_not_optimize(instances.hookableCore.callHook("test", {})));
+    bench("HookablePrev", () => do_not_optimize(instances.hookablePrev.callHook("test", {})));
   });
 });
 
