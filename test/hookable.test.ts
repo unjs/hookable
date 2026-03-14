@@ -297,6 +297,26 @@ describe("hookable", () => {
     expect(hook._hooks).toEqual({});
   });
 
+  test("should clear all handlers for a specific hook", () => {
+    const hook = new Hookable();
+    hook.hook("test:hook", () => {});
+    hook.hook("test:hook", () => {});
+    hook.hook("test:other", () => {});
+
+    expect(hook._hooks["test:hook"]).toHaveLength(2);
+    expect(hook._hooks["test:other"]).toHaveLength(1);
+
+    hook.clearHook("test:hook");
+
+    expect(hook._hooks["test:hook"]).toBeUndefined();
+    expect(hook._hooks["test:other"]).toHaveLength(1);
+  });
+
+  test("clearHook should be safe to call for non-existent hooks", () => {
+    const hook = new Hookable();
+    expect(() => hook.clearHook("test:nonexistent")).not.toThrow();
+  });
+
   test("should clear only the hooks added by addHooks", () => {
     const hook = new Hookable();
     const callback1 = () => {};

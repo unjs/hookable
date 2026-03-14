@@ -140,6 +140,10 @@ export class Hookable<
     }
   }
 
+  clearHook<NameT extends HookNameT>(name: NameT): void {
+    this._hooks[name] = undefined;
+  }
+
   deprecateHook<NameT extends HookNameT>(
     name: NameT,
     deprecated: HookKeys<HooksT> | DeprecatedHook<HooksT>,
@@ -316,6 +320,10 @@ export class HookableCore<
         this._hooks[name] = undefined;
       }
     }
+  }
+
+  clearHook<NameT extends HookNameT>(name: NameT): void {
+    this._hooks[name] = undefined;
   }
 
   callHook<NameT extends HookNameT>(
