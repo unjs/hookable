@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.1.0
+
+[compare changes](https://github.com/unjs/hookable/compare/v6.0.1...v6.1.0)
+
+### 🚀 Enhancements
+
+- Add `clearHook(name)` ([#135](https://github.com/unjs/hookable/pull/135))
+
+### 🏡 Chore
+
+- Update deps ([24e006b](https://github.com/unjs/hookable/commit/24e006b))
+- Lint with oxfmt and oxlint ([56c67fb](https://github.com/unjs/hookable/commit/56c67fb))
+- Fix lint script ([f8a083d](https://github.com/unjs/hookable/commit/f8a083d))
+- Init agents.md ([883dfb9](https://github.com/unjs/hookable/commit/883dfb9))
+- Fix typecheck ([94e870e](https://github.com/unjs/hookable/commit/94e870e))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+
 ## v6.0.1
 
 [compare changes](https://github.com/unjs/hookable/compare/v6.0.0...v6.0.1)
