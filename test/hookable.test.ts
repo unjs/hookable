@@ -1,4 +1,5 @@
 // @ts-nocheck
+import vm from "node:vm";
 import { describe, test, beforeEach, expect, vi } from "vitest";
 import { Hookable, HookableCore, flatHooks, mergeHooks } from "../src/index.ts";
 
@@ -439,5 +440,41 @@ describe("hookable", () => {
     };
     await hooks.callHookWith(customSerialCaller, "test");
     expect(result).toBe(3);
+  });
+
+  // Regression: https://github.com/nitrojs/nitro/issues/4203
+  // Cross-realm Promises (e.g. from jiti/vm) fail `instanceof Promise`,
+  // so hookable must detect thenables and await them regardless.
+  test("awaits cross-realm thenables returned by async hooks", async () => {
+    const context = vm.createContext({});
+    const foreignAsync = vm.runInContext(
+      `(async (obj) => { await Promise.resolve(); obj.called = true; })`,
+      context,
+    );
+
+    const probe = foreignAsync({ called: false });
+    expect(typeof probe.then).toBe("function");
+    expect(probe instanceof Promise).toBe(false);
+
+    const hooks = new Hookable();
+    hooks.hook("test", foreignAsync);
+
+    const obj = { called: false };
+    await hooks.callHook("test", obj);
+    expect(obj.called).toBe(true);
+
+    // Also verify the next hook runs *after* the foreign thenable settles.
+    const order: string[] = [];
+    const foreignOrderedAsync = vm.runInContext(
+      `(async (arr) => { await Promise.resolve(); await Promise.resolve(); arr.push("first"); })`,
+      context,
+    );
+    const hooks2 = new Hookable();
+    hooks2.hook("t", foreignOrderedAsync);
+    hooks2.hook("t", (arr: string[]) => {
+      arr.push("second");
+    });
+    await hooks2.callHook("t", order);
+    expect(order).toEqual(["first", "second"]);
   });
 });

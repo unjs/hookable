@@ -80,8 +80,9 @@ export function callHooks(
   for (let i = startIndex; i < hooks.length; i += 1) {
     try {
       const result = task ? task.run(() => hooks[i](...args)) : hooks[i](...args);
-      if (result instanceof Promise) {
-        return result.then(() => callHooks(hooks, args, i + 1, task));
+      // Use thenable check to support cross-realm Promises (e.g. from vm/jiti).
+      if (result && typeof (result as any).then === "function") {
+        return Promise.resolve(result).then(() => callHooks(hooks, args, i + 1, task));
       }
     } catch (error) {
       return Promise.reject(error);
