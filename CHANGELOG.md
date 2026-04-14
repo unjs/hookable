@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.1.1
+
+[compare changes](https://github.com/unjs/hookable/compare/v6.1.0...v6.1.1)
+
+### 🩹 Fixes
+
+- Await thenables to support cross-realm promises ([#139](https://github.com/unjs/hookable/pull/139))
+
+### 🏡 Chore
+
+- Update deps ([e179ddc](https://github.com/unjs/hookable/commit/e179ddc))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v6.1.0
 
 [compare changes](https://github.com/unjs/hookable/compare/v6.0.1...v6.1.0)
