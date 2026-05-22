@@ -51,6 +51,18 @@ describe("debugger", () => {
     await hooks.callHook("other:hook");
     expect(console.time).toBeCalled();
   });
+  it("should end timer when inspect is true", async () => {
+    createDebugger(hooks, { inspect: true });
+    await hooks.callHook("hook");
+    expect(console.timeEnd).toBeCalledWith(expect.stringContaining("hook"));
+  });
+  it("should not leak timers when calling same hook twice with inspect", async () => {
+    createDebugger(hooks, { inspect: true });
+    await hooks.callHook("hook");
+    await hooks.callHook("hook");
+    expect(console.time).toBeCalledTimes(2);
+    expect(console.timeEnd).toBeCalledTimes(2);
+  });
   it("should allowing closing debugger", async () => {
     const debug = createDebugger(hooks);
     await hooks.callHook("hook");
