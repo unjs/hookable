@@ -9,49 +9,49 @@ importers:
   .:
     devDependencies:
       '@types/node':
-        specifier: ^25.6.0
+        specifier: 25.6.0
         version: 25.6.0
       '@typescript/native-preview':
-        specifier: ^7.0.0-dev.20260414.1
+        specifier: 7.0.0-dev.20260414.1
         version: 7.0.0-dev.20260414.1
       '@vitest/coverage-v8':
-        specifier: ^4.1.4
+        specifier: 4.1.4
         version: 4.1.4(vitest@4.1.4)
       changelogen:
-        specifier: ^0.6.2
+        specifier: 0.6.2
         version: 0.6.2(magicast@0.5.2)
       esbuild:
-        specifier: ^0.28.0
+        specifier: 0.28.0
         version: 0.28.0
       eslint-config-unjs:
-        specifier: ^0.6.2
+        specifier: 0.6.2
         version: 0.6.2(eslint@10.0.3(jiti@2.6.1))(typescript@6.0.2)
       expect-type:
-        specifier: ^1.3.0
+        specifier: 1.3.0
         version: 1.3.0
       hookable-prev:
-        specifier: npm:hookable@^6.1.0
-        version: hookable@6.1.0
+        specifier: npm:hookable@6.1.1
+        version: hookable@6.1.1
       mitata:
-        specifier: ^1.0.34
+        specifier: 1.0.34
         version: 1.0.34
       obuild:
-        specifier: ^0.4.33
+        specifier: 0.4.33
         version: 0.4.33(@typescript/native-preview@7.0.0-dev.20260414.1)(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.2.0)(jiti@2.6.1)(magicast@0.5.2)(picomatch@4.0.4)(rollup@4.59.0)(typescript@6.0.2)
       oxfmt:
-        specifier: ^0.45.0
+        specifier: 0.45.0
         version: 0.45.0
       oxlint:
-        specifier: ^1.60.0
+        specifier: 1.60.0
         version: 1.60.0
       typescript:
-        specifier: ^6.0.2
+        specifier: 6.0.2
         version: 6.0.2
       vite:
-        specifier: ^8.0.8
+        specifier: 8.0.8
         version: 8.0.8(@types/node@25.6.0)(esbuild@0.28.0)(jiti@2.6.1)
       vitest:
-        specifier: ^4.1.4
+        specifier: 4.1.4
         version: 4.1.4(@types/node@25.6.0)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(@types/node@25.6.0)(esbuild@0.28.0)(jiti@2.6.1))
 
 packages:
@@ -1365,8 +1365,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hookable@6.1.0:
-    resolution: {integrity: sha512-ZoKZSJgu8voGK2geJS+6YtYjvIzu9AOM/KZXsBxr83uhLL++e9pEv/dlgwgy3dvHg06kTz6JOh1hk3C8Ceiymw==}
+  hookable@6.1.1:
+    resolution: {integrity: sha512-U9LYDy1CwhMCnprUfeAZWZGByVbhd54hwepegYTK7Pi5NvqEj63ifz5z+xukznehT7i6NIZRu89Ay1AZmRsLEQ==}
 
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
@@ -3156,7 +3156,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hookable@6.1.0: {}
+  hookable@6.1.1: {}
 
   html-escaper@2.0.2: {}
 
