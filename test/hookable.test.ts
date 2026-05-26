@@ -477,4 +477,20 @@ describe("hookable", () => {
     await hooks2.callHook("t", order);
     expect(order).toEqual(["first", "second"]);
   });
+
+  test("falls back when console.createTask returns undefined", async () => {
+    const originalCreateTask = console.createTask;
+    console.createTask = () => undefined as any;
+
+    try {
+      const hook = new Hookable();
+      hook.hook("test", () => {});
+      expect(() => hook.callHook("test")).not.toThrow();
+
+      hook.hook("parallel", () => {});
+      await expect(hook.callHookParallel("parallel")).resolves.toEqual([undefined]);
+    } finally {
+      console.createTask = originalCreateTask;
+    }
+  });
 });

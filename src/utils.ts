@@ -63,11 +63,12 @@ declare global {
   }
 }
 
+const defaultTask: ReturnType<CreateTask> = { run: (function_) => function_() };
+
 const createTask = /* @__PURE__ */ (() => {
   if (console.createTask) {
-    return console.createTask;
+    return (name?: string) => console.createTask!(name) ?? defaultTask;
   }
-  const defaultTask: ReturnType<CreateTask> = { run: (fn) => fn() };
   return () => defaultTask;
 })();
 
