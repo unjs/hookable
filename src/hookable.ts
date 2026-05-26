@@ -177,6 +177,24 @@ export class Hookable<
     this._hooks = {};
   }
 
+  getHooks(): Partial<Record<HookNameT, HookCallback[]>>;
+  getHooks<NameT extends HookNameT>(name: NameT): HookCallback[] | undefined;
+  getHooks<NameT extends HookNameT>(name?: NameT) {
+    if (name) {
+      const hooks = this._hooks[name];
+      return hooks ? [...hooks] : undefined;
+    }
+
+    const result: Partial<Record<HookNameT, HookCallback[]>> = {};
+    for (const key in this._hooks) {
+      const hooks = this._hooks[key];
+      if (hooks) {
+        result[key as HookNameT] = [...hooks];
+      }
+    }
+    return result;
+  }
+
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>

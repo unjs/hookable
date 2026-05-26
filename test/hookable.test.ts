@@ -442,6 +442,27 @@ describe("hookable", () => {
     expect(result).toBe(3);
   });
 
+  test("getHooks returns registered hook callbacks", () => {
+    const hook = new Hookable();
+    const fn1 = () => {};
+    const fn2 = () => {};
+
+    hook.hook("test", fn1);
+    hook.hook("test", fn2);
+    hook.hook("other", fn1);
+
+    expect(hook.getHooks("test")).toEqual([fn1, fn2]);
+    expect(hook.getHooks("missing")).toBeUndefined();
+    expect(hook.getHooks()).toEqual({
+      test: [fn1, fn2],
+      other: [fn1],
+    });
+
+    const snapshot = hook.getHooks("test")!;
+    snapshot.pop();
+    expect(hook.getHooks("test")).toEqual([fn1, fn2]);
+  });
+
   // Regression: https://github.com/nitrojs/nitro/issues/4203
   // Cross-realm Promises (e.g. from jiti/vm) fail `instanceof Promise`,
   // so hookable must detect thenables and await them regardless.
