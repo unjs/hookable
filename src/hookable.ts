@@ -43,7 +43,7 @@ export class Hookable<
   hook<NameT extends HookNameT>(
     name: NameT,
     function_: InferCallback<HooksT, NameT>,
-    options: { allowDeprecated?: boolean } = {},
+    options: { allowDeprecated?: boolean; enforce?: "before" | "after" } = {},
   ): () => void {
     if (!name || typeof function_ !== "function") {
       return () => {};
@@ -83,7 +83,11 @@ export class Hookable<
     }
 
     this._hooks[name] = this._hooks[name] || [];
-    this._hooks[name]!.push(function_);
+    if (options.enforce === "before") {
+      this._hooks[name]!.unshift(function_);
+    } else {
+      this._hooks[name]!.push(function_);
+    }
 
     return () => {
       if (function_) {

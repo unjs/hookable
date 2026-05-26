@@ -41,6 +41,44 @@ describe("hookable", () => {
     expect(hook._hooks["test:hook"]).toEqual([expect.any(Function), expect.any(Function)]);
   });
 
+  test("hook with enforce before runs before previously registered hooks", async () => {
+    const hook = new Hookable();
+    const order: string[] = [];
+
+    hook.hook("test", () => {
+      order.push("first");
+    });
+    hook.hook(
+      "test",
+      () => {
+        order.push("second");
+      },
+      { enforce: "before" },
+    );
+
+    await hook.callHook("test");
+    expect(order).toEqual(["second", "first"]);
+  });
+
+  test("hook with enforce after runs after previously registered hooks", async () => {
+    const hook = new Hookable();
+    const order: string[] = [];
+
+    hook.hook("test", () => {
+      order.push("first");
+    });
+    hook.hook(
+      "test",
+      () => {
+        order.push("second");
+      },
+      { enforce: "after" },
+    );
+
+    await hook.callHook("test");
+    expect(order).toEqual(["first", "second"]);
+  });
+
   test("should ignore empty hook name", () => {
     const hook = new Hookable();
     hook.hook(0, () => {});
