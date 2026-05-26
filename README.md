@@ -169,6 +169,12 @@ If you need custom control over how hooks are called, you can provide a custom f
 - `args`: Array of arguments that should be passed each time calling a hook
 - `name`: Name of the hook
 
+### `callHookChained (name, initialValue)`
+
+Sequentially call hooks, passing the return value of each hook as the sole argument to the next. Returns the final value (or the initial value if no hooks are registered).
+
+You can also use the exported `chainableTaskCaller` with `callHookWith` for custom chaining behavior.
+
 ### `deprecateHook (old, name)`
 
 Deprecate hook called `old` in favor of `name` hook.

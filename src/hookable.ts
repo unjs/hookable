@@ -2,6 +2,7 @@ import {
   flatHooks,
   parallelTaskCaller,
   serialTaskCaller,
+  chainableTaskCaller,
   callEachWith,
   callHooks,
 } from "./utils.ts";
@@ -38,6 +39,7 @@ export class Hookable<
     this.hook = this.hook.bind(this);
     this.callHook = this.callHook.bind(this);
     this.callHookWith = this.callHookWith.bind(this);
+    this.callHookChained = this.callHookChained.bind(this);
   }
 
   hook<NameT extends HookNameT>(
@@ -189,6 +191,13 @@ export class Hookable<
     ...args: Parameters<InferCallback<HooksT, NameT>>
   ): Promise<any[]> | void {
     return this.callHookWith(parallelTaskCaller, name, args);
+  }
+
+  callHookChained<NameT extends HookNameT, ValueT>(
+    name: NameT,
+    initial: ValueT,
+  ): Promise<ValueT> | ValueT {
+    return this.callHookWith(chainableTaskCaller, name, [initial] as any);
   }
 
   callHookWith<

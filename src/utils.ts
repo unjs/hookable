@@ -111,6 +111,35 @@ export function parallelTaskCaller(
   }
 }
 
+export function chainableTaskCaller(
+  hooks: HookCallback[],
+  args: any[],
+  name: string,
+): Promise<any> | any {
+  if (hooks.length === 0) {
+    return args[0];
+  }
+
+  const task = createTask(name);
+
+  function runFrom(index: number, value: any): Promise<any> | any {
+    if (index >= hooks.length) {
+      return value;
+    }
+    try {
+      const hookResult = task.run(() => hooks[index](value));
+      if (hookResult && typeof (hookResult as any).then === "function") {
+        return Promise.resolve(hookResult).then((next) => runFrom(index + 1, next));
+      }
+      return runFrom(index + 1, hookResult);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  return runFrom(0, args[0]);
+}
+
 /** @deprecated */
 export function serialCaller(hooks: HookCallback[], arguments_?: any[]): Promise<any> {
   // eslint-disable-next-line unicorn/no-array-reduce

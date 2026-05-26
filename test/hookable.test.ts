@@ -442,6 +442,30 @@ describe("hookable", () => {
     expect(result).toBe(3);
   });
 
+  test("callHookChained passes result through hooks", () => {
+    const hooks = new Hookable();
+    hooks.hook("transform", (value: number) => value + 1);
+    hooks.hook("transform", (value: number) => value * 2);
+
+    expect(hooks.callHookChained("transform", 1)).toBe(4);
+  });
+
+  test("callHookChained returns initial value when no hooks registered", () => {
+    const hooks = new Hookable();
+    expect(hooks.callHookChained("missing", { ok: true })).toEqual({ ok: true });
+  });
+
+  test("chainableTaskCaller supports async hooks", async () => {
+    const hooks = new Hookable();
+    hooks.hook("transform", async (value: number) => {
+      await Promise.resolve();
+      return value + 1;
+    });
+    hooks.hook("transform", (value: number) => value * 3);
+
+    await expect(hooks.callHookChained("transform", 2)).resolves.toBe(9);
+  });
+
   // Regression: https://github.com/nitrojs/nitro/issues/4203
   // Cross-realm Promises (e.g. from jiti/vm) fail `instanceof Promise`,
   // so hookable must detect thenables and await them regardless.
