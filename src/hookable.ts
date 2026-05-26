@@ -16,6 +16,12 @@ type InferSpyEvent<HT extends Record<string, any>> = {
     context: Record<string, any>;
   };
 }[keyof HT];
+type InferHookRegisterEvent<HT extends Record<string, any>> = {
+  [key in keyof HT]: {
+    name: key;
+    hook: HT[key];
+  };
+}[keyof HT];
 
 export class Hookable<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
@@ -24,6 +30,7 @@ export class Hookable<
   private _hooks: { [key: string]: HookCallback[] | undefined };
   private _before?: HookCallback[];
   private _after?: HookCallback[];
+  private _onHook?: HookCallback[];
   private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>;
   private _deprecatedMessages?: Set<string>;
 
@@ -31,6 +38,7 @@ export class Hookable<
     this._hooks = {};
     this._before = undefined;
     this._after = undefined;
+    this._onHook = undefined;
     this._deprecatedMessages = undefined;
     this._deprecatedHooks = {};
 
@@ -84,6 +92,10 @@ export class Hookable<
 
     this._hooks[name] = this._hooks[name] || [];
     this._hooks[name]!.push(function_);
+
+    if (this._onHook) {
+      callEachWith(this._onHook, { name, hook: function_ });
+    }
 
     return () => {
       if (function_) {
@@ -246,6 +258,19 @@ export class Hookable<
         const index = this._after.indexOf(function_);
         if (index !== -1) {
           this._after.splice(index, 1);
+        }
+      }
+    };
+  }
+
+  onHook(function_: (event: InferHookRegisterEvent<HooksT>) => void): () => void {
+    this._onHook = this._onHook || [];
+    this._onHook.push(function_);
+    return () => {
+      if (this._onHook !== undefined) {
+        const index = this._onHook.indexOf(function_);
+        if (index !== -1) {
+          this._onHook.splice(index, 1);
         }
       }
     };

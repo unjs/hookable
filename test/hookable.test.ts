@@ -397,6 +397,29 @@ describe("hookable", () => {
     expect(x).toBe(5);
   });
 
+  test("onHook spy", () => {
+    const hook = new Hookable<{ test(): void; other(): void }>();
+    const events: Array<{ name: string; hook: () => void }> = [];
+
+    const unreg = hook.onHook((event) => {
+      events.push({ name: event.name, hook: event.hook });
+    });
+
+    const testHook = () => {};
+    const otherHook = () => {};
+    hook.hook("test", testHook);
+    hook.hook("other", otherHook);
+
+    expect(events).toEqual([
+      { name: "test", hook: testHook },
+      { name: "other", hook: otherHook },
+    ]);
+
+    unreg();
+    hook.hook("test", () => {});
+    expect(events).toHaveLength(2);
+  });
+
   test("mergeHooks", () => {
     const function_ = () => {};
     const hooks1 = {

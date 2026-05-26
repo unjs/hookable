@@ -88,4 +88,23 @@ describe("hook types", () => {
       }
     });
   });
+
+  test("onHook typings", () => {
+    const hooks = createHooks<{
+      foo: () => true;
+      bar: (_arg: number) => 42;
+    }>();
+
+    expectTypeOf(hooks.onHook)
+      .parameter(0)
+      .parameter(0)
+      .toEqualTypeOf<
+        { name: "foo"; hook: () => true } | { name: "bar"; hook: (_arg: number) => 42 }
+      >();
+
+    hooks.onHook(({ name, hook }) => {
+      expectTypeOf(name).toEqualTypeOf<"foo" | "bar">();
+      expectTypeOf(hook).toBeFunction();
+    });
+  });
 });
