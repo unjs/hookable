@@ -111,24 +111,33 @@ export class Hookable<
     return _unreg;
   }
 
-  removeHook<NameT extends HookNameT>(name: NameT, function_: InferCallback<HooksT, NameT>): void {
+  removeHook<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>,
+  ): InferCallback<HooksT, NameT> | undefined {
     const hooks = this._hooks[name];
 
     if (hooks) {
       const index = hooks.indexOf(function_);
 
       if (index !== -1) {
-        hooks.splice(index, 1);
-      }
+        const [removed] = hooks.splice(index, 1);
 
-      if (hooks.length === 0) {
-        this._hooks[name] = undefined;
+        if (hooks.length === 0) {
+          this._hooks[name] = undefined;
+        }
+
+        return removed as InferCallback<HooksT, NameT>;
       }
     }
+
+    return undefined;
   }
 
-  clearHook<NameT extends HookNameT>(name: NameT): void {
+  clearHook<NameT extends HookNameT>(name: NameT): InferCallback<HooksT, NameT>[] {
+    const hooks = this._hooks[name] ? [...this._hooks[name]!] : [];
     this._hooks[name] = undefined;
+    return hooks as InferCallback<HooksT, NameT>[];
   }
 
   deprecateHook<NameT extends HookNameT>(
@@ -165,16 +174,29 @@ export class Hookable<
     };
   }
 
-  removeHooks(configHooks: NestedHooks<HooksT>): void {
+  removeHooks(configHooks: NestedHooks<HooksT>): InferCallback<HooksT, HookNameT>[] {
     const hooks = flatHooks<HooksT>(configHooks);
+    const removed: InferCallback<HooksT, HookNameT>[] = [];
     for (const key in hooks) {
       // @ts-ignore
-      this.removeHook(key, hooks[key]);
+      const hook = this.removeHook(key, hooks[key]);
+      if (hook) {
+        removed.push(hook);
+      }
     }
+    return removed;
   }
 
-  removeAllHooks(): void {
+  removeAllHooks(): Record<string, InferCallback<HooksT, HookNameT>[]> {
+    const snapshot: Record<string, InferCallback<HooksT, HookNameT>[]> = {};
+    for (const name in this._hooks) {
+      const hooks = this._hooks[name];
+      if (hooks?.length) {
+        snapshot[name] = [...hooks] as InferCallback<HooksT, HookNameT>[];
+      }
+    }
     this._hooks = {};
+    return snapshot;
   }
 
   callHook<NameT extends HookNameT>(
@@ -281,20 +303,27 @@ export class HookableCore<
     };
   }
 
-  removeHook<NameT extends HookNameT>(name: NameT, function_: InferCallback<HooksT, NameT>): void {
+  removeHook<NameT extends HookNameT>(
+    name: NameT,
+    function_: InferCallback<HooksT, NameT>,
+  ): InferCallback<HooksT, NameT> | undefined {
     const hooks = this._hooks[name];
 
     if (hooks) {
       const index = hooks.indexOf(function_);
 
       if (index !== -1) {
-        hooks.splice(index, 1);
-      }
+        const [removed] = hooks.splice(index, 1);
 
-      if (hooks.length === 0) {
-        this._hooks[name] = undefined;
+        if (hooks.length === 0) {
+          this._hooks[name] = undefined;
+        }
+
+        return removed as InferCallback<HooksT, NameT>;
       }
     }
+
+    return undefined;
   }
 
   callHook<NameT extends HookNameT>(

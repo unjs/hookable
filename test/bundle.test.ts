@@ -13,8 +13,8 @@ describe("benchmark", () => {
     if (process.env.DEBUG) {
       console.log("new Hookable():", { bytes, gzipSize });
     }
-    expect(bytes).toBeLessThan(3000);
-    expect(gzipSize).toBeLessThan(1200);
+    expect(bytes).toBeLessThan(3250);
+    expect(gzipSize).toBeLessThan(1260);
   });
 
   it("new HookableCore()", async () => {
@@ -26,8 +26,8 @@ describe("benchmark", () => {
     if (process.env.DEBUG) {
       console.log("new HookableCore():", { bytes, gzipSize });
     }
-    expect(bytes).toBeLessThan(642);
-    expect(gzipSize).toBeLessThan(370);
+    expect(bytes).toBeLessThan(680);
+    expect(gzipSize).toBeLessThan(385);
   });
 });
 

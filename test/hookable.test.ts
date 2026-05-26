@@ -306,7 +306,38 @@ describe("hookable", () => {
 
   test("clearHook should be safe to call for non-existent hooks", () => {
     const hook = new Hookable();
-    expect(() => hook.clearHook("test:nonexistent")).not.toThrow();
+    expect(hook.clearHook("test:nonexistent")).toEqual([]);
+  });
+
+  test("remove methods should return removed hooks", () => {
+    const hook = new Hookable();
+    const callback = () => {};
+    const before = () => {};
+
+    hook.hook("test:hook", callback);
+    hook.hook("test:before", before);
+
+    expect(hook.removeHook("test:hook", callback)).toBe(callback);
+    expect(hook.removeHook("test:missing", callback)).toBeUndefined();
+
+    hook.hook("test:hook", callback);
+    expect(hook.clearHook("test:hook")).toEqual([callback]);
+    expect(hook._hooks["test:hook"]).toBeUndefined();
+
+    hook.clearHook("test:before");
+    hook.hook("test:hook", callback);
+    hook.hook("test:before", before);
+    expect(hook.removeHooks({ test: { hook: callback, before } })).toEqual([callback, before]);
+    expect(hook._hooks["test:hook"]).toBeUndefined();
+    expect(hook._hooks["test:before"]).toBeUndefined();
+
+    hook.hook("test:hook", callback);
+    hook.hook("test:before", before);
+    expect(hook.removeAllHooks()).toEqual({
+      "test:hook": [callback],
+      "test:before": [before],
+    });
+    expect(hook._hooks).toEqual({});
   });
 
   test("should clear only the hooks added by addHooks", () => {
