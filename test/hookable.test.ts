@@ -348,6 +348,36 @@ describe("hookable", () => {
     expect(x).toBe(1);
   });
 
+  test("clone creates independent copy of hooks", async () => {
+    const hook = new Hookable();
+    let count = 0;
+
+    hook.hook("test", () => {
+      count++;
+    });
+
+    const cloned = hook.clone();
+
+    hook.hook("test", () => {
+      count++;
+    });
+    cloned.hook("other", () => {
+      count++;
+    });
+
+    await hook.callHook("test");
+    expect(count).toBe(2);
+
+    await cloned.callHook("test");
+    expect(count).toBe(3);
+
+    await cloned.callHook("other");
+    expect(count).toBe(4);
+
+    await hook.callHook("other");
+    expect(count).toBe(4);
+  });
+
   test("hook sync", () => {
     const hook = new Hookable();
 

@@ -177,6 +177,30 @@ export class Hookable<
     this._hooks = {};
   }
 
+  clone(): Hookable<HooksT> {
+    const cloned = new Hookable<HooksT>();
+
+    for (const name in this._deprecatedHooks) {
+      cloned.deprecateHook(
+        name as HookNameT,
+        this._deprecatedHooks[name] as DeprecatedHook<HooksT>,
+      );
+    }
+
+    for (const name in this._hooks) {
+      const hooks = this._hooks[name];
+      if (hooks) {
+        for (const fn of hooks) {
+          cloned.hook(name as HookNameT, fn as InferCallback<HooksT, HookNameT>, {
+            allowDeprecated: true,
+          });
+        }
+      }
+    }
+
+    return cloned;
+  }
+
   callHook<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
