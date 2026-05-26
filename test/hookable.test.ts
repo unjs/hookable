@@ -427,6 +427,42 @@ describe("hookable", () => {
     expect(result).toBe(3);
   });
 
+  test("callHookOnce clears listeners after calling", async () => {
+    const hook = new Hookable();
+    let count = 0;
+
+    hook.hook("test", () => {
+      count++;
+    });
+    hook.hook("test", () => {
+      count++;
+    });
+
+    await hook.callHookOnce("test");
+    expect(count).toBe(2);
+    expect(hook._hooks.test).toBeUndefined();
+
+    await hook.callHook("test");
+    expect(count).toBe(2);
+  });
+
+  test("callHookOnce clears listeners after async hooks complete", async () => {
+    const hook = new Hookable();
+    let count = 0;
+
+    hook.hook("test", async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      count++;
+    });
+
+    await hook.callHookOnce("test");
+    expect(count).toBe(1);
+    expect(hook._hooks.test).toBeUndefined();
+
+    await hook.callHook("test");
+    expect(count).toBe(1);
+  });
+
   test("callEachWith", async () => {
     let result = 0;
     const hooks = new Hookable();

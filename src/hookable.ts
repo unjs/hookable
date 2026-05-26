@@ -191,6 +191,23 @@ export class Hookable<
     return this.callHookWith(parallelTaskCaller, name, args);
   }
 
+  callHookOnce<NameT extends HookNameT>(
+    name: NameT,
+    ...args: Parameters<InferCallback<HooksT, NameT>>
+  ): Promise<any> | void {
+    const result = this.callHook(name, ...args);
+    const clear = () => {
+      this.clearHook(name);
+    };
+
+    if (result && typeof (result as Promise<any>).then === "function") {
+      return Promise.resolve(result).finally(clear);
+    }
+
+    clear();
+    return result;
+  }
+
   callHookWith<
     NameT extends HookNameT,
     CallFunction extends (
