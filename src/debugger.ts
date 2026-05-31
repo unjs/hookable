@@ -68,9 +68,8 @@ export function createDebugger(
     }
     if (options.inspect) {
       console.timeLog(logPrefix(event), event.args);
-    } else {
-      console.timeEnd(logPrefix(event));
     }
+    console.timeEnd(logPrefix(event));
     if (options.group) {
       console.groupEnd();
     }
