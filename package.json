@@ -45,7 +45,7 @@
     "obuild": "^0.4.33",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.2",
     "vite": "^8.0.8",
     "vitest": "^4.1.4"
   },
