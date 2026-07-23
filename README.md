@@ -120,6 +120,63 @@ const unregister = lib.hook("hook0", async () => {
 });
 ```
 
+### TypeScript
+
+Pass a hooks interface to `createHooks` or `Hookable` so hook names and callback arguments are checked:
+
+```ts
+import { createHooks, Hookable } from "hookable";
+
+type AppHooks = {
+  ready: () => void | Promise<void>;
+  "user:login": (userId: string) => void | Promise<void>;
+};
+
+const hooks = createHooks<AppHooks>();
+
+hooks.hook("ready", () => {
+  console.log("app ready");
+});
+
+hooks.hook("user:login", (userId) => {
+  // userId is typed as string
+  console.log("login", userId);
+});
+
+await hooks.callHook("ready");
+await hooks.callHook("user:login", "123");
+```
+
+You can also type a class that extends `Hookable`:
+
+```ts
+import { Hookable } from "hookable";
+
+type ParserHooks = {
+  "rows:parsed": (rows: string[]) => void | Promise<void>;
+};
+
+export class Parser extends Hookable<ParserHooks> {
+  rows: string[] = [];
+
+  async getRows() {
+    this.rows = ["a", "b", "c"];
+    await this.callHook("rows:parsed", this.rows);
+  }
+}
+
+const parser = new Parser();
+const unregister = parser.hook("rows:parsed", (rows) => {
+  console.log(rows);
+});
+
+await parser.getRows();
+unregister();
+```
+
+> [!NOTE]
+> Hook callbacks should return `void` or `Promise<void>`. Prefer passing data through hook arguments rather than relying on return values from `callHook`.
+
 ## Hookable class
 
 ### `constructor()`
