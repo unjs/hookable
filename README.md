@@ -159,6 +159,10 @@ Returns an `unregister` function that, when called, will remove all the register
 
 Used by class itself to **sequentially** call handlers of a specific hook.
 
+### `async callHookOnce (name, ...args)`
+
+Sequentially call handlers of a specific hook once and automatically clear all listeners for that hook.
+
 ### `callHookWith (name, callerFn)`
 
 If you need custom control over how hooks are called, you can provide a custom function that will receive an array of handlers of a specific hook.

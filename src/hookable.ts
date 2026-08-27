@@ -184,6 +184,15 @@ export class Hookable<
     return this.callHookWith(serialTaskCaller, name, args);
   }
 
+  callHookOnce<NameT extends HookNameT>(
+    name: NameT,
+    ...args: Parameters<InferCallback<HooksT, NameT>>
+  ): Promise<any> | void {
+    const res = this.callHook(name, ...args);
+    this.clearHook(name);
+    return res;
+  }
+
   callHookParallel<NameT extends HookNameT>(
     name: NameT,
     ...args: Parameters<InferCallback<HooksT, NameT>>
