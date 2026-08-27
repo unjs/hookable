@@ -208,6 +208,22 @@ describe("hookable", () => {
     expect(hook._hooks["test:hook"]).toBeUndefined();
   });
 
+  test("callHookOnce", async () => {
+    const hook = new Hookable();
+    hook.hook("test:hook", () => console.log("test:hook called 1"));
+    hook.hook("test:hook", () => console.log("test:hook called 2"));
+
+    expect(hook._hooks["test:hook"]).toHaveLength(2);
+
+    await hook.callHookOnce("test:hook");
+    await hook.callHook("test:hook");
+
+    expect(console.log).toBeCalledWith("test:hook called 1");
+    expect(console.log).toBeCalledWith("test:hook called 2");
+    expect(console.log).toBeCalledTimes(2);
+    expect(hook._hooks["test:hook"]).toBeUndefined();
+  });
+
   test("should return flat hooks", () => {
     const hooks = flatHooks({
       test: {
