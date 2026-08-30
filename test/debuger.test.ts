@@ -51,6 +51,25 @@ describe("debugger", () => {
     await hooks.callHook("other:hook");
     expect(console.time).toBeCalled();
   });
+  it("should keep timer labels unique for overlapping calls", async () => {
+    const pending: Array<() => void> = [];
+    hooks.hook("hook", () => new Promise<void>((resolve) => pending.push(resolve)));
+    createDebugger(hooks, { inspect: false, group: false });
+
+    const first = hooks.callHook("hook");
+    const second = hooks.callHook("hook");
+    pending.shift()!();
+    await first;
+
+    const third = hooks.callHook("hook");
+    pending.shift()!();
+    pending.shift()!();
+    await Promise.all([second, third]);
+
+    const labels = vi.mocked(console.time).mock.calls.map(([label]) => label);
+    expect(labels).toHaveLength(3);
+    expect(labels[2]).not.toBe(labels[1]);
+  });
   it("should allowing closing debugger", async () => {
     const debug = createDebugger(hooks);
     await hooks.callHook("hook");
