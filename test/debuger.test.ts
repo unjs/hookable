@@ -30,6 +30,7 @@ describe("debugger", () => {
     await hooks.callHook("hook");
     expect(console.time).toBeCalledWith(expect.stringContaining("hook"));
     expect(console.timeLog).toBeCalledWith("hook", []);
+    expect(console.timeEnd).toBeCalledWith("hook");
   });
   it("should respect `group` option", async () => {
     createDebugger(hooks, { group: true });
@@ -68,6 +69,7 @@ describe("debugger", () => {
 
     const labels = vi.mocked(console.time).mock.calls.map(([label]) => label);
     expect(labels).toHaveLength(3);
+    expect(labels[0]).not.toBe(labels[1]);
     expect(labels[2]).not.toBe(labels[1]);
   });
   it("should allowing closing debugger", async () => {
