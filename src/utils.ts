@@ -63,13 +63,15 @@ declare global {
   }
 }
 
-const createTask = /* @__PURE__ */ (() => {
-  if (console.createTask) {
-    return console.createTask;
+const defaultTask: ReturnType<CreateTask> = { run: (fn) => fn() };
+
+const createTask: CreateTask = (name) => {
+  try {
+    return console.createTask?.(name) || defaultTask;
+  } catch {
+    return defaultTask;
   }
-  const defaultTask: ReturnType<CreateTask> = { run: (fn) => fn() };
-  return () => defaultTask;
-})();
+};
 
 export function callHooks(
   hooks: HookCallback[],

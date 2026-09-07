@@ -477,4 +477,46 @@ describe("hookable", () => {
     await hooks2.callHook("t", order);
     expect(order).toEqual(["first", "second"]);
   });
+
+  test("does not crash if console.createTask returns undefined or throws", async () => {
+    const originalCreateTask = console.createTask;
+    try {
+      // Test when console.createTask returns undefined
+      console.createTask = vi.fn(() => undefined);
+      const hooks = new Hookable();
+      let called = false;
+      hooks.hook("test", () => {
+        called = true;
+      });
+      await hooks.callHook("test");
+      expect(called).toBe(true);
+
+      let parallelCalled = false;
+      hooks.hook("test-parallel", () => {
+        parallelCalled = true;
+      });
+      await hooks.callHookParallel("test-parallel");
+      expect(parallelCalled).toBe(true);
+
+      // Test when console.createTask throws
+      console.createTask = vi.fn(() => {
+        throw new Error("createTask error");
+      });
+      let throwCalled = false;
+      hooks.hook("test-throw", () => {
+        throwCalled = true;
+      });
+      await hooks.callHook("test-throw");
+      expect(throwCalled).toBe(true);
+
+      let throwParallelCalled = false;
+      hooks.hook("test-throw-parallel", () => {
+        throwParallelCalled = true;
+      });
+      await hooks.callHookParallel("test-throw-parallel");
+      expect(throwParallelCalled).toBe(true);
+    } finally {
+      console.createTask = originalCreateTask;
+    }
+  });
 });
