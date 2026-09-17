@@ -13,6 +13,19 @@ describe("HookableCore", () => {
     await hookable.callHook("test", obj);
     expect(obj.called).toBe(true);
   });
+
+  test("should run remaining hooks when a hook unregisters itself", async () => {
+    const hookable = new HookableCore();
+    let calls = 0;
+    const unregister = hookable.hook("test", () => {
+      unregister();
+    });
+    hookable.hook("test", () => {
+      calls++;
+    });
+    await hookable.callHook("test");
+    expect(calls).toBe(1);
+  });
 });
 
 describe("hookable", () => {
