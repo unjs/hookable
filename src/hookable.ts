@@ -305,6 +305,6 @@ export class HookableCore<
     if (!hooks || hooks.length === 0) {
       return;
     }
-    return callHooks(hooks, args, 0);
+    return callHooks(hooks.slice(), args, 0);
   }
 }
