@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.1.2
+
+[compare changes](https://github.com/unjs/hookable/compare/v6.1.1...v6.1.2)
+
+### 🩹 Fixes
+
+- Copy hooks before iterating in callHook ([#166](https://github.com/unjs/hookable/pull/166))
+
+### 🏡 Chore
+
+- Update deps ([e55a8e8](https://github.com/unjs/hookable/commit/e55a8e8))
+
+### 🤖 CI
+
+- Update node ([670b8b6](https://github.com/unjs/hookable/commit/670b8b6))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+
 ## v6.1.1
 
 [compare changes](https://github.com/unjs/hookable/compare/v6.1.0...v6.1.1)
