@@ -46,15 +46,20 @@ export function createDebugger(
   const _tag = options.tag ? `[${options.tag}] ` : "";
   const logPrefix = (event: any) => _tag + event.name + "".padEnd(event._id, "\0");
 
-  const _idCtr: Record<string, number> = {};
+  const _activeIds: Record<string, Set<number>> = {};
 
   // Before each
   const unsubscribeBefore = hooks.beforeEach((event: any) => {
     if (filter !== undefined && !filter(event.name)) {
       return;
     }
-    _idCtr[event.name] = _idCtr[event.name] || 0;
-    event._id = _idCtr[event.name]++;
+    const activeIds = (_activeIds[event.name] ||= new Set());
+    let id = 0;
+    while (activeIds.has(id)) {
+      id++;
+    }
+    activeIds.add(id);
+    event._id = id;
     console.time(logPrefix(event));
   });
 
@@ -68,13 +73,12 @@ export function createDebugger(
     }
     if (options.inspect) {
       console.timeLog(logPrefix(event), event.args);
-    } else {
-      console.timeEnd(logPrefix(event));
     }
+    console.timeEnd(logPrefix(event));
     if (options.group) {
       console.groupEnd();
     }
-    _idCtr[event.name]--;
+    _activeIds[event.name].delete((event as unknown as { _id: number })._id);
   });
 
   return {
