@@ -31,6 +31,14 @@ describe("debugger", () => {
     expect(console.time).toBeCalledWith(expect.stringContaining("hook"));
     expect(console.timeLog).toBeCalledWith("hook", []);
   });
+  it("should end the timer when `inspect` is enabled", async () => {
+    createDebugger(hooks, { inspect: true });
+    await hooks.callHook("hook");
+    await hooks.callHook("hook");
+    expect(console.time).toBeCalledTimes(2);
+    expect(console.timeEnd).toBeCalledTimes(2);
+    expect(console.timeEnd).toBeCalledWith("hook");
+  });
   it("should respect `group` option", async () => {
     createDebugger(hooks, { group: true });
     await hooks.callHook("hook");
