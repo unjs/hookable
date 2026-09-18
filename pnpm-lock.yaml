@@ -9,10 +9,10 @@ importers:
   .:
     devDependencies:
       '@types/node':
-        specifier: ^25.9.6
+        specifier: ^25.9.7
         version: 25.9.7
       '@vitest/coverage-v8':
-        specifier: ^5
+        specifier: ^5.0.1
         version: 5.0.1(vitest@5.0.1)
       changelogen:
         specifier: ^0.6.2
@@ -36,19 +36,19 @@ importers:
         specifier: ^0.4.40
         version: 0.4.40(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)(typescript@6.0.3)
       oxfmt:
-        specifier: '>=0.67.0'
+        specifier: '>=0.68.0'
         version: 0.68.0
       oxlint:
-        specifier: ^1.82.0
+        specifier: ^1.83.0
         version: 1.83.0
       typescript:
-        specifier: ^6
+        specifier: ^6.0.3
         version: 6.0.3
       vite:
         specifier: ^8.3.0
         version: 8.3.0(@types/node@25.9.7)(esbuild@0.28.2)(jiti@2.7.0)
       vitest:
-        specifier: ^5
+        specifier: ^5.0.1
         version: 5.0.1(@types/node@25.9.7)(@vitest/coverage-v8@5.0.1)(vite@8.3.0(@types/node@25.9.7)(esbuild@0.28.2)(jiti@2.7.0))
 
 packages:
