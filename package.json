@@ -33,20 +33,20 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^25.9.6",
-    "@vitest/coverage-v8": "^5",
+    "@types/node": "^25.9.8",
+    "@vitest/coverage-v8": "^5.0.1",
     "changelogen": "^0.6.2",
     "esbuild": "^0.28.2",
     "eslint-config-unjs": "^0.6.2",
     "expect-type": "^1.4.0",
-    "hookable-prev": "npm:hookable@^6.1.1",
+    "hookable-prev": "npm:hookable@^6.1.2",
     "mitata": "^1.0.34",
     "obuild": "^0.4.40",
-    "oxfmt": ">=0.67.0",
-    "oxlint": "^1.82.0",
-    "typescript": "^6",
+    "oxfmt": ">=0.70.0",
+    "oxlint": "^1.85.0",
+    "typescript": "^6.0.3",
     "vite": "^8.3.0",
-    "vitest": "^5"
+    "vitest": "^5.0.1"
   },
-  "packageManager": "pnpm@11.26.0"
+  "packageManager": "pnpm@11.27.1"
 }
