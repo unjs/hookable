@@ -93,4 +93,15 @@ describe("tracer", () => {
     await hooks.callHook("hook");
     expect(events).toEqual([]);
   });
+  it("should allow closing tracers in any order", async () => {
+    hooks.hook("hook", () => {});
+    const original = hooks.callHookWith;
+    const first = createTracer(hooks, { channel: "hookable:test" });
+    const second = createTracer(hooks, { channel: "hookable:test" });
+    first.close();
+    await hooks.callHook("hook");
+    expect(events.filter(([type]) => type === "start")).toHaveLength(1);
+    second.close();
+    expect(hooks.callHookWith).toBe(original);
+  });
 });

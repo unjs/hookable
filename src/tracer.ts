@@ -17,6 +17,8 @@ export interface HookTraceContext {
   error?: unknown;
 }
 
+const closed = new WeakMap<Function, any>();
+
 /** Publish hook calls on a `diagnostics_channel` `TracingChannel`. No-op when unavailable. */
 export function createTracer(
   hooks: Hookable<any>,
@@ -38,8 +40,10 @@ export function createTracer(
 
   const original = hooks.callHookWith;
 
+  let active = true;
   const traced: typeof original = (caller, name, args) => {
     if (
+      !active ||
       !(hooks as any)._hooks[name]?.length ||
       (channel as any).hasSubscribers === false ||
       (filter && !filter(name as string))
@@ -66,7 +70,11 @@ export function createTracer(
 
   return {
     close: () => {
-      hooks.callHookWith = original;
+      active = false;
+      closed.set(traced, original);
+      while (closed.has(hooks.callHookWith)) {
+        hooks.callHookWith = closed.get(hooks.callHookWith)!;
+      }
     },
   };
 }
