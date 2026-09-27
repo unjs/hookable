@@ -256,6 +256,28 @@ hooks.callHook("some-hook", "some-arg");
 debug.close();
 ```
 
+### `createTracer`
+
+Publishes hook calls on a [`diagnostics_channel`](https://nodejs.org/api/diagnostics_channel.html#class-tracingchannel) `TracingChannel`. Each call is wrapped with `tracePromise`, so listeners run inside the span async context (for example via `channel.start.bindStore()`).
+
+```js
+import diagnostics_channel from "node:diagnostics_channel";
+
+const tracer = hookable.createTracer(hooks, { channel: "my.hooks", filter: "build:" });
+
+diagnostics_channel.tracingChannel("my.hooks").subscribe({
+  start: ({ name, args }) => {},
+  asyncEnd: ({ name, args, result }) => {},
+  error: ({ name, error }) => {},
+});
+
+tracer.close();
+```
+
+The context object is `{ name, args }`, with `result` or `error` added by `TracingChannel`. Calls are not traced when the hook has no listeners, when the channel has no subscribers, or when `filter` (a name prefix or function) does not match. In runtimes without `diagnostics_channel`, `createTracer` is a no-op.
+
+Calls made through a `callHookWith` reference captured before `createTracer` was attached are not traced.
+
 ## Migration
 
 ### From `4.x` to `5.x`

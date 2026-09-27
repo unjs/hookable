@@ -4,4 +4,6 @@ export { flatHooks, mergeHooks, parallelCaller, serial, serialCaller } from "./u
 
 export * from "./debugger.ts";
 
+export * from "./tracer.ts";
+
 export * from "./types.ts";
