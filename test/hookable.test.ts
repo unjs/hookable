@@ -361,6 +361,25 @@ describe("hookable", () => {
     expect(x).toBe(1);
   });
 
+  test("hook once is not called twice by concurrent calls queued behind an async hook", async () => {
+    const hook = new Hookable();
+
+    let x = 0;
+
+    // An async hook ahead of the `hookOnce` callback defers its first call,
+    // so the second `callHook` snapshots the hook list before it unregisters.
+    hook.hook("test", async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    });
+    hook.hookOnce("test", () => {
+      x++;
+    });
+
+    await Promise.all([hook.callHook("test"), hook.callHook("test")]);
+
+    expect(x).toBe(1);
+  });
+
   test("hook sync", () => {
     const hook = new Hookable();
 
