@@ -100,9 +100,12 @@ export class Hookable<
   ): () => void {
     let _unreg: (() => void) | undefined;
     let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
-      if (typeof _unreg === "function") {
-        _unreg();
+      if (!_function) {
+        // Already called once: a concurrent `callHook` snapshotted the hook list
+        // before the first call unregistered it (e.g. queued behind an async hook)
+        return;
       }
+      _unreg?.();
       _unreg = undefined;
       _function = undefined;
       return function_(...arguments_);
