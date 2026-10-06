@@ -491,3 +491,39 @@ describe("hookable", () => {
     expect(order).toEqual(["first", "second"]);
   });
 });
+
+describe.each([Hookable, HookableCore])("prototype-colliding hook names", (HookClass) => {
+  test.each(["toString", "constructor", "__proto__"])(
+    "registers and unregisters %s",
+    async (name) => {
+      const hooks = new HookClass();
+      await hooks.callHook(name);
+      const callback = vi.fn();
+      const remove = hooks.hook(name, callback);
+      await hooks.callHook(name, "value");
+      expect(callback).toHaveBeenCalledExactlyOnceWith("value");
+      remove();
+      await hooks.callHook(name);
+      expect(callback).toHaveBeenCalledTimes(1);
+    },
+  );
+});
+
+test("removeAllHooks keeps prototype-colliding names usable", async () => {
+  const hooks = new Hookable();
+  hooks.hook("toString", () => {});
+  hooks.removeAllHooks();
+  const callback = vi.fn();
+  hooks.hook("toString", callback);
+  await hooks.callHook("toString");
+  expect(callback).toHaveBeenCalledTimes(1);
+});
+
+test("deprecates a prototype-colliding hook name", async () => {
+  const hooks = new Hookable();
+  hooks.deprecateHook("__proto__", "next");
+  const callback = vi.fn();
+  hooks.hook("__proto__", callback, { allowDeprecated: true });
+  await hooks.callHook("next");
+  expect(callback).toHaveBeenCalledTimes(1);
+});

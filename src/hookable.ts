@@ -21,19 +21,13 @@ export class Hookable<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
 > {
-  private _hooks: { [key: string]: HookCallback[] | undefined };
+  private _hooks: { [key: string]: HookCallback[] | undefined } = Object.create(null);
   private _before?: HookCallback[];
   private _after?: HookCallback[];
-  private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>>;
+  private _deprecatedHooks: Record<string, DeprecatedHook<HooksT>> = Object.create(null);
   private _deprecatedMessages?: Set<string>;
 
   constructor() {
-    this._hooks = {};
-    this._before = undefined;
-    this._after = undefined;
-    this._deprecatedMessages = undefined;
-    this._deprecatedHooks = {};
-
     // Allow destructuring hook and callHook functions out of instance object
     this.hook = this.hook.bind(this);
     this.callHook = this.callHook.bind(this);
@@ -174,7 +168,7 @@ export class Hookable<
   }
 
   removeAllHooks(): void {
-    this._hooks = {};
+    this._hooks = Object.create(null);
   }
 
   callHook<NameT extends HookNameT>(
@@ -260,11 +254,7 @@ export class HookableCore<
   HooksT extends Record<string, any> = Record<string, HookCallback>,
   HookNameT extends HookKeys<HooksT> = HookKeys<HooksT>,
 > {
-  protected _hooks: { [key: string]: HookCallback[] | undefined };
-
-  constructor() {
-    this._hooks = {};
-  }
+  protected _hooks: { [key: string]: HookCallback[] | undefined } = Object.create(null);
 
   hook<NameT extends HookNameT>(name: NameT, fn: InferCallback<HooksT, NameT>): () => void {
     if (!name || typeof fn !== "function") {
