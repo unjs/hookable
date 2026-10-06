@@ -2,7 +2,7 @@ import type { NestedHooks, HookCallback } from "./types.ts";
 
 export function flatHooks<T>(
   configHooks: NestedHooks<T>,
-  hooks: T = {} as T,
+  hooks: T = Object.create(null),
   parentName?: string,
 ): T {
   for (const key in configHooks) {
@@ -20,7 +20,7 @@ export function flatHooks<T>(
 }
 
 export function mergeHooks<T>(...hooks: NestedHooks<T>[]): T {
-  const finalHooks = {} as any;
+  const finalHooks = Object.create(null);
 
   for (const hook of hooks) {
     const flatenHook = flatHooks(hook);

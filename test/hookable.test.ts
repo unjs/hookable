@@ -527,3 +527,41 @@ test("deprecates a prototype-colliding hook name", async () => {
   await hooks.callHook("next");
   expect(callback).toHaveBeenCalledTimes(1);
 });
+
+describe("bulk prototype-colliding hooks", () => {
+  test("flatHooks retains an own __proto__ callback", () => {
+    const callback = vi.fn();
+    const flattened = flatHooks({ ["__proto__"]: callback });
+    expect(Object.prototype.hasOwnProperty.call(flattened, "__proto__")).toBe(true);
+    expect(flattened.__proto__).toBe(callback);
+  });
+
+  test("addHooks registers and unregisters __proto__", async () => {
+    const hooks = new Hookable();
+    const callback = vi.fn();
+    const remove = hooks.addHooks({ ["__proto__"]: callback });
+    await hooks.callHook("__proto__");
+    expect(callback).toHaveBeenCalledTimes(1);
+    remove();
+    await hooks.callHook("__proto__");
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test("removeHooks removes __proto__", async () => {
+    const hooks = new Hookable();
+    const callback = vi.fn();
+    hooks.hook("__proto__", callback);
+    hooks.removeHooks({ ["__proto__"]: callback });
+    await hooks.callHook("__proto__");
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  test.each(["toString", "constructor", "__proto__"])("mergeHooks merges %s", async (name) => {
+    const first = vi.fn();
+    const second = vi.fn();
+    const merged = mergeHooks({ [name]: first }, { [name]: second });
+    await merged[name]("value");
+    expect(first).toHaveBeenCalledExactlyOnceWith("value");
+    expect(second).toHaveBeenCalledExactlyOnceWith("value");
+  });
+});
