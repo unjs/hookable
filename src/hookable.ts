@@ -99,16 +99,15 @@ export class Hookable<
     function_: InferCallback<HooksT, NameT>,
   ): () => void {
     let _unreg: (() => void) | undefined;
-    let _function: ((...arguments_: any) => any) | undefined = (...arguments_: any) => {
-      if (typeof _unreg === "function") {
-        _unreg();
-      }
+    const _function = ((...arguments_: any) => {
+      _unreg?.();
       _unreg = undefined;
-      _function = undefined;
-      return function_(...arguments_);
-    };
-    _unreg = this.hook(name, _function as typeof function_);
-    return _unreg;
+      const fn = function_;
+      // @ts-ignore
+      function_ = undefined;
+      return fn?.(...arguments_);
+    }) as typeof function_;
+    return (_unreg = this.hook(name, _function));
   }
 
   removeHook<NameT extends HookNameT>(name: NameT, function_: InferCallback<HooksT, NameT>): void {

@@ -361,6 +361,22 @@ describe("hookable", () => {
     expect(x).toBe(1);
   });
 
+  test("hookOnce does not fire twice when concurrent callHooks overlap", async () => {
+    const hook = new Hookable();
+    let calls = 0;
+
+    hook.hook("test", async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    });
+    hook.hookOnce("test", () => {
+      calls++;
+    });
+
+    await Promise.all([hook.callHook("test"), hook.callHook("test")]);
+
+    expect(calls).toBe(1);
+  });
+
   test("hook sync", () => {
     const hook = new Hookable();
 
