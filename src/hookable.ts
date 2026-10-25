@@ -252,6 +252,7 @@ export class Hookable<
   }
 }
 
+/*#__NO_SIDE_EFFECTS__*/
 export function createHooks<T extends Record<string, any>>(): Hookable<T> {
   return new Hookable<T>();
 }
