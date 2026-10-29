@@ -1,7 +1,7 @@
 import { describe, test } from "vitest";
 import { expectTypeOf } from "expect-type";
 import { createHooks } from "../src/index.ts";
-import type { HookCallback } from "../src/types.ts";
+import type { HookCallback, HookListenerEvent } from "../src/types.ts";
 
 describe("hook types", () => {
   test("correctly handles non-nested hooks", () => {
@@ -85,6 +85,32 @@ describe("hook types", () => {
       }
       if (name === "bar") {
         expectTypeOf(args[0]).toEqualTypeOf<number>();
+      }
+    });
+  });
+
+  test("listener spy typings", () => {
+    const hooks = createHooks<{
+      foo: () => true;
+      bar: (_arg: number) => 42;
+    }>();
+
+    const voidHooks = createHooks<{ foo: () => void }>();
+    voidHooks.hook("foo", () => {}, { label: "Foo listener" });
+    voidHooks.hookOnce("foo", () => {}, { label: "Foo once listener" });
+
+    expectTypeOf(hooks.beforeEachListener)
+      .parameter(0)
+      .parameter(0)
+      .toEqualTypeOf<HookListenerEvent<{ foo: () => true; bar: (_arg: number) => 42 }>>();
+
+    hooks.afterEachListener(({ name, args, label, duration, error }) => {
+      expectTypeOf(name).toEqualTypeOf<"foo" | "bar">();
+      expectTypeOf(label).toEqualTypeOf<string>();
+      expectTypeOf(duration).toEqualTypeOf<number | undefined>();
+      expectTypeOf(error).toEqualTypeOf<unknown>();
+      if (name === "bar") {
+        expectTypeOf(args).toEqualTypeOf<[number]>();
       }
     });
   });

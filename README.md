@@ -124,15 +124,24 @@ const unregister = lib.hook("hook0", async () => {
 
 ### `constructor()`
 
-### `hook (name, fn)`
+### `hook (name, fn, options?)`
 
 Register a handler for a specific hook. `fn` must be a function.
 
+Options:
+
+- `label`: Human-readable name of the handler, exposed to [listener spies](#beforeeachlistener-synccallback) (defaults to `fn.name`).
+- `allowDeprecated`: Skip the deprecation warning when registering a deprecated hook.
+
+```js
+hookable.hook("order:created", sendEmail, { label: "Send out customer email" });
+```
+
 Returns an `unregister` function that, when called, will remove the registered handler.
 
-### `hookOnce (name, fn)`
+### `hookOnce (name, fn, options?)`
 
-Similar to `hook` but unregisters hook once called.
+Similar to `hook` but unregisters hook once called. Accepts the `label` option.
 
 Returns an `unregister` function that, when called, will remove the registered handler before first call.
 
@@ -242,6 +251,33 @@ hookable.hook("test", () => {
 // test hook called with []
 await hookable.callHook("test");
 ```
+
+### `beforeEachListener (syncCallback)`
+
+Registers a (sync) callback to be called before each individual handler of a hook runs.
+
+The event contains `name`, `args`, `label` (from `hook()` options, or `fn.name`), `fn` and `context` (shared with the `beforeEach` / `afterEach` event of the same call).
+
+### `afterEachListener (syncCallback)`
+
+Registers a (sync) callback to be called after each individual handler of a hook finishes (or throws / rejects).
+
+In addition to the `beforeEachListener` event fields, it receives `duration` (in ms) and `error` (when the handler failed). Errors are still propagated to the `callHook` caller.
+
+```js
+hookable.beforeEach((event) => console.log(`Emit: ${event.name}`));
+hookable.afterEachListener((event) => console.log(`Listener: ${event.name}, "${event.label}"`));
+
+hookable.hook("order:created", sendEmail, { label: "Send out customer email" });
+hookable.hook("order:created", notifyCEO, { label: "Notify CEO about the new order" });
+
+// Emit: order:created
+// Listener: order:created, "Send out customer email"
+// Listener: order:created, "Notify CEO about the new order"
+await hookable.callHook("order:created");
+```
+
+Handlers are only wrapped while at least one listener spy is registered.
 
 ### `createDebugger`
 

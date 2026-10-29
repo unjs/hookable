@@ -8,11 +8,11 @@ Lightweight, type-safe, zero-dependency awaitable hook system.
 
 - **Type:** ESM-only (`"type": "module"`)
 - **Runtime deps:** None
-- **Bundle size:** Hookable < 3KB, HookableCore < 630B gzipped
+- **Bundle size:** Hookable < 5KB minified (< 1.8KB gzipped), HookableCore < 655B minified
 
 Two classes:
 
-- **`Hookable<HooksT>`** — Full-featured: deprecation chains, beforeEach/afterEach spies, serial & parallel execution
+- **`Hookable<HooksT>`** — Full-featured: deprecation chains, beforeEach/afterEach spies, per-listener spies (beforeEachListener/afterEachListener with `label`, `duration`, `error`), `label` option on `hook()`/`hookOnce()`, serial & parallel execution
 - **`HookableCore<HooksT>`** — Minimal: only `hook()`, `removeHook()`, `callHook()` (~630B)
 
 ## Source Structure
@@ -57,7 +57,8 @@ export { createDebugger }
 ## Testing
 
 - **Framework:** Vitest
-- **Tests:** `test/hookable.test.ts`, `test/types.test.ts`, `test/debuger.test.ts`, `test/bundle.test.ts`
+- **Tests:** `test/hookable.test.ts`, `test/types.test.ts`, `test/debuger.test.ts`, `test/bundle.test.ts`, `test/compat.test.ts`
+- `test/compat.test.ts` runs the same scenarios against `src` and the previous release (`hookable-prev` devDependency), with and without listener spies, and expects identical behavior
 - **Run single:** `pnpm vitest run test/hookable.test.ts`
 - Uses `expectTypeOf` for type-level assertions
 - Bundle size enforced in `test/bundle.test.ts`
