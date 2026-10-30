@@ -157,6 +157,23 @@ describe("hookable", () => {
     await expect(() => hook.callHook("test:hook")).rejects.toThrow(error);
   });
 
+  test("should reject parallel hook error and still call other hooks", async () => {
+    const hook = new Hookable();
+    const error = new Error("Hook Error");
+    const other = vi.fn();
+    hook.hook("test:hook", () => {
+      throw error;
+    });
+    hook.hook("test:hook", other);
+
+    let result: unknown;
+    expect(() => {
+      result = hook.callHookParallel("test:hook");
+    }).not.toThrow();
+    await expect(result).rejects.toBe(error);
+    expect(other).toHaveBeenCalledOnce();
+  });
+
   test("should return a self-removal function", async () => {
     const hook = new Hookable();
     const remove = hook.hook("test:hook", () => {

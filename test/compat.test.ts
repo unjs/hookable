@@ -51,10 +51,11 @@ const scenarios: Record<string, (impl: Impl, log: any[]) => Promise<void> | void
       throw new Error("a");
     });
     h.hook("async", () => log.push("should not run"));
+    // ["sync", "callHookParallel"] intentionally diverges from hookable-prev: a sync throw
+    // rejects instead of throwing and no longer skips the other listeners (see hookable.test.ts)
     for (const [name, fn] of [
       ["sync", "callHook"],
       ["async", "callHook"],
-      ["sync", "callHookParallel"],
       ["async", "callHookParallel"],
     ] as const) {
       try {
