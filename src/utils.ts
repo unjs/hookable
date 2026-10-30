@@ -107,7 +107,15 @@ export function parallelTaskCaller(
 ): Promise<any> | void {
   if (hooks.length > 0) {
     const task = createTask(name);
-    return Promise.all(hooks.map((hook) => task.run(() => hook(...args))));
+    return Promise.all(
+      hooks.map((hook) => {
+        try {
+          return task.run(() => hook(...args));
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      }),
+    );
   }
 }
 

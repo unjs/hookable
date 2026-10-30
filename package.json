@@ -1,6 +1,6 @@
 {
-  "name": "hookable",
-  "version": "6.1.2",
+  "name": "@martinszeltins/hookable",
+  "version": "6.2.1",
   "description": "Awaitable hook system",
   "keywords": [
     "hook",
@@ -10,10 +10,16 @@
     "tappable"
   ],
   "license": "MIT",
-  "repository": "unjs/hookable",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinszeltins/hookable.git"
+  },
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.mjs",

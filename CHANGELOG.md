@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v6.2.1
+
+### 🩹 Fixes
+
+- `callHookParallel` returns a rejected promise instead of throwing when a listener throws synchronously, and still calls the remaining listeners
+
+## v6.2.0
+
+Published as `@martinszeltins/hookable`.
+
+### 🚀 Enhancements
+
+- Listener labels via `hook(name, fn, { label })` and `hookOnce(name, fn, { label })`
+- Listener spies: `beforeEachListener` and `afterEachListener`, with label, duration and error
+
 ## v6.1.2
 
 [compare changes](https://github.com/unjs/hookable/compare/v6.1.1...v6.1.2)

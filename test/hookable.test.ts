@@ -1,7 +1,7 @@
 // @ts-nocheck
 import vm from "node:vm";
 import { describe, test, beforeEach, expect, vi } from "vitest";
-import { Hookable, HookableCore, flatHooks, mergeHooks } from "../src/index.ts";
+import { Hookable, HookableCore, createDebugger, flatHooks, mergeHooks } from "../src/index.ts";
 
 describe("HookableCore", () => {
   test("basic functionality", async () => {
@@ -155,6 +155,23 @@ describe("hookable", () => {
       throw error;
     });
     await expect(() => hook.callHook("test:hook")).rejects.toThrow(error);
+  });
+
+  test("should reject parallel hook error and still call other hooks", async () => {
+    const hook = new Hookable();
+    const error = new Error("Hook Error");
+    const other = vi.fn();
+    hook.hook("test:hook", () => {
+      throw error;
+    });
+    hook.hook("test:hook", other);
+
+    let result: unknown;
+    expect(() => {
+      result = hook.callHookParallel("test:hook");
+    }).not.toThrow();
+    await expect(result).rejects.toBe(error);
+    expect(other).toHaveBeenCalledOnce();
   });
 
   test("should return a self-removal function", async () => {
@@ -408,6 +425,480 @@ describe("hookable", () => {
 
     await hook.callHookParallel("test");
     expect(x).toBe(5);
+  });
+
+  describe("listener spies", () => {
+    test("label and fn.name fallback", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener((event) => labels.push(event.label));
+
+      hooks.hook("order:created", () => {}, { label: "Send out customer email" });
+      hooks.hook("order:created", function prepareAnalytics() {});
+      hooks.hook("order:created", () => {});
+      hooks.hookOnce("order:created", () => {}, { label: "Notify CEO" });
+
+      await hooks.callHook("order:created");
+      expect(labels).toEqual([
+        "Send out customer email",
+        "prepareAnalytics",
+        "_order_created_hook_cb",
+        "Notify CEO",
+      ]);
+
+      labels.length = 0;
+      await hooks.callHook("order:created");
+      expect(labels).toHaveLength(3);
+    });
+
+    test("order with sync and async listeners", async () => {
+      const hooks = new Hookable();
+      const log: string[] = [];
+      hooks.beforeEach(({ name }) => log.push(`emit ${name}`));
+      hooks.beforeEachListener(({ label }) => log.push(`before ${label}`));
+      hooks.afterEachListener(({ label, duration }) => {
+        expect(duration).toBeTypeOf("number");
+        log.push(`after ${label}`);
+      });
+      hooks.afterEach(({ name }) => log.push(`done ${name}`));
+
+      hooks.hook("test", () => log.push("run a"), { label: "a" });
+      hooks.hook(
+        "test",
+        async () => {
+          await new Promise((resolve) => setTimeout(resolve, 5));
+          log.push("run b");
+        },
+        { label: "b" },
+      );
+
+      await hooks.callHook("test");
+      expect(log).toEqual([
+        "emit test",
+        "before a",
+        "run a",
+        "after a",
+        "before b",
+        "run b",
+        "after b",
+        "done test",
+      ]);
+
+      log.length = 0;
+      await hooks.callHookParallel("test");
+      expect(log).toEqual([
+        "emit test",
+        "before a",
+        "run a",
+        "after a",
+        "before b",
+        "run b",
+        "after b",
+        "done test",
+      ]);
+    });
+
+    test("error is reported and still propagates", async () => {
+      const hooks = new Hookable();
+      const errors: unknown[] = [];
+      hooks.afterEachListener((event) => errors.push(event.error));
+
+      const syncError = new Error("sync");
+      hooks.hook("sync", () => {
+        throw syncError;
+      });
+      await expect(hooks.callHook("sync")).rejects.toBe(syncError);
+
+      const asyncError = new Error("async");
+      hooks.hook("async", async () => {
+        throw asyncError;
+      });
+      await expect(hooks.callHook("async")).rejects.toBe(asyncError);
+
+      hooks.hook("ok", () => {});
+      await hooks.callHook("ok");
+
+      expect(errors).toEqual([syncError, asyncError, undefined]);
+    });
+
+    test("shares context with beforeEach and gets listener args", async () => {
+      const hooks = new Hookable<{ test: (a: number) => void }>();
+      hooks.beforeEach((event) => {
+        event.context.id = 42;
+      });
+      const spy = vi.fn();
+      hooks.beforeEachListener(spy);
+      const fn = () => {};
+      hooks.hook("test", fn);
+
+      await hooks.callHook("test", 1);
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({ name: "test", args: [1], fn, context: { id: 42 } }),
+      );
+    });
+
+    test("hookOnce runs once with spies", async () => {
+      const hooks = new Hookable();
+      const events: string[] = [];
+      hooks.beforeEachListener(({ label }) => events.push(`before ${label}`));
+      hooks.afterEachListener(({ label }) => events.push(`after ${label}`));
+      const fn = vi.fn();
+      hooks.hookOnce("test", fn, { label: "once" });
+
+      await hooks.callHook("test");
+      await hooks.callHook("test");
+      expect(fn).toHaveBeenCalledTimes(1);
+      expect(events).toEqual(["before once", "after once"]);
+    });
+
+    test("hookOnce without label falls back to the original function name", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      function sendEmail() {}
+      hooks.hookOnce("order:created", sendEmail);
+      hooks.hookOnce("order:created", () => {});
+
+      await hooks.callHook("order:created");
+      expect(labels).toEqual(["sendEmail", "_order_created_hook_cb"]);
+    });
+
+    test("labels are per registration", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ name, label }) => labels.push(`${name} ${label}`));
+      const shared = function shared() {};
+      hooks.hook("x", shared, { label: "X label" });
+      hooks.hook("y", shared, { label: "Y label" });
+      await hooks.callHook("x");
+      await hooks.callHook("y");
+      expect(labels).toEqual(["x X label", "y Y label"]);
+    });
+
+    test("labels do not outlive their registration", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      const fn = function fn() {};
+
+      const unreg = hooks.hook("a", fn, { label: "removed via unregister" });
+      unreg();
+      hooks.hook("a", fn);
+      await hooks.callHook("a");
+
+      hooks.hook("b", fn, { label: "removed via removeHook" });
+      hooks.removeHook("b", fn);
+      hooks.hook("b", fn);
+      await hooks.callHook("b");
+
+      hooks.hook("c", fn, { label: "removed via clearHook" });
+      hooks.clearHook("c");
+      hooks.hook("c", fn);
+      await hooks.callHook("c");
+
+      hooks.hook("d", fn, { label: "removed via removeAllHooks" });
+      hooks.removeAllHooks();
+      hooks.hook("d", fn);
+      await hooks.callHook("d");
+
+      expect(labels).toEqual(["fn", "fn", "fn", "fn"]);
+    });
+
+    test("same function registered twice on one hook keeps both labels", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      const fn = function fn() {};
+      hooks.hook("test", fn, { label: "first" });
+      const unregSecond = hooks.hook("test", fn, { label: "second" });
+
+      await hooks.callHook("test");
+      expect(labels).toEqual(["first", "second"]);
+
+      // removeHook removes the first occurrence, remaining entries keep their labels
+      labels.length = 0;
+      unregSecond();
+      hooks.hook("test", fn, { label: "third" });
+      await hooks.callHook("test");
+      expect(labels).toEqual(["second", "third"]);
+    });
+
+    test("mixed labeled and unlabeled registrations", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      function a() {}
+      function b() {}
+      function c() {}
+      function d() {}
+      hooks.hook("test", a);
+      hooks.hook("test", b, { label: "B" });
+      hooks.hook("test", c);
+      hooks.hook("test", d, { label: "D" });
+
+      await hooks.callHook("test");
+      expect(labels).toEqual(["a", "B", "c", "D"]);
+
+      labels.length = 0;
+      hooks.removeHook("test", a);
+      hooks.removeHook("test", c);
+      hooks.hook("test", a);
+      await hooks.callHook("test");
+      expect(labels).toEqual(["B", "D", "a"]);
+    });
+
+    test("addHooks listeners use their function names", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ name, label }) => labels.push(`${name} ${label}`));
+      hooks.addHooks({ order: { created: function sendEmail() {} } });
+
+      await hooks.callHook("order:created");
+      expect(labels).toEqual(["order:created sendEmail"]);
+    });
+
+    test("labels keep their position through deprecateHook", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      function a() {}
+      function b() {}
+      hooks.hook("new", function existing() {});
+      hooks.hook("old", a);
+      hooks.hook("old", b, { label: "B" });
+      hooks.deprecateHook("old", "new");
+      hooks.hook("old", () => {}, { label: "allowed", allowDeprecated: true });
+
+      await hooks.callHook("new");
+      expect(labels).toEqual(["existing", "a", "B", "allowed"]);
+      warn.mockRestore();
+    });
+
+    test("spies added or removed during a call", async () => {
+      const hooks = new Hookable();
+      const log: string[] = [];
+      const late = vi.fn(({ label }) => log.push(`late ${label}`));
+      const unregEarly = hooks.afterEachListener(({ label }) => log.push(`early ${label}`));
+      hooks.hook(
+        "test",
+        () => {
+          unregEarly();
+          hooks.afterEachListener(late);
+        },
+        { label: "a" },
+      );
+      hooks.hook("test", () => {}, { label: "b" });
+
+      await hooks.callHook("test");
+      expect(log).toEqual(["late a", "late b"]);
+    });
+
+    test("listeners removed during a call still run once and are reported", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      const second = () => {};
+      hooks.hook("test", () => hooks.removeHook("test", second), { label: "remover" });
+      hooks.hook("test", second, { label: "second" });
+
+      await hooks.callHook("test");
+      await hooks.callHook("test");
+      expect(labels).toEqual(["remover", "second", "remover"]);
+    });
+
+    test("a throwing listener spy propagates like beforeEach/afterEach spies", async () => {
+      const hooks = new Hookable();
+      const listener = vi.fn();
+      hooks.beforeEachListener(() => {
+        throw new Error("logger bug");
+      });
+      hooks.hook("test", listener);
+
+      await expect(hooks.callHook("test")).rejects.toThrow("logger bug");
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    test("parallel calls fire all before spies first", async () => {
+      const hooks = new Hookable();
+      const log: string[] = [];
+      hooks.beforeEachListener(({ label }) => log.push(`before ${label}`));
+      hooks.afterEachListener(({ label }) => log.push(`after ${label}`));
+      hooks.hook("test", async () => {}, { label: "a" });
+      hooks.hook("test", async () => {}, { label: "b" });
+
+      await hooks.callHookParallel("test");
+      expect(log).toEqual(["before a", "before b", "after a", "after b"]);
+    });
+
+    test("works together with createDebugger", async () => {
+      const time = vi.spyOn(console, "time").mockImplementation(() => {});
+      const timeEnd = vi.spyOn(console, "timeEnd").mockImplementation(() => {});
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      const debug = createDebugger(hooks, { inspect: false, group: false });
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      hooks.hook("test", async () => {}, { label: "a" });
+
+      await hooks.callHook("test");
+      expect(labels).toEqual(["a"]);
+      expect(time).toHaveBeenCalledTimes(1);
+      expect(timeEnd).toHaveBeenCalledTimes(1);
+      debug.close();
+      time.mockRestore();
+      timeEnd.mockRestore();
+    });
+
+    test("label survives deprecateHook and reports the new name", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const hooks = new Hookable();
+      const events: string[] = [];
+      hooks.afterEachListener(({ name, label }) => events.push(`${name} ${label}`));
+      hooks.hook("old", () => {}, { label: "registered before" });
+      hooks.deprecateHook("old", "new");
+      hooks.hook("old", () => {}, { label: "registered after" });
+
+      await hooks.callHook("new");
+      expect(events).toEqual(["new registered before", "new registered after"]);
+      warn.mockRestore();
+    });
+
+    test("return values and sync behavior are preserved", async () => {
+      const hooks = new Hookable();
+      hooks.afterEachListener(() => {});
+      hooks.hook("test", (x: number) => x * 2);
+      hooks.hook("test", async (x: number) => x * 3);
+
+      const results = hooks.callHookWith((fns, args) => fns.map((fn) => fn(...args)), "test", [5]);
+      expect(results[0]).toBe(10);
+      await expect(results[1]).resolves.toBe(15);
+      await expect(hooks.callHookParallel("test", 2)).resolves.toEqual([4, 6]);
+
+      hooks.hook("sync", () => {});
+      expect(hooks.callHook("sync")).toBeUndefined();
+    });
+
+    test("parallel rejection reports failing and passing listeners", async () => {
+      const hooks = new Hookable();
+      const events: [string, unknown][] = [];
+      hooks.afterEachListener(({ label, error }) => events.push([label, error]));
+      const error = new Error("fail");
+      hooks.hook(
+        "test",
+        async () => {
+          await new Promise((resolve) => setTimeout(resolve, 5));
+        },
+        { label: "slow" },
+      );
+      hooks.hook(
+        "test",
+        async () => {
+          throw error;
+        },
+        { label: "failing" },
+      );
+
+      await expect(hooks.callHookParallel("test")).rejects.toBe(error);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      expect(events).toEqual([
+        ["failing", error],
+        ["slow", undefined],
+      ]);
+    });
+
+    test("waits for cross-realm thenables and measures duration", async () => {
+      const foreignAsync = vm.runInContext(
+        `(async () => { await new Promise((r) => setTimeout(r, 20)); })`,
+        vm.createContext({ setTimeout }),
+      );
+      const hooks = new Hookable();
+      const events: any[] = [];
+      hooks.beforeEachListener((event) => events.push(["before", event]));
+      hooks.afterEachListener((event) => events.push(["after", event.duration]));
+      hooks.hook("test", foreignAsync);
+
+      const promise = hooks.callHook("test");
+      expect(events).toHaveLength(1);
+      await promise;
+      expect(events).toHaveLength(2);
+      expect(events[0][1].duration).toBeGreaterThanOrEqual(15);
+      expect(events[1][1]).toBeGreaterThanOrEqual(15);
+    });
+
+    test("same event object for before and after, context per call", async () => {
+      const hooks = new Hookable();
+      const before: any[] = [];
+      const after: any[] = [];
+      hooks.beforeEachListener((event) => before.push(event));
+      hooks.afterEachListener((event) => after.push(event));
+      hooks.hook("test", () => {});
+      hooks.hook("test", () => {});
+
+      await hooks.callHook("test");
+      await hooks.callHook("test");
+      expect(before).toHaveLength(4);
+      expect(after).toEqual(before);
+      for (let i = 0; i < 4; i++) {
+        expect(after[i]).toBe(before[i]);
+      }
+      expect(before[0].context).toEqual({});
+      expect(before[0].context).toBe(before[1].context);
+      expect(before[0].context).not.toBe(before[2].context);
+    });
+
+    test("unregistering a spy twice keeps other spies", async () => {
+      const hooks = new Hookable();
+      const a = vi.fn();
+      const b = vi.fn();
+      const unregA = hooks.beforeEachListener(a);
+      hooks.beforeEachListener(b);
+      unregA();
+      unregA();
+      hooks.hook("test", () => {});
+
+      await hooks.callHook("test");
+      expect(a).not.toHaveBeenCalled();
+      expect(b).toHaveBeenCalledTimes(1);
+    });
+
+    test("works with destructured hook and callHook", async () => {
+      const hooks = new Hookable();
+      const labels: string[] = [];
+      hooks.afterEachListener(({ label }) => labels.push(label));
+      const { hook, callHook } = hooks;
+      hook("test", () => {}, { label: "destructured" });
+
+      await callHook("test");
+      expect(labels).toEqual(["destructured"]);
+    });
+
+    test("no wrapping without spies and unregister", async () => {
+      const hooks = new Hookable();
+      const fn = () => {};
+      hooks.hook("test", fn);
+
+      let received: any[] = [];
+      const caller = (fns: any[]) => {
+        received = fns;
+        for (const f of fns) {
+          f();
+        }
+      };
+
+      hooks.callHookWith(caller, "test", []);
+      expect(received[0]).toBe(fn);
+
+      const spy = vi.fn();
+      const unreg = hooks.afterEachListener(spy);
+      hooks.callHookWith(caller, "test", []);
+      expect(received[0]).not.toBe(fn);
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      unreg();
+      hooks.callHookWith(caller, "test", []);
+      expect(received[0]).toBe(fn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 
   test("mergeHooks", () => {
